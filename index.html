@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Gears</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+    }
+    header {
+      text-align: center;
+      padding: 2rem;
+      font-family: 'UnifrakturCook', cursive;
+      font-size: 3rem;
+      border-bottom: 1px solid #333;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    h2 {
+      border-bottom: 1px solid #444;
+      padding-bottom: 0.5rem;
+      margin-top: 3rem;
+      font-family: 'UnifrakturCook', cursive;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .product {
+      background-color: #111;
+      padding: 1rem;
+      border: 1px solid #333;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .product img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .product h3 {
+      margin: 0.5rem 0;
+    }
+    .product button {
+      background-color: #fff;
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>Custom Gears</header>
+  <div class="container">
+    <h2>Roupas</h2>
+    <div class="products">
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Camiseta+Gótica" alt="Camiseta Gótica">
+        <h3>Camiseta Gótica</h3>
+        <p>Preta com estampa exclusiva</p>
+        <button>Ver mais</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Boné+Street" alt="Boné Street">
+        <h3>Boné Street</h3>
+        <p>Estilo urbano preto fosco</p>
+        <button>Ver mais</button>
+      </div>
+    </div>
+
+    <h2>Chaveiros</h2>
+    <div class="products">
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Turbo" alt="Chaveiro Turbo">
+        <h3>Chaveiro Turbo</h3>
+        <p>Miniatura de turbina metálica</p>
+        <button>Ver mais</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Engrenagem" alt="Chaveiro Engrenagem">
+        <h3>Chaveiro Engrenagem</h3>
+        <p>Design mecânico estilizado</p>
+        <button>Ver mais</button>
+      </div>
+    </div>
+
+    <h2>Acessórios Automotivos</h2>
+    <div class="products">
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Capa+de+Volante" alt="Capa de Volante">
+        <h3>Capa de Volante</h3>
+        <p>Couro sintético com costura preta</p>
+        <button>Ver mais</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Adesivo+Reflectivo" alt="Adesivo Reflectivo">
+        <h3>Adesivo Reflectivo</h3>
+        <p>Estilo racing em preto e prata</p>
+        <button>Ver mais</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    © 2025 Custom Gears. Todos os direitos reservados.
+  </footer>
+</body>
+</html>
