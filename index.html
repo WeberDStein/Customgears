@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Custom Gears</title>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <style>
@@ -200,56 +200,37 @@
   </header>
   <div class="container">
 
-    <!-- Produtos como no seu código anterior -->
-
-    <!-- ... (mesmos produtos anteriores) -->
-
-    <h2>Fale Conosco</h2>
-    <div class="contact">
-      <p><strong>Instagram:</strong><br><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">@custom_gears17</a></p>
-      <p><strong>E-mail:</strong><br><a href="mailto:customgears17@gmail.com">customgears17@gmail.com</a></p>
-      <p><strong>WhatsApp:</strong><br><a href="https://wa.me/5541999737694" target="_blank">+55 41 99973-7694</a></p>
+    <h2>Roupas</h2>
+    <div class="products">
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Camiseta+Gótica" alt="Camiseta Gótica">
+        <h3>Camisetas estilo JDM</h3>
+        <p>Preta com estampas exclusivas</p>
+        <button>Ver mais</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Boné+Street" alt="Boné Street">
+        <h3>Boné Street</h3>
+        <p>Estilo urbano preto fosco</p>
+        <button>Ver mais</button>
+      </div>
     </div>
 
-  </div>
-  <footer>© 2025 Custom Gears. Todos os direitos reservados.</footer>
+    <h2>Chaveiros</h2>
+    <div class="products">
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Turbo" alt="Chaveiro Turbo">
+        <h3>Chaves personalizadas</h3>
+        <p>Miniaturas de carrinhos JDM</p>
+        <button>Ver mais</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Engrenagem" alt="Chaveiro Engrenagem">
+        <h3>Parafusos e porcas</h3>
+        <p>Design mecânico estilizado</p>
+        <button>Ver mais</button>
+      </div>
+    </div>
 
-  <script>
-    const cartIcon = document.getElementById("cart-icon");
-    const cartItemsBox = document.getElementById("cart-items");
-    const cartList = cartItemsBox.querySelector("ul");
-    let cart = [];
-
-    cartIcon.addEventListener("click", () => {
-      cartItemsBox.style.display = cartItemsBox.style.display === "none" ? "block" : "none";
-    });
-
-    document.querySelectorAll(".product button").forEach((button, index) => {
-      button.addEventListener("click", () => {
-        const product = button.closest(".product");
-        const name = product.querySelector("h3").textContent;
-        cart.push(name);
-        updateCart();
-      });
-    });
-
-    function updateCart() {
-      cartList.innerHTML = "";
-      cart.forEach((item, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `${item} <button class="remove-btn" data-index="${index}">x</button>`;
-        cartList.appendChild(li);
-      });
-      cartIcon.textContent = `Carrinho (${cart.length})`;
-
-      document.querySelectorAll(".remove-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const index = btn.getAttribute("data-index");
-          cart.splice(index, 1);
-          updateCart();
-        });
-      });
-    }
-  </script>
-</body>
-                                                                                                                                                  </html>
+    <h2>Acessórios Automotivos</h2>
+    <div class="products0
