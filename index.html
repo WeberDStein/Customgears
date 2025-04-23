@@ -1,248 +1,149 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Custom Gears</title>
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-  <style>
-    /* Scroll personalizada elegante */
-    ::-webkit-scrollbar {
-      width: 10px;
+<!DOCTYPE html>  
+<html lang="pt-BR">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+  <title>Custom Gears</title>  
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">  
+  <style>  
+    ::-webkit-scrollbar { width: 10px; }  
+    ::-webkit-scrollbar-track { background: #111; }  
+    ::-webkit-scrollbar-thumb { background: #555; border-radius: 5px; }  
+    ::-webkit-scrollbar-thumb:hover { background: #777; }
+
+    body { background-color: #000; color: #fff; font-family: Arial, sans-serif; margin: 0; padding-top: 60px; }  
+    a { color: #ccc; text-decoration: none; }  
+    a:hover { text-decoration: underline; }
+
+    header { text-align: center; padding: 2rem; font-family: 'UnifrakturCook', cursive; font-size: 3rem; border-bottom: 1px solid #333; color: #ccc; }  
+    h2 { border-bottom: 1px solid #444; padding-bottom: 0.5rem; margin-top: 3rem; font-family: 'UnifrakturCook', cursive; text-align: center; color: #aaa; }  
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }  
+    .products { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; padding: 2rem 0; }  
+
+    .product { background-color: #111; border: 1px solid #333; border-radius: 8px; padding: 1rem; width: 250px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; }  
+    .product:hover { transform: translateY(-5px); box-shadow: 0 0 10px #555; }  
+    .product img { width: 100%; border-radius: 6px; margin-bottom: 0.5rem; }  
+    .product h3 { margin: 0.5rem 0; color: #ddd; }  
+    .product p { font-size: 0.9rem; color: #aaa; margin-bottom: 1rem; }
+
+    button { background-color: #333; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: bold; }  
+    button:hover { background-color: #555; }  
+
+    .contact { text-align: center; background-color: #111; border: 1px solid #333; border-radius: 8px; padding: 2rem; max-width: 500px; margin: 2rem auto; color: #ccc; }  
+    .contact p { margin: 1rem 0; }
+
+    footer { text-align: center; padding: 2rem; font-size: 0.9rem; color: #777; border-top: 1px solid #333; margin-top: 2rem; }  
+
+    .cart { position: fixed; top: 15px; right: 20px; background-color: #222; color: #fff; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #444; font-weight: bold; z-index: 999; cursor: pointer; box-shadow: 0 0 5px #800080; }  
+    .cart-count { background-color: #800080; border-radius: 50%; color: white; padding: 2px 8px; margin-left: 6px; font-size: 0.8rem; }
+  </style>  
+</head>  
+<body>  
+
+  <div class="cart" onclick="showCart()">  
+    Carrinho <span class="cart-count" id="cartCount">0</span>  
+  </div>  
+
+  <header>Custom Gears</header>  
+  <div class="container">  
+
+    <h2>Roupas</h2>  
+    <div class="products">  
+      <div class="product">  
+        <img src="https://via.placeholder.com/200x200.png?text=Camiseta+Gótica" alt="Camiseta Gótica">  
+        <h3>Camisetas estilo JDM</h3>  
+        <p>Preta com estampas exclusivas</p>  
+        <button onclick="addToCart('Camiseta JDM')">Adicionar ao carrinho</button>  
+      </div>  
+      <div class="product">  
+        <img src="https://via.placeholder.com/200x200.png?text=Boné+Street" alt="Boné Street">  
+        <h3>Boné Street</h3>  
+        <p>Estilo urbano preto fosco</p>  
+        <button onclick="addToCart('Boné Street')">Adicionar ao carrinho</button>  
+      </div>  
+    </div>  
+
+    <h2>Chaveiros</h2>  
+    <div class="products">  
+      <div class="product">  
+        <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Turbo" alt="Chaveiro Turbo">  
+        <h3>Chaves personalizadas</h3>  
+        <p>Miniaturas de carrinhos JDM</p>  
+        <button onclick="addToCart('Chaveiro Turbo')">Adicionar ao carrinho</button>  
+      </div>  
+      <div class="product">  
+        <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Engrenagem" alt="Chaveiro Engrenagem">  
+        <h3>Parafusos e porcas</h3>  
+        <p>Design mecânico estilizado</p>  
+        <button onclick="addToCart('Chaveiro Engrenagem')">Adicionar ao carrinho</button>  
+      </div>  
+    </div>  
+
+    <h2>Acessórios Automotivos</h2>  
+    <div class="products">  
+      <div class="product">  
+        <img src="https://via.placeholder.com/200x200.png?text=Bancos+Concha" alt="Bancos Concha">  
+        <h3>Bancos Concha</h3>  
+        <p>Couro sintético com costura preta</p>  
+        <button onclick="addToCart('Bancos Concha')">Adicionar ao carrinho</button>  
+      </div>  
+      <div class="product">  
+        <img src="https://via.placeholder.com/200x200.png?text=Adesivo+Reflectivo" alt="Adesivo Reflectivo">  
+        <h3>Adesivos Reflectivos</h3>  
+        <p>Estilo racing em preto e prata</p>  
+        <button onclick="addToCart('Adesivo Reflectivo')">Adicionar ao carrinho</button>  
+      </div>  
+    </div>  
+
+    <h2>Fale Conosco</h2>  
+    <div class="contact">  
+      <p><strong>Instagram:</strong><br><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">@custom_gears17</a></p>  
+      <p><strong>E-mail:</strong><br><a href="mailto:customgears17@gmail.com">customgears17@gmail.com</a></p>  
+      <p><strong>WhatsApp:</strong><br><a href="https://wa.me/5541999737694" target="_blank">+55 41 99973-7694</a></p>  
+    </div>  
+
+  </div>  
+  <footer>© 2025 Custom Gears. Todos os direitos reservados.</footer>  
+
+  <script>  
+    let cart = [];
+
+    function addToCart(item) {
+      cart.push(item);
+      updateCartCount();
     }
 
-    ::-webkit-scrollbar-track {
-      background: #111;
+    function removeFromCart(index) {
+      if (index > -1) {
+        cart.splice(index, 1);
+        updateCartCount();
+      }
     }
 
-    ::-webkit-scrollbar-thumb {
-      background: #555;
-      border-radius: 5px;
+    function updateCartCount() {
+      document.getElementById('cartCount').textContent = cart.length;
     }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: #777;
+    function showCart() {
+      if (cart.length === 0) {
+        alert("Seu carrinho está vazio.");
+        return;
+      }
+
+      let message = "Itens no carrinho:\n\n";
+      cart.forEach((item, index) => {
+        message += `${index + 1}. ${item} [Remover]\n`;
+      });
+
+      let indexToRemove = prompt(message + "\nDigite o número do item para remover, ou deixe vazio para sair:");
+      let index = parseInt(indexToRemove);
+      if (!isNaN(index) && index >= 1 && index <= cart.length) {
+        removeFromCart(index - 1);
+        showCart(); // Mostra novamente com atualização
+      }
     }
+  </script>  
 
-    body {
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding-top: 60px;
-    }
-
-    a {
-      color: #ccc;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    header {
-      text-align: center;
-      padding: 2rem;
-      font-family: 'UnifrakturCook', cursive;
-      font-size: 3rem;
-      border-bottom: 1px solid #333;
-      color: #ccc;
-    }
-
-    h2 {
-      border-bottom: 1px solid #444;
-      padding-bottom: 0.5rem;
-      margin-top: 3rem;
-      font-family: 'UnifrakturCook', cursive;
-      text-align: center;
-      color: #aaa;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    .products {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 2rem 0;
-    }
-
-    .product {
-      background-color: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 1rem;
-      width: 250px;
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .product:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 10px #555;
-    }
-
-    .product img {
-      width: 100%;
-      border-radius: 6px;
-      margin-bottom: 0.5rem;
-    }
-
-    .product h3 {
-      margin: 0.5rem 0;
-      color: #ddd;
-    }
-
-    .product p {
-      font-size: 0.9rem;
-      color: #aaa;
-      margin-bottom: 1rem;
-    }
-
-    button {
-      background-color: #333;
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background-color: #555;
-    }
-
-    .contact {
-      text-align: center;
-      background-color: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 2rem;
-      max-width: 500px;
-      margin: 2rem auto;
-      color: #ccc;
-    }
-
-    .contact p {
-      margin: 1rem 0;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
-      color: #777;
-      border-top: 1px solid #333;
-      margin-top: 2rem;
-    }
-
-    /* Carrinho no topo */
-    .cart {
-      position: fixed;
-      top: 15px;
-      right: 20px;
-      background-color: #222;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      border: 1px solid #444;
-      font-weight: bold;
-      z-index: 999;
-      cursor: pointer;
-      box-shadow: 0 0 5px #800080;
-    }
-
-    .cart-count {
-      background-color: #800080;
-      border-radius: 50%;
-      color: white;
-      padding: 2px 8px;
-      margin-left: 6px;
-      font-size: 0.8rem;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="cart" onclick="alert('Você tem ' + cartCount + ' item(ns) no carrinho.')">
-    Carrinho <span class="cart-count" id="cartCount">0</span>
-  </div>
-
-  <header>Custom Gears</header>
-  <div class="container">
-
-    <h2>Roupas</h2>
-    <div class="products">
-      <div class="product">
-        <img src="https://via.placeholder.com/200x200.png?text=Camiseta+Gótica" alt="Camiseta Gótica">
-        <h3>Camisetas estilo JDM</h3>
-        <p>Preta com estampas exclusivas</p>
-        <button onclick="addToCart()">Adicionar ao carrinho</button>
-      </div>
-      <div class="product">
-        <img src="https://via.placeholder.com/200x200.png?text=Boné+Street" alt="Boné Street">
-        <h3>Boné Street</h3>
-        <p>Estilo urbano preto fosco</p>
-        <button onclick="addToCart()">Adicionar ao carrinho</button>
-      </div>
-    </div>
-
-    <h2>Chaveiros</h2>
-    <div class="products">
-      <div class="product">
-        <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Turbo" alt="Chaveiro Turbo">
-        <h3>Chaves personalizadas</h3>
-        <p>Miniaturas de carrinhos JDM</p>
-        <button onclick="addToCart()">Adicionar ao carrinho</button>
-      </div>
-      <div class="product">
-        <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Engrenagem" alt="Chaveiro Engrenagem">
-        <h3>Parafusos e porcas</h3>
-        <p>Design mecânico estilizado</p>
-        <button onclick="addToCart()">Adicionar ao carrinho</button>
-      </div>
-    </div>
-
-    <h2>Acessórios Automotivos</h2>
-    <div class="products">
-      <div class="product">
-        <img src="https://via.placeholder.com/200x200.png?text=Bancos+Concha" alt="Bancos Concha">
-        <h3>Bancos Concha</h3>
-        <p>Couro sintético com costura preta</p>
-        <button onclick="addToCart()">Adicionar ao carrinho</button>
-      </div>
-      <div class="product">
-        <img src="https://via.placeholder.com/200x200.png?text=Adesivo+Reflectivo" alt="Adesivo Reflectivo">
-        <h3>Adesivos Reflectivos</h3>
-        <p>Estilo racing em preto e prata</p>
-        <button onclick="addToCart()">Adicionar ao carrinho</button>
-      </div>
-    </div>
-
-    <h2>Fale Conosco</h2>
-    <div class="contact">
-      <p><strong>Instagram:</strong><br><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">@custom_gears17</a></p>
-      <p><strong>E-mail:</strong><br><a href="mailto:customgears17@gmail.com">customgears17@gmail.com</a></p>
-      <p><strong>WhatsApp:</strong><br><a href="https://wa.me/5541999737694" target="_blank">+55 41 99973-7694</a></p>
-    </div>
-
-  </div>
-  <footer>© 2025 Custom Gears. Todos os direitos reservados.</footer>
-
-  <script>
-    let cartCount = 0;
-    function addToCart() {
-      cartCount++;
-      document.getElementById('cartCount').textContent = cartCount;
-    }
-  </script>
-
-</body>
+</body>  
 </html>
