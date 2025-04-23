@@ -6,11 +6,38 @@
   <title>Custom Gears</title>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <style>
+    /* Scroll personalizada elegante */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #777;
+    }
+
     body {
       background-color: #000;
       color: #fff;
       font-family: Arial, sans-serif;
       margin: 0;
+    }
+
+    a {
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
 
     header {
@@ -19,6 +46,7 @@
       font-family: 'UnifrakturCook', cursive;
       font-size: 3rem;
       border-bottom: 1px solid #333;
+      color: #ccc;
     }
 
     h2 {
@@ -27,6 +55,7 @@
       margin-top: 3rem;
       font-family: 'UnifrakturCook', cursive;
       text-align: center;
+      color: #aaa;
     }
 
     .container {
@@ -55,7 +84,7 @@
 
     .product:hover {
       transform: translateY(-5px);
-      box-shadow: 0 0 10px #f39c12;
+      box-shadow: 0 0 10px #555;
     }
 
     .product img {
@@ -66,18 +95,18 @@
 
     .product h3 {
       margin: 0.5rem 0;
-      color: #f1c40f;
+      color: #ddd;
     }
 
     .product p {
       font-size: 0.9rem;
-      color: #ccc;
+      color: #aaa;
       margin-bottom: 1rem;
     }
 
     button {
-      background-color: #f39c12;
-      color: #000;
+      background-color: #333;
+      color: #fff;
       border: none;
       padding: 0.5rem 1rem;
       border-radius: 4px;
@@ -86,14 +115,29 @@
     }
 
     button:hover {
-      background-color: #e67e22;
+      background-color: #555;
+    }
+
+    .contact {
+      text-align: center;
+      background-color: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 2rem;
+      max-width: 500px;
+      margin: 2rem auto;
+      color: #ccc;
+    }
+
+    .contact p {
+      margin: 1rem 0;
     }
 
     footer {
       text-align: center;
       padding: 2rem;
       font-size: 0.9rem;
-      color: #888;
+      color: #777;
       border-top: 1px solid #333;
       margin-top: 2rem;
     }
@@ -102,11 +146,12 @@
 <body>
   <header>Custom Gears</header>
   <div class="container">
+
     <h2>Roupas</h2>
     <div class="products">
       <div class="product">
         <img src="https://via.placeholder.com/200x200.png?text=Camiseta+Gótica" alt="Camiseta Gótica">
-        <h3>Camisetas estilo jdm</h3>
+        <h3>Camisetas estilo JDM</h3>
         <p>Preta com estampas exclusivas</p>
         <button>Ver mais</button>
       </div>
@@ -123,13 +168,12 @@
       <div class="product">
         <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Turbo" alt="Chaveiro Turbo">
         <h3>Chaves personalizadas</h3>
-        <p>Miniaturas de
-        carrinhos jdm</p>
+        <p>Miniaturas de carrinhos JDM</p>
         <button>Ver mais</button>
       </div>
       <div class="product">
         <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Engrenagem" alt="Chaveiro Engrenagem">
-        <h3>parafusos e porcas </h3>
+        <h3>Parafusos e porcas</h3>
         <p>Design mecânico estilizado</p>
         <button>Ver mais</button>
       </div>
@@ -138,8 +182,8 @@
     <h2>Acessórios Automotivos</h2>
     <div class="products">
       <div class="product">
-        <img src="https://via.placeholder.com/200x200.png?text=Capa+de+Volante" alt="Capa de Volante">
-        <h3>bancos concha </h3>
+        <img src="https://via.placeholder.com/200x200.png?text=Bancos+Concha" alt="Bancos Concha">
+        <h3>Bancos Concha</h3>
         <p>Couro sintético com costura preta</p>
         <button>Ver mais</button>
       </div>
@@ -153,196 +197,22 @@
 
     <h2>Catálogo Completo</h2>
     <div class="products">
-      <div class="product">
-        <img src="https://via.placeholder.com/150" alt="Roupa">
-        <h3>Roupas em geral</h3>
-        <p>Peças com estilo próprio e toque personalizado</p>
-        <button>Ver mais</button>
-      </div>
-      <div class="product">
-        <img src="https://via.placeholder.com/150" alt="Chaveiros">
-        <h3>Acessórios e Chaveiros</h3>
-        <p>Designs criativos com identidade única</p>
-        <button>Ver mais</button>
-      </div>
-      <div class="product">
-        <img src="https://via.placeholder.com/150" alt="Tecidos">
-        <h3>Tecidos customizados</h3>
-        <p>Estampas exclusivas para seus projetos</p>
-        <button>Ver mais</button>
-      </div>
-      <div class="product">
-        <img src="https://via.placeholder.com/150" alt="Bandeiras">
-        <h3>Bandeiras</h3>
-        <p>Personalizadas com seu estilo e identidade</p>
-        <button>Ver mais</button>
-      </div>
-      <div class="product">
-        <img src="https://via.placeholder.com/150" alt="Estofamento">
-        <h3>Forros e Estofamentos</h3>
-        <p>Acabamento premium para interiores</p>
-        <button>Ver mais</button>
-      </div>
-      <div class="product">
-        <img src="https://via.placeholder.com/150" alt="Volantes">
-        <h3>Volantes e Manoplas</h3>
-        <p>Conforto e estilo para a direção</p>
-        <button>Ver mais</button>
-      </div>
+      <div class="product"><img src="https://via.placeholder.com/150" alt="Roupa"><h3>Roupas em geral</h3><p>Peças com estilo próprio</p><button>Ver mais</button></div>
+      <div class="product"><img src="https://via.placeholder.com/150" alt="Chaveiros"><h3>Acessórios e Chaveiros</h3><p>Designs criativos</p><button>Ver mais</button></div>
+      <div class="product"><img src="https://via.placeholder.com/150" alt="Tecidos"><h3>Tecidos customizados</h3><p>Estampas exclusivas</p><button>Ver mais</button></div>
+      <div class="product"><img src="https://via.placeholder.com/150" alt="Bandeiras"><h3>Bandeiras</h3><p>Com identidade única</p><button>Ver mais</button></div>
+      <div class="product"><img src="https://via.placeholder.com/150" alt="Estofamento"><h3>Forros e Estofamentos</h3><p>Acabamento premium</p><button>Ver mais</button></div>
+      <div class="product"><img src="https://via.placeholder.com/150" alt="Volantes"><h3>Volantes e Manoplas</h3><p>Conforto e estilo</p><button>Ver mais</button></div>
     </div>
-  </div>
 
-  <footer>
-  </footer>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Custom Gears</title>
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-    }
-
-    a {
-      color: #b84cff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    header {
-      text-align: center;
-      padding: 2rem;
-      font-family: 'UnifrakturCook', cursive;
-      font-size: 3rem;
-      border-bottom: 1px solid #333;
-    }
-
-    h2 {
-      border-bottom: 1px solid #444;
-      padding-bottom: 0.5rem;
-      margin-top: 3rem;
-      font-family: 'UnifrakturCook', cursive;
-      text-align: center;
-      color: #b84cff;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    .products {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 2rem 0;
-    }
-
-    .product {
-      background-color: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 1rem;
-      width: 250px;
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .product:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 10px #b84cff;
-    }
-
-    .product img {
-      width: 100%;
-      border-radius: 6px;
-      margin-bottom: 0.5rem;
-    }
-
-    .product h3 {
-      margin: 0.5rem 0;
-      color: #b84cff;
-    }
-
-    .product p {
-      font-size: 0.9rem;
-      color: #ccc;
-      margin-bottom: 1rem;
-    }
-
-    button {
-      background-color: #b84cff;
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background-color: #8c2acc;
-    }
-
-    .contact {
-      text-align: center;
-      background-color: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 2rem;
-      max-width: 500px;
-      margin: 2rem auto;
-    }
-
-    .contact p {
-      margin: 1rem 0;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
-      color: #888;
-      border-top: 1px solid #333;
-      margin-top: 2rem;
-    }
-  </style>
-</head>
-<body>
-  <header>para mais informações 
-    <div class="container">
-    <!-- Produtos aqui (igual como estava) -->
-
-    <!-- Seção Fale Conosco -->
     <h2>Fale Conosco</h2>
     <div class="contact">
-      <p><strong>Instagram:</strong><br>
-        <a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">@custom_gears17</a>
-      </p>
-      <p><strong>E-mail:</strong><br>
-        <a href="mailto:customgears17@gmail.com">customgears17@gmail.com</a>
-      </p>
-      <p><strong>WhatsApp:</strong><br>
-        <a href="https://wa.me/5541999737694" target="_blank">+55 41 99973-7694</a>
-      </p>
+      <p><strong>Instagram:</strong><br><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">@custom_gears17</a></p>
+      <p><strong>E-mail:</strong><br><a href="mailto:customgears17@gmail.com">customgears17@gmail.com</a></p>
+      <p><strong>WhatsApp:</strong><br><a href="https://wa.me/5541999737694" target="_blank">+55 41 99973-7694</a></p>
     </div>
+
   </div>
-  <footer>
-    © 2024 Custom Gears. Todos os direitos reservados.
-  </footer>
+  <footer>© 2025 Custom Gears. Todos os direitos reservados.</footer>
 </body>
 </html>
-
