@@ -6,49 +6,154 @@
   <title>Custom Gears</title>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
-
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: #111; }
-    ::-webkit-scrollbar-thumb { background: #555; border-radius: 5px; }
-    ::-webkit-scrollbar-thumb:hover { background: #800080; }
-
+    html { scroll-behavior: smooth; }
     body {
       background-color: #000;
       color: #fff;
       font-family: 'Montserrat', sans-serif;
       margin: 0;
-      padding-top: 60px;
-    }
-
-    a {
-      color: #ccc;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
+      padding-top: 80px;
     }
 
     header {
-      text-align: center;
-      padding: 2rem;
-      font-family: 'UnifrakturCook', cursive;
-      font-size: 3rem;
+      background-color: #111;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
       border-bottom: 1px solid #333;
+      box-shadow: 0 0 10px #800080;
+    }
+
+    .logo {
+      font-family: 'UnifrakturCook', cursive;
+      font-size: 2rem;
+      color: #aa88cc;
+      text-shadow: 0 0 10px #800080;
+    }
+
+    nav a {
+      margin: 0 1rem;
+      color: #ccc;
+      text-decoration: none;
+      font-weight: bold;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: #aa88cc;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .cart-icon {
+      cursor: pointer;
+      background-color: #222;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      box-shadow: 0 0 5px #800080;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cart-icon i { color: #aa88cc; }
+    .cart-count {
+      background-color: #800080;
+      border-radius: 50%;
+      padding: 2px 8px;
+      font-size: 0.8rem;
+    }
+
+    .cart-panel {
+      position: fixed;
+      top: 0;
+      right: -340px;
+      width: 300px;
+      height: 100%;
+      background: linear-gradient(to bottom, #111, #1a001a);
+      border-left: 1px solid #333;
+      padding: 1rem;
+      z-index: 1100;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .cart-panel.open { right: 0; }
+
+    .cart-panel h3 {
+      color: #aa88cc;
+      margin-top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-panel h3 i {
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid #333;
+      padding: 0.5rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-item button {
+      background: none;
+      border: none;
+      color: #f55;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .total {
+      margin-top: 1rem;
+      font-weight: bold;
       color: #aa88cc;
     }
 
+    .checkout-btn {
+      width: 100%;
+      margin-top: 1rem;
+      background-color: #800080;
+      border: none;
+      padding: 0.6rem;
+      border-radius: 6px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .checkout-btn:hover { background-color: #aa44ff; }
+
     h2 {
-      border-bottom: 1px solid #444;
-      padding-bottom: 0.5rem;
-      margin-top: 3rem;
-      font-family: 'UnifrakturCook', cursive;
       text-align: center;
+      font-family: 'UnifrakturCook', cursive;
       color: #aa88cc;
+      margin-top: 3rem;
     }
 
     .container {
@@ -83,19 +188,10 @@
     .product img {
       width: 100%;
       border-radius: 6px;
-      margin-bottom: 0.5rem;
     }
 
-    .product h3 {
-      margin: 0.5rem 0;
-      color: #ddd;
-    }
-
-    .product p {
-      font-size: 0.9rem;
-      color: #aaa;
-      margin-bottom: 1rem;
-    }
+    .product h3 { color: #ddd; }
+    .product p { font-size: 0.9rem; color: #aaa; }
 
     button {
       background-color: #800080;
@@ -108,23 +204,16 @@
       transition: background-color 0.3s;
     }
 
-    button:hover {
-      background-color: #a020f0;
-    }
+    button:hover { background-color: #a020f0; }
 
-    .contact {
-      text-align: center;
+    .about, .contact {
       background-color: #111;
       border: 1px solid #333;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 2rem;
-      max-width: 500px;
       margin: 2rem auto;
+      max-width: 800px;
       color: #ccc;
-    }
-
-    .contact p {
-      margin: 1rem 0;
     }
 
     footer {
@@ -136,208 +225,164 @@
       margin-top: 2rem;
     }
 
-    .cart {
-      position: fixed;
-      top: 15px;
-      right: 20px;
-      background-color: #222;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      border: 1px solid #444;
-      font-weight: bold;
-      z-index: 999;
-      cursor: pointer;
-      box-shadow: 0 0 5px #800080;
-    }
-
-    .cart-count {
-      background-color: #800080;
-      border-radius: 50%;
-      color: white;
-      padding: 2px 8px;
-      margin-left: 6px;
-      font-size: 0.8rem;
-    }
-
-    .about {
-      max-width: 800px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 10px;
-      color: #ccc;
-    }
-
-    .about h3 {
-      color: #aa88cc;
-      font-family: 'UnifrakturCook', cursive;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    /* Checkout Form Styling */
-    .checkout-form {
-      background-color: #111;
-      padding: 2rem;
-      border-radius: 10px;
-      border: 1px solid #333;
-      max-width: 600px;
-      margin: 2rem auto;
-      color: #ccc;
-    }
-
-    .checkout-form input,
-    .checkout-form textarea {
+    /* Adicionando Estilo para o Formulário de Checkout */
+    .checkout-form input, .checkout-form textarea, .checkout-form button {
       width: 100%;
-      padding: 0.8rem;
-      margin: 1rem 0;
-      border: 1px solid #333;
-      border-radius: 5px;
+      padding: 1rem;
+      margin-bottom: 1rem;
       background-color: #222;
-      color: #ccc;
+      border: 1px solid #333;
+      color: #fff;
     }
 
     .checkout-form button {
       background-color: #800080;
-      color: #fff;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 4px;
       cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s;
-      width: 100%;
     }
-
-    .checkout-form button:hover {
-      background-color: #a020f0;
-    }
-
   </style>
 </head>
 <body>
 
-  <div class="cart" onclick="showCart()">
-    Carrinho <span class="cart-count" id="cartCount">0</span>
+  <header>
+    <div class="logo">Custom Gears</div>
+    <nav>
+      <a href="#roupas">Roupas</a>
+      <a href="#chaveiros">Chaveiros</a>
+      <a href="#acessorios">Acessórios</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <div class="cart-icon" onclick="toggleCart()">
+      <i class="fas fa-shopping-cart"></i> Carrinho <span class="cart-count" id="cartCount">0</span>
+    </div>
+  </header>
+
+  <div class="cart-panel" id="cartPanel">
+    <h3>
+      Carrinho
+      <i class="fas fa-times" onclick="toggleCart()"></i>
+    </h3>
+    <div id="cartItems"></div>
+    <div class="total" id="cartTotal"></div>
+    <button class="checkout-btn" onclick="checkout()">Finalizar compra</button>
   </div>
 
-  <header>Custom Gears</header>
-  <div class="container">
+  <!-- Checkout Form (Hidden initially) -->
+  <div class="checkout-form" id="checkoutForm" style="display: none;">
+    <h3>Informações para o Checkout</h3>
+    <input type="text" id="name" placeholder="Nome Completo" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="text" id="address" placeholder="Endereço" required />
+    <textarea id="message" placeholder="Comentários ou Instruções Especiais" rows="4"></textarea>
+    <button onclick="submitOrder()">Finalizar Pedido</button>
+  </div>
 
-    <!-- Products Section -->
-    <h2>Roupas</h2>
+  <div class="container">
+    <h2 id="roupas"><i class="fas fa-tshirt"></i> Roupas</h2>
     <div class="products">
       <div class="product">
-        <img src="https://via.placeholder.com/200x200.png?text=Camiseta+Gótica" alt="Camiseta Gótica">
-        <h3>Camisetas estilo JDM</h3>
-        <p>Algodão premium com caimento reto e estampas exclusivas inspiradas na cultura JDM.</p>
-        <button onclick="addToCart('Camiseta JDM', 1)">Adicionar ao carrinho</button>
+        <img src="https://via.placeholder.com/200x200.png?text=Camiseta+Gótica">
+        <h3>Camiseta JDM</h3>
+        <p>Algodão premium com caimento reto e estampas exclusivas.</p>
+        <button onclick="addToCart('Camiseta JDM', 89.90)">Adicionar ao carrinho</button>
       </div>
+    </div>
+
+    <h2 id="chaveiros"><i class="fas fa-key"></i> Chaveiros</h2>
+    <div class="products">
       <div class="product">
-        <img src="https://via.placeholder.com/200x200.png?text=Boné+Street" alt="Boné Street">
-        <h3>Boné Street</h3>
-        <p>Modelo ajustável com aba curva. Estilo urbano com toque gótico em preto fosco.</p>
-        <button onclick="addToCart('Boné Street', 1)">Adicionar ao carrinho</button>
+        <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Turbo">
+        <h3>Chaveiro Turbo</h3>
+        <p>Miniaturas metálicas com visual racing.</p>
+        <button onclick="addToCart('Chaveiro Turbo', 29.90)">Adicionar ao carrinho</button>
       </div>
     </div>
 
-    <!-- Checkout Section -->
-    <div class="checkout-form">
-      <h3>Checkout</h3>
-      <form id="checkoutForm">
-        <input type="text" id="name" placeholder="Nome completo" required />
-        <input type="email" id="email" placeholder="E-mail" required />
-        <input type="text" id="address" placeholder="Endereço de entrega" required />
-        <textarea id="message" placeholder="Mensagem (opcional)"></textarea>
-        <button type="submit">Finalizar Compra</button>
-      </form>
+    <h2 id="acessorios"><i class="fas fa-car"></i> Acessórios Automotivos</h2>
+    <div class="products">
+      <div class="product">
+        <img src="https://via.placeholder.com/200x200.png?text=Bancos+Concha">
+        <h3>Bancos Concha</h3>
+        <p>Design esportivo com costura reforçada.</p>
+        <button onclick="addToCart('Bancos Concha', 599.00)">Adicionar ao carrinho</button>
+      </div>
     </div>
 
-    <!-- About Section -->
-    <div class="about">
+    <div class="about" id="sobre">
       <h3>Sobre a Custom Gears</h3>
-      <p>Nascida da paixão por carros e estilo, a Custom Gears é uma marca que une moda, atitude e a cultura automotiva underground. Nosso objetivo é transformar o seu carro e o seu visual em uma extensão da sua personalidade.</p>
+      <p>Marca que une moda e cultura automotiva underground.</p>
     </div>
 
-    <h2 id="contato">Fale Conosco</h2>
-    <div class="contact">
-      <p><strong>Instagram:</strong><br><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">@custom_gears17</a></p>
-      <p><strong>E-mail:</strong><br><a href="mailto:customgears17@gmail.com">customgears17@gmail.com</a></p>
+    <div class="contact" id="contato">
+      <p><strong>Instagram:</strong><br><a href="https://www.instagram.com/custom_gears17" target="_blank">@custom_gears17</a></p>
+      <p><strong>Email:</strong><br><a href="mailto:customgears17@gmail.com">customgears17@gmail.com</a></p>
       <p><strong>WhatsApp:</strong><br><a href="https://wa.me/5541999737694" target="_blank">+55 41 99973-7694</a></p>
     </div>
   </div>
 
-  <footer>© 2025 Custom Gears. Todos os direitos reservados. | Seu estilo, seu carro, sua atitude.</footer>
+  <footer>© 2025 Custom Gears. Todos os direitos reservados.</footer>
 
   <script>
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // Função para adicionar ao carrinho com quantidade
-    function addToCart(item, quantity) {
-      let existingItem = cart.find(i => i.name === item);
-      if (existingItem) {
-        existingItem.quantity += quantity;
-      } else {
-        cart.push({ name: item, quantity: quantity });
-      }
-      updateCartCount();
-      saveCartToLocalStorage();
+    function addToCart(item, price) {
+      cart.push({ item, price });
+      saveCart();
+      renderCart();
     }
 
-    // Função para remover um item do carrinho
     function removeFromCart(index) {
-      if (index > -1) {
-        cart.splice(index, 1);
-        updateCartCount();
-        saveCartToLocalStorage();
-      }
+      cart.splice(index, 1);
+      saveCart();
+      renderCart();
     }
 
-    // Função para atualizar o número de itens no carrinho
-    function updateCartCount() {
-      document.getElementById('cartCount').textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
-    }
+    function renderCart() {
+      document.getElementById('cartCount').textContent = cart.length;
+      const container = document.getElementById('cartItems');
+      container.innerHTML = '';
+      let total = 0;
 
-    // Função para mostrar os itens no carrinho
-    function showCart() {
-      if (cart.length === 0) {
-        alert("Seu carrinho está vazio.");
-        return;
-      }
-
-      let message = "Itens no carrinho:\n\n";
-      cart.forEach((item, index) => {
-        message += `${index + 1}. ${item.name} - Quantidade: ${item.quantity}\n`;
+      cart.forEach((entry, i) => {
+        total += entry.price;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `${entry.item} - R$ ${entry.price.toFixed(2)} <button onclick="removeFromCart(${i})">×</button>`;
+        container.appendChild(div);
       });
 
-      let indexToRemove = prompt(message + "\nDigite o número do item para remover, ou deixe vazio para sair:");
-      let index = parseInt(indexToRemove);
-      if (!isNaN(index) && index >= 1 && index <= cart.length) {
-        removeFromCart(index - 1);
-        showCart();
-      }
+      document.getElementById('cartTotal').textContent = `Total: R$ ${total.toFixed(2)}`;
     }
 
-    // Função para salvar o carrinho no localStorage
-    function saveCartToLocalStorage() {
+    function saveCart() {
       localStorage.setItem('cart', JSON.stringify(cart));
     }
 
-    // Função para finalizar o pedido (checkout)
-    document.getElementById('checkoutForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      alert("Compra realizada com sucesso! Enviaremos as informações para seu e-mail.");
-      // Limpar carrinho após a compra
+    function toggleCart() {
+      document.getElementById('cartPanel').classList.toggle('open');
+    }
+
+    function checkout() {
+      document.getElementById('cartPanel').style.display = 'none';
+      document.getElementById('checkoutForm').style.display = 'block';
+    }
+
+    function submitOrder() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const address = document.getElementById('address').value;
+      const message = document.getElementById('message').value;
+
+      // Aqui você pode processar o pedido, por exemplo, enviar os dados para um servidor ou e-mail
+
+      alert(`Pedido confirmado! Enviado para ${name} - ${email}`);
       cart = [];
-      saveCartToLocalStorage();
-      updateCartCount();
-    });
+      saveCart();
+      renderCart();
+      document.getElementById('checkoutForm').style.display = 'none';
+    }
 
-    // Atualiza a contagem do carrinho ao carregar a página
-    updateCartCount();
+    renderCart();
   </script>
-
 </body>
 </html>
