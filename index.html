@@ -6,7 +6,6 @@
   <title>Custom Gears</title>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <style>
     html { scroll-behavior: smooth; }
     body {
@@ -29,14 +28,12 @@
       align-items: center;
       padding: 1rem 2rem;
       border-bottom: 1px solid #333;
-      box-shadow: 0 0 10px #800080;
     }
 
     .logo {
       font-family: 'UnifrakturCook', cursive;
       font-size: 2rem;
       color: #aa88cc;
-      text-shadow: 0 0 10px #800080;
     }
 
     nav a {
@@ -44,24 +41,9 @@
       color: #ccc;
       text-decoration: none;
       font-weight: bold;
-      position: relative;
     }
 
-    nav a::after {
-      content: '';
-      display: block;
-      width: 0;
-      height: 2px;
-      background: #aa88cc;
-      transition: width 0.3s;
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-    }
-
-    nav a:hover::after {
-      width: 100%;
-    }
+    nav a:hover { text-decoration: underline; }
 
     .cart-icon {
       cursor: pointer;
@@ -69,26 +51,23 @@
       padding: 0.5rem 1rem;
       border-radius: 5px;
       box-shadow: 0 0 5px #800080;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
-    .cart-icon i { color: #aa88cc; }
     .cart-count {
       background-color: #800080;
       border-radius: 50%;
       padding: 2px 8px;
+      margin-left: 6px;
       font-size: 0.8rem;
     }
 
     .cart-panel {
       position: fixed;
       top: 0;
-      right: -340px;
+      right: -320px;
       width: 300px;
       height: 100%;
-      background: linear-gradient(to bottom, #111, #1a001a);
+      background-color: #111;
       border-left: 1px solid #333;
       padding: 1rem;
       z-index: 1100;
@@ -101,15 +80,6 @@
     .cart-panel h3 {
       color: #aa88cc;
       margin-top: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .cart-panel h3 i {
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: #fff;
     }
 
     .cart-item {
@@ -127,27 +97,6 @@
       font-size: 1rem;
       cursor: pointer;
     }
-
-    .total {
-      margin-top: 1rem;
-      font-weight: bold;
-      color: #aa88cc;
-    }
-
-    .checkout-btn {
-      width: 100%;
-      margin-top: 1rem;
-      background-color: #800080;
-      border: none;
-      padding: 0.6rem;
-      border-radius: 6px;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .checkout-btn:hover { background-color: #aa44ff; }
 
     h2 {
       text-align: center;
@@ -237,49 +186,42 @@
       <a href="#sobre">Sobre</a>
       <a href="#contato">Contato</a>
     </nav>
-    <div class="cart-icon" onclick="toggleCart()">
-      <i class="fas fa-shopping-cart"></i> Carrinho <span class="cart-count" id="cartCount">0</span>
-    </div>
+    <div class="cart-icon" onclick="toggleCart()">Carrinho <span class="cart-count" id="cartCount">0</span></div>
   </header>
 
   <div class="cart-panel" id="cartPanel">
-    <h3>
-      Carrinho
-      <i class="fas fa-times" onclick="toggleCart()"></i>
-    </h3>
+    <h3>Seu Carrinho</h3>
     <div id="cartItems"></div>
-    <div class="total" id="cartTotal"></div>
-    <button class="checkout-btn">Finalizar compra</button>
   </div>
 
   <div class="container">
-    <h2 id="roupas"><i class="fas fa-tshirt"></i> Roupas</h2>
+    <h2 id="roupas">Roupas</h2>
     <div class="products">
       <div class="product">
         <img src="https://via.placeholder.com/200x200.png?text=Camiseta+Gótica">
         <h3>Camiseta JDM</h3>
         <p>Algodão premium com caimento reto e estampas exclusivas.</p>
-        <button onclick="addToCart('Camiseta JDM', 89.90)">Adicionar ao carrinho</button>
+        <button onclick="addToCart('Camiseta JDM')">Adicionar ao carrinho</button>
       </div>
     </div>
 
-    <h2 id="chaveiros"><i class="fas fa-key"></i> Chaveiros</h2>
+    <h2 id="chaveiros">Chaveiros</h2>
     <div class="products">
       <div class="product">
         <img src="https://via.placeholder.com/200x200.png?text=Chaveiro+Turbo">
         <h3>Chaveiro Turbo</h3>
         <p>Miniaturas metálicas com visual racing.</p>
-        <button onclick="addToCart('Chaveiro Turbo', 29.90)">Adicionar ao carrinho</button>
+        <button onclick="addToCart('Chaveiro Turbo')">Adicionar ao carrinho</button>
       </div>
     </div>
 
-    <h2 id="acessorios"><i class="fas fa-car"></i> Acessórios Automotivos</h2>
+    <h2 id="acessorios">Acessórios Automotivos</h2>
     <div class="products">
       <div class="product">
         <img src="https://via.placeholder.com/200x200.png?text=Bancos+Concha">
         <h3>Bancos Concha</h3>
         <p>Design esportivo com costura reforçada.</p>
-        <button onclick="addToCart('Bancos Concha', 599.00)">Adicionar ao carrinho</button>
+        <button onclick="addToCart('Bancos Concha')">Adicionar ao carrinho</button>
       </div>
     </div>
 
@@ -300,8 +242,8 @@
   <script>
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    function addToCart(item, price) {
-      cart.push({ item, price });
+    function addToCart(item) {
+      cart.push(item);
       saveCart();
       renderCart();
     }
@@ -316,17 +258,12 @@
       document.getElementById('cartCount').textContent = cart.length;
       const container = document.getElementById('cartItems');
       container.innerHTML = '';
-      let total = 0;
-
-      cart.forEach((entry, i) => {
-        total += entry.price;
+      cart.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'cart-item';
-        div.innerHTML = `${entry.item} - R$ ${entry.price.toFixed(2)} <button onclick="removeFromCart(${i})">×</button>`;
+        div.innerHTML = `${item} <button onclick="removeFromCart(${i})">×</button>`;
         container.appendChild(div);
       });
-
-      document.getElementById('cartTotal').textContent = `Total: R$ ${total.toFixed(2)}`;
     }
 
     function saveCart() {
