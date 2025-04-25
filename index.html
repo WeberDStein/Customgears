@@ -139,6 +139,8 @@
       border-radius: 8px;
       width: 300px;
       text-align: center;
+      max-height: 400px;
+      overflow-y: auto;
     }
 
     .cart-popup .cart-content ul {
@@ -180,6 +182,10 @@
       .product {
         width: 80%;
       }
+
+      .product img {
+        width: 80%;
+      }
     }
   </style>
 </head>
@@ -207,8 +213,22 @@
       <ul id="cartItemsList">
         <!-- Itens do carrinho serão inseridos aqui -->
       </ul>
+      <p><strong>Total: R$ <span id="cartTotal">0.00</span></strong></p>
       <button onclick="checkout()">Finalizar Compra</button>
     </div>
+  </div>
+
+  <div id="checkoutForm" style="display:none;">
+    <h3>Preencha seus dados para finalizar a compra</h3>
+    <form>
+      <label for="name">Nome</label>
+      <input type="text" id="name" required />
+      <label for="email">E-mail</label>
+      <input type="email" id="email" required />
+      <label for="address">Endereço</label>
+      <input type="text" id="address" required />
+      <button type="submit">Confirmar Compra</button>
+    </form>
   </div>
 
   <script>
@@ -242,10 +262,17 @@
     function addToCart(index) {
       cart.push(products[index]);
       updateCartCount();
+      renderCartItems();
     }
 
     function updateCartCount() {
       document.getElementById('cartCount').textContent = cart.length;
+      updateCartTotal();
+    }
+
+    function updateCartTotal() {
+      let total = cart.reduce((acc, item) => acc + item.preco, 0);
+      document.getElementById('cartTotal').textContent = total.toFixed(2);
     }
 
     function toggleCartPopup() {
@@ -280,7 +307,8 @@
     }
 
     function checkout() {
-      alert('Redirecionando para o checkout...');
+      document.getElementById('checkoutForm').style.display = 'block';
+      document.getElementById('cartPopup').style.display = 'none';
     }
 
     renderProducts();
