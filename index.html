@@ -30,7 +30,7 @@
       padding: 2rem;
     }
 
-    h2, h3 {
+    h2 {
       color: #aa88cc;
       font-family: 'UnifrakturCook', cursive;
       border-bottom: 1px solid #444;
@@ -139,8 +139,6 @@
       border-radius: 8px;
       width: 300px;
       text-align: center;
-      max-height: 400px;
-      overflow-y: auto;
     }
 
     .cart-popup .cart-content ul {
@@ -154,6 +152,15 @@
       text-align: left;
     }
 
+    .cart-popup .cart-content button {
+      margin-top: 10px;
+      background: #800080;
+      padding: 0.5rem 1rem;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
     footer {
       text-align: center;
       padding: 2rem;
@@ -163,42 +170,12 @@
       margin-top: 2rem;
     }
 
-    #checkoutForm, #orderSummary {
-      background: #111;
-      padding: 2rem;
-      max-width: 400px;
-      margin: 2rem auto;
-      border: 1px solid #444;
-      border-radius: 8px;
-      display: none;
-    }
-
-    #checkoutForm label, #checkoutForm input {
-      display: block;
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-
-    #checkoutForm input {
-      padding: 0.5rem;
-      border-radius: 4px;
-      border: none;
-    }
-
-    #orderSummary ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    #orderSummary ul li {
-      margin: 0.5rem 0;
-    }
-
     @media (max-width: 768px) {
       .products {
         flex-direction: column;
         align-items: center;
       }
+
       .product {
         width: 80%;
       }
@@ -206,6 +183,7 @@
   </style>
 </head>
 <body>
+
   <div class="cart" onclick="toggleCartPopup()">
     Carrinho <span class="cart-count" id="cartCount">0</span>
   </div>
@@ -213,7 +191,9 @@
   <header>Custom Gears</header>
   <div class="container">
     <h2>Produtos</h2>
-    <div class="products" id="productList"></div>
+    <div class="products" id="productList">
+      <!-- Produtos serão inseridos via JS -->
+    </div>
   </div>
 
   <footer>
@@ -223,30 +203,11 @@
   <div class="cart-popup" id="cartPopup">
     <div class="cart-content">
       <h3>Itens no Carrinho</h3>
-      <ul id="cartItemsList"></ul>
-      <p><strong>Total: R$ <span id="cartTotal">0.00</span></strong></p>
+      <ul id="cartItemsList">
+        <!-- Itens do carrinho serão inseridos aqui -->
+      </ul>
       <button onclick="checkout()">Finalizar Compra</button>
     </div>
-  </div>
-
-  <div id="checkoutForm">
-    <h3>Finalizar Compra</h3>
-    <form onsubmit="return submitOrder(event)">
-      <label for="name">Nome</label>
-      <input type="text" id="name" required />
-      <label for="email">E-mail</label>
-      <input type="email" id="email" required />
-      <label for="address">Endereço</label>
-      <input type="text" id="address" required />
-      <button type="submit">Confirmar Compra</button>
-    </form>
-  </div>
-
-  <div id="orderSummary">
-    <h3>Resumo do Pedido</h3>
-    <p id="clientInfo"></p>
-    <ul id="orderItems"></ul>
-    <p><strong>Total: R$ <span id="summaryTotal">0.00</span></strong></p>
   </div>
 
   <script>
@@ -264,82 +225,61 @@
     function renderProducts() {
       const container = document.getElementById('productList');
       container.innerHTML = '';
+
       products.forEach((product, index) => {
         container.innerHTML += `
           <div class="product">
             <img src="${product.imagem}" alt="${product.nome}">
             <h3>${product.nome}</h3>
             <p>R$ ${product.preco.toFixed(2)}</p>
-            <button onclick="addToCart(${index})">Adicionar ao Carrinho</button>
+            <button onclick="addToCart(${index})">Adicionar ao carrinho</button>
           </div>
         `;
       });
     }
 
     function addToCart(index) {
-      const product = products[index];
-      const cartItem = { nome: product.nome, preco: product.preco };
-      cart.push(cartItem);
-      updateCart();
+      cart.push(products[index]);
+      updateCartCount();
     }
 
-    function updateCart() {
-      const cartCount = document.getElementById('cartCount');
-      const cartPopup = document.getElementById('cartPopup');
-      const cartItemsList = document.getElementById('cartItemsList');
-      const cartTotal = document.getElementById('cartTotal');
-
-      cartCount.textContent = cart.length;
-      cartItemsList.innerHTML = '';
-      let total = 0;
-
-      cart.forEach(item => {
-        cartItemsList.innerHTML += `<li>${item.nome} - R$ ${item.preco.toFixed(2)}</li>`;
-        total += item.preco;
-      });
-
-      cartTotal.textContent = total.toFixed(2);
+    function updateCartCount() {
+      document.getElementById('cartCount').textContent = cart.length;
     }
 
     function toggleCartPopup() {
-      const cartPopup = document.getElementById('cartPopup');
-      cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
+      const popup = document.getElementById('cartPopup');
+      if (cart.length === 0) {
+        alert("Seu carrinho está vazio.");
+        return;
+      }
+
+      popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+      renderCartItems();
+    }
+
+    function renderCartItems() {
+      const list = document.getElementById('cartItemsList');
+      list.innerHTML = '';
+
+      cart.forEach((item, i) => {
+        list.innerHTML += `
+          <li>
+            ${item.nome} - R$ ${item.preco.toFixed(2)} 
+            <button onclick="removeFromCart(${i})">Remover</button>
+          </li>
+        `;
+      });
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartCount();
+      renderCartItems();
     }
 
     function checkout() {
-      const cartPopup = document.getElementById('cartPopup');
-      const checkoutForm = document.getElementById('checkoutForm');
-      cartPopup.style.display = 'none';
-      checkoutForm.style.display = 'block';
-    }
-
-    function submitOrder(event) {
-      event.preventDefault();
-
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const address = document.getElementById('address').value;
-
-      const orderSummary = document.getElementById('orderSummary');
-      const clientInfo = document.getElementById('clientInfo');
-      const orderItems = document.getElementById('orderItems');
-      const summaryTotal = document.getElementById('summaryTotal');
-
-      clientInfo.textContent = `Nome: ${name}, E-mail: ${email}, Endereço: ${address}`;
-      orderItems.innerHTML = '';
-      let total = 0;
-
-      cart.forEach(item => {
-        orderItems.innerHTML += `<li>${item.nome} - R$ ${item.preco.toFixed(2)}</li>`;
-        total += item.preco;
-      });
-
-      summaryTotal.textContent = total.toFixed(2);
-
-      orderSummary.style.display = 'block';
-      checkoutForm.style.display = 'none';
-      cart = [];
-      updateCart();
+      alert('Redirecionando para o checkout...');
     }
 
     renderProducts();
