@@ -168,16 +168,6 @@
       overflow-y: auto;
     }
 
-    #checkoutForm, #orderSummary {
-      background: #111;
-      padding: 2rem;
-      max-width: 400px;
-      margin: 2rem auto;
-      border: 1px solid #444;
-      border-radius: 8px;
-      display: none;
-    }
-
     #searchInput {
       padding: 0.5rem;
       width: 100%;
@@ -199,307 +189,208 @@
         width: 80%;
       }
     }
+
+    .custom-alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #6a0dad;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      z-index: 9999;
+      animation: fadein 0.5s, fadeout 0.5s 1.5s;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeout {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-20px); }
+    }
   </style>
 </head>
 <body>
+  <div class="cart" onclick="toggleCartPopup()">
+    🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
+  </div>
 
-<div class="cart" onclick="toggleCartPopup()">
-  🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
-</div>
+  <header>Custom Gears</header>
 
-<header>Custom Gears</header>
+  <div class="container">
+    <h2>Produtos</h2>
+    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()">
+    <div class="products" id="productList"></div>
+  </div>
 
-<div class="container">
-  <h2>Produtos</h2>
-  <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()">
-  <div class="products" id="productList"></div>
-</div>
-
-<div class="container">
-  <h2>Catálogo Completo</h2>
-  <div class="catalog">
-    <!-- Seção 1: Customização Interna -->
-    <div class="catalog-item">
-      <h3>Customização Interna</h3>
-      <ul>
-        <li><strong>Tecido para Customizar Interior</strong>: Tecido automotivo de alta resistência. Tamanho: 1m x 1,5m. Preço: R$89,90</li>
-        <li><strong>Almofada para Banco Automotivo</strong>: Almofada ergonômica premium. Tamanho: 30x30cm. Preço: R$49,90</li>
-        <li><strong>Coifa para Freio de Mão</strong>: Coifa em couro sintético. Tamanho: Universal. Preço: R$59,90</li>
-        <li><strong>Coifa para Câmbio</strong>: Coifa de câmbio personalizada. Tamanho: Universal. Preço: R$64,90</li>
-      </ul>
-    </div>
-    <!-- Seção 2: Roupas (Streetwear) -->
-    <div class="catalog-item">
-      <h3>Roupas (Streetwear)</h3>
-      <ul>
-        <li><strong>Camiseta Oversized</strong>: Malha premium. Tamanhos: P, M, G, GG. Preço: R$119,90</li>
-        <li><strong>Blusa de Moletom</strong>: Moletom grosso com capuz. Tamanhos: P, M, G, GG. Preço: R$189,90</li>
-        <li><strong>Calça de Moletom</strong>: Calça ajustada. Tamanhos: P, M, G, GG. Preço: R$149,90</li>
-        <li><strong>Meias</strong>: Meias cano alto bordadas. Tamanho: 38-42. Preço: R$29,90</li>
-        <li><strong>Camiseta de Manga</strong>: Camiseta básica. Tamanhos: P, M, G, GG. Preço: R$89,90</li>
-        <li><strong>Blusa de Manga Longa</strong>: Blusa casual. Tamanhos: P, M, G, GG. Preço: R$99,90</li>
-      </ul>
-    </div>
-    <!-- Seção 3: Roupas para Pilotos -->
-    <div class="catalog-item">
-      <h3>Roupas para Pilotos</h3>
-      <ul>
-        <li><strong>Luvas de Piloto</strong>: Grip antiderrapante. Tamanhos: P, M, G. Preço: R$199,90</li>
-        <li><strong>Macacão de Corrida</strong>: Homologado para corridas. Tamanhos: P, M, G, GG. Preço: R$1.499,90</li>
-        <li><strong>Capacete</strong>: Capacete leve. Tamanhos: 56, 58, 60. Preço: R$2.399,90</li>
-        <li><strong>Camiseta Térmica</strong>: Anti-chamas. Tamanhos: P, M, G, GG. Preço: R$249,90</li>
-        <li><strong>Calça Térmica</strong>: Anti-chamas. Tamanhos: P, M, G, GG. Preço: R$249,90</li>
-        <li><strong>Máscara Balaclava</strong>: Resistente à temperatura. Tamanho: Único. Preço: R$149,90</li>
-      </ul>
-    </div>
-    <!-- Seção 4: Adesivos e Acessórios -->
-    <div class="catalog-item">
-      <h3>Adesivos e Acessórios</h3>
-      <ul>
-        <li><strong>Adesivos Refletivos</strong>: Kit em vários tamanhos. Preço: R$19,90 (pequeno)</li>
-        <li><strong>Caneca Térmica</strong>: Aço inox, 350ml. Preço: R$69,90</li>
-        <li><strong>Pulseiras</strong>: Silicone resistente. Preço: R$19,90</li>
-        <li><strong>Chaveiro Turbo</strong>: Mini turbo metálico. Preço: R$39,90</li>
-        <li><strong>Cordão de Pescoço</strong>: Cordão para chaves, 45cm. Preço: R$29,90</li>
-        <li><strong>Cheirinho</strong>: Aromatizador Custom Gears. Preço: R$14,90</li>
-      </ul>
-    </div>
-    <!-- Seção 5: Manoplas e Itens de Corrida -->
-    <div class="catalog-item">
-      <h3>Manoplas e Itens de Corrida</h3>
-      <ul>
-        <li><strong>Manopla de Freio de Mão</strong>: Ergonômica. Preço: R$79,90</li>
-        <li><strong>Manopla de Câmbio</strong>: Curta ou longa. Preço: R$99,90</li>
-        <li><strong>Volante Esportivo</strong>: 320mm ou 350mm. Preço: R$499,90</li>
-        <li><strong>Banco Concha</strong>: Fibra e revestimento premium. Preço: R$899,90</li>
-        <li><strong>Cinto de 4 Pontas</strong>: Ajuste rápido. Preço: R$349,90</li>
-        <li><strong>Cinto de 5 Pontas</strong>: Reforçado. Preço: R$449,90</li>
-        <li><strong>Cinto de 6 Pontas</strong>: Homologado. Preço: R$599,90</li>
-      </ul>
+  <div class="container">
+    <h2>Catálogo Completo</h2>
+    <div class="catalog">
+      <!-- catalog items here -->
     </div>
   </div>
-</div>
 
-<footer>
-  <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
-    <div>
-      <h4>Links</h4>
-      <ul style="list-style: none; padding: 0;">
-        <li><a href="#">Sobre</a></li>
-        <li><a href="#">Contato</a></li>
-      </ul>
+  <footer>
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+      <div>
+        <h4>Links</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li><a href="#">Sobre</a></li>
+          <li><a href="#">Contato</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Redes Sociais</h4>
+        <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a> | <a href="#">Facebook</a></p>
+      </div>
     </div>
-    <div>
-      <h4>Redes Sociais</h4>
-      <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a> | <a href="#">Facebook</a></p>
-    </div>
-  </div>
-  <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
-</footer>
+    <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
+  </footer>
 
-<!-- Scripts de carrinho e checkout (sem alterações) -->
-<script>
-// Produto catálogo
-const products = [
-  { id: 1, name: 'Cinto de 5 Pontas', price: 449.90, img: 'https://via.placeholder.com/250x250?text=Cinto+5+Pontas' },
-  { id: 2, name: 'Volante Esportivo', price: 499.90, img: 'https://via.placeholder.com/250x250?text=Volante+Esportivo' },
-  { id: 3, name: 'Camisa Oversized', price: 119.90, img: 'https://via.placeholder.com/250x250?text=Camisa+Oversized' },
-  { id: 4, name: 'Cheirinho Custom Gears', price: 14.90, img: 'https://via.placeholder.com/250x250?text=Cheirinho' },
-];
+  <script>
+    // Lista de produtos
+    const products = [
+      { id: 1, name: 'Cinto de 5 Pontas', price: 449.90, img: 'https://via.placeholder.com/250x250?text=Cinto+5+Pontas' },
+      { id: 2, name: 'Volante Esportivo', price: 499.90, img: 'https://via.placeholder.com/250x250?text=Volante+Esportivo' },
+      { id: 3, name: 'Camisa Oversized', price: 119.90, img: 'https://via.placeholder.com/250x250?text=Camisa+Oversized' },
+      { id: 4, name: 'Cheirinho Custom Gears', price: 14.90, img: 'https://via.placeholder.com/250x250?text=Cheirinho' }
+    ];
 
-// Carrinho
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// Renderizar produtos
-function renderProducts() {
-  const productList = document.getElementById('productList');
-  productList.innerHTML = '';
-  products.forEach(product => {
-    const div = document.createElement('div');
-    div.className = 'product';
-    div.innerHTML = `
-      <img src="${product.img}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p>R$${product.price.toFixed(2)}</p>
-      <button onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
-    `;
-    productList.appendChild(div);
-  });
-}
+    function renderProducts() {
+      const list = document.getElementById('productList');
+      list.innerHTML = '';
+      products.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>R$${p.price.toFixed(2)}</p>
+          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
+        `;
+        list.appendChild(div);
+      });
+    }
 
-// Adicionar ao carrinho
-function addToCart(productId) {
-  const product = products.find(p => p.id === productId);
-  const existingItem = cart.find(item => item.id === productId);
-  if (existingItem) {
-    existingItem.quantity++;
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
-  saveCart();
-  updateCartCount();
-  showAlert(`${product.name} adicionado ao carrinho!`);
-}
+    function addToCart(id) {
+      const prod = products.find(x => x.id === id);
+      const exists = cart.find(x => x.id === id);
+      if (exists) exists.quantity++;
+      else cart.push({ ...prod, quantity: 1 });
+      saveCart();
+      updateCartCount();
+      showAlert(`${prod.name} adicionado ao carrinho!`);
+    }
 
-// Atualizar contagem
-function updateCartCount() {
-  const count = cart.reduce((acc, item) => acc + item.quantity, 0);
-  document.getElementById('cartCount').innerText = count;
-}
+    function updateCartCount() {
+      const count = cart.reduce((a, i) => a + i.quantity, 0);
+      document.getElementById('cartCount').innerText = count;
+    }
 
-// Salvar no localStorage
-function saveCart() {
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
 
-// Abrir carrinho
-function toggleCartPopup() {
-  const popup = document.querySelector('.cart-popup');
-  if (!popup) {
-    createCartPopup();
-  }
-  document.querySelector('.cart-popup').style.display = 'flex';
-  renderCartItems();
-}
+    function toggleCartPopup() {
+      let popup = document.querySelector('.cart-popup');
+      if (!popup) createCartPopup();
+      document.querySelector('.cart-popup').style.display = 'flex';
+      renderCartItems();
+    }
 
-// Criar popup carrinho
-function createCartPopup() {
-  const popup = document.createElement('div');
-  popup.className = 'cart-popup';
-  popup.innerHTML = `
-    <div class="cart-content">
-      <h3>Seu Carrinho</h3>
-      <div id="cartItems"></div>
-      <p id="cartTotal"></p>
-      <button onclick="checkout()" class="checkout">Finalizar Compra</button>
-      <button onclick="closeCart()" style="margin-top: 1rem;">Fechar</button>
-    </div>
-  `;
-  document.body.appendChild(popup);
-}
+    function createCartPopup() {
+      const popup = document.createElement('div');
+      popup.className = 'cart-popup';
+      popup.innerHTML = `
+        <div class="cart-content">
+          <h3>Seu Carrinho</h3>
+          <div id="cartItems"></div>
+          <p id="cartTotal"></p>
+          <button onclick="checkout()" class="checkout">Finalizar Compra</button>
+          <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
+        </div>
+      `;
+      document.body.appendChild(popup);
+    }
 
-// Mostrar itens
-function renderCartItems() {
-  const cartItems = document.getElementById('cartItems');
-  cartItems.innerHTML = '';
-  let total = 0;
-  cart.forEach(item => {
-    total += item.price * item.quantity;
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <p>${item.name} x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}
-        <button class="remove" onclick="removeFromCart(${item.id})">X</button>
-      </p>
-    `;
-    cartItems.appendChild(div);
-  });
-  document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
-}
+    function renderCartItems() {
+      const items = document.getElementById('cartItems');
+      items.innerHTML = '';
+      let total = 0;
+      cart.forEach(i => {
+        total += i.price * i.quantity;
+        const div = document.createElement('div');
+        div.innerHTML = `<p>${i.name} x${i.quantity} - R$${(i.price * i.quantity).toFixed(2)} <button class="remove" onclick="removeFromCart(${i.id})">X</button></p>`;
+        items.appendChild(div);
+      });
+      document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
+    }
 
-// Remover do carrinho
-function removeFromCart(productId) {
-  cart = cart.filter(item => item.id !== productId);
-  saveCart();
-  updateCartCount();
-  renderCartItems();
-}
+    function removeFromCart(id) {
+      cart = cart.filter(x => x.id !== id);
+      saveCart();
+      updateCartCount();
+      renderCartItems();
+    }
 
-// Fechar popup
-function closeCart() {
-  document.querySelector('.cart-popup').style.display = 'none';
-}
+    function closeCart() {
+      document.querySelector('.cart-popup').style.display = 'none';
+    }
 
-// Checkout
-function checkout() {
-  let checkoutHTML = '<h2>Finalizar Compra</h2>';
-  checkoutHTML += '<p>Resumo do Pedido:</p><ul>';
-  cart.forEach(item => {
-    checkoutHTML += `<li>${item.name} x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}</li>`;
-  });
-  checkoutHTML += '</ul>';
-  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  checkoutHTML += `<p><strong>Total: R$${total.toFixed(2)}</strong></p>`;
-  checkoutHTML += `<p>Por favor, entre em contato via WhatsApp para concluir o pedido.</p>`;
-  checkoutHTML += `<a href="https://wa.me/5541999737694?text=Ol%C3%A1!+Quero+concluir+meu+pedido:+${encodeURIComponent(generateOrderSummary())}" target="_blank"><button class="checkout">Chamar no WhatsApp</button></a>`;
+    function checkout() {
+      let summary = '<h2>Finalizar Compra</h2><ul>';
+      cart.forEach(i => summary += `<li>${i.name} x${i.quantity} - R$${(i.price * i.quantity).toFixed(2)}</li>`);
+      const total = cart.reduce((a,i) => a + i.price*i.quantity,0);
+      summary += `</ul><p><strong>Total: R$${total.toFixed(2)}</strong></p>`;
+      summary += `<p>Entre em contato no WhatsApp:</p><a href="https://wa.me/5541999737694?text=${encodeURIComponent(generateOrderSummary())}" target="_blank"><button class="checkout">Chamar no WhatsApp</button></a>`;
+      document.querySelector('.container').innerHTML = summary;
+      cart = [];
+      saveCart();
+      updateCartCount();
+      closeCart();
+    }
 
-  document.querySelector('.container').innerHTML = checkoutHTML;
-  cart = [];
-  saveCart();
-  updateCartCount();
-  closeCart();
-}
+    function generateOrderSummary() {
+      let text = '';
+      cart.forEach(i => text += `${i.quantity}x ${i.name} (R$${(i.price*i.quantity).toFixed(2)})\n`);
+      text += `Total: R$${cart.reduce((a,i) => a + i.price*i.quantity,0).toFixed(2)}`;
+      return text;
+    }
 
-// Gerar resumo para WhatsApp
-function generateOrderSummary() {
-  let text = '';
-  cart.forEach(item => {
-    text += `${item.quantity}x ${item.name} (R$${(item.price * item.quantity).toFixed(2)})\n`;
-  });
-  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  text += `Total: R$${total.toFixed(2)}`;
-  return text;
-}
+    function filterProducts() {
+      const term = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+      const list = document.getElementById('productList');
+      list.innerHTML = '';
+      filtered.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>R$${p.price.toFixed(2)}</p>
+          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
+        `;
+        list.appendChild(div);
+      });
+    }
 
-// Filtro de busca
-function filterProducts() {
-  const searchInput = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = products.filter(p => p.name.toLowerCase().includes(searchInput));
-  const productList = document.getElementById('productList');
-  productList.innerHTML = '';
-  filtered.forEach(product => {
-    const div = document.createElement('div');
-    div.className = 'product';
-    div.innerHTML = `
-      <img src="${product.img}" alt="${product.name}">
-      <h3>${product.name}</h3>
-      <p>R$${product.price.toFixed(2)}</p>
-      <button onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
-    `;
-    productList.appendChild(div);
-  });
-}
+    function showAlert(msg) {
+      const alertEl = document.createElement('div');
+      alertEl.className = 'custom-alert';
+      alertEl.innerText = msg;
+      document.body.appendChild(alertEl);
+      setTimeout(() => alertEl.remove(), 2000);
+    }
 
-// Alertas
-function showAlert(message) {
-  const alert = document.createElement('div');
-  alert.className = 'custom-alert';
-  alert.innerText = message;
-  document.body.appendChild(alert);
-  setTimeout(() => {
-    alert.remove();
-  }, 2000);
-}
-
-// Iniciar
-renderProducts();
-updateCartCount();
-</script>
-
-<!-- Estilo do alerta -->
-<style>
-.custom-alert {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #6a0dad;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  z-index: 9999;
-  animation: fadein 0.5s, fadeout 0.5s 1.5s;
-}
-@keyframes fadein {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeout {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-20px); }
-}
-</style>
-
-  // ... seu script existente permanece aqui ...
-  renderProducts();
-</script>
+    // Inicialização
+    renderProducts();
+    updateCartCount();
+  </script>
 </body>
 </html>
