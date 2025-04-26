@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Gears</title>
+  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear. Camisetas, bonés, chaveiros e mais.">
+  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning">
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -30,7 +32,7 @@
       padding: 2rem;
     }
 
-    h2 {
+    h2, h3 {
       color: #aa88cc;
       font-family: 'UnifrakturCook', cursive;
       border-bottom: 1px solid #444;
@@ -64,6 +66,7 @@
       width: 100%;
       border-radius: 6px;
       margin-bottom: 0.5rem;
+      loading: lazy;
     }
 
     .product h3 {
@@ -72,7 +75,7 @@
     }
 
     .product p {
-      color: #aaa;
+      color: #ccc; /* Melhor contraste */
       font-size: 0.9rem;
       margin-bottom: 1rem;
     }
@@ -85,10 +88,21 @@
       border-radius: 4px;
       cursor: pointer;
       font-size: 1rem;
+      transition: background 0.2s;
     }
 
     button:hover {
       background: #a020f0;
+    }
+
+    button.checkout {
+      background: #4caf50;
+    }
+
+    button.remove {
+      background: #f44336;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
     }
 
     .cart {
@@ -131,14 +145,18 @@
       display: none;
       justify-content: center;
       align-items: center;
+      z-index: 1000;
     }
 
     .cart-popup .cart-content {
       background: #333;
       padding: 20px;
       border-radius: 8px;
-      width: 300px;
+      width: 90%;
+      max-width: 400px;
       text-align: center;
+      max-height: 80vh;
+      overflow-y: auto;
     }
 
     .cart-popup .cart-content ul {
@@ -150,15 +168,9 @@
       margin: 10px 0;
       color: #fff;
       text-align: left;
-    }
-
-    .cart-popup .cart-content button {
-      margin-top: 10px;
-      background: #800080;
-      padding: 0.5rem 1rem;
-      color: white;
-      border: none;
-      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     footer {
@@ -170,12 +182,62 @@
       margin-top: 2rem;
     }
 
+    #checkoutForm, #orderSummary {
+      background: #111;
+      padding: 2rem;
+      max-width: 400px;
+      margin: 2rem auto;
+      border: 1px solid #444;
+      border-radius: 8px;
+      display: none;
+    }
+
+    #checkoutForm label, #checkoutForm input {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    #checkoutForm input {
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: none;
+      background: #222;
+      color: #fff;
+    }
+
+    #orderSummary ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    #orderSummary ul li {
+      margin: 0.5rem 0;
+    }
+
+    #searchInput {
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 300px;
+      margin: 1rem auto;
+      display: block;
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #fff;
+    }
+
+    .empty-message {
+      margin-left: 10px;
+      color: #ff6b6b;
+      font-size: 0.8rem;
+    }
+
     @media (max-width: 768px) {
       .products {
         flex-direction: column;
         align-items: center;
       }
-
       .product {
         width: 80%;
       }
@@ -183,77 +245,185 @@
   </style>
 </head>
 <body>
-
   <div class="cart" onclick="toggleCartPopup()">
-    Carrinho <span class="cart-count" id="cartCount">0</span>
+    🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
   </div>
 
   <header>Custom Gears</header>
   <div class="container">
     <h2>Produtos</h2>
-    <div class="products" id="productList">
-      <!-- Produtos serão inseridos via JS -->
-    </div>
+    <input 
+      type="text" 
+      id="searchInput" 
+      placeholder="Buscar produtos..." 
+      oninput="filterProducts()"
+    >
+    <div class="products" id="productList"></div>
   </div>
 
   <footer>
-    © 2025 Custom Gears. Todos os direitos reservados.
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+      <div>
+        <h4>Links</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li><a href="#" style="color: #aaa;">Sobre</a></li>
+          <li><a href="#" style="color: #aaa;">Contato</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Redes Sociais</h4>
+        <p>
+          <a href="#" style="color: #aa88cc;">Instagram</a> | 
+          <a href="#" style="color: #aa88cc;">Facebook</a>
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
 
   <div class="cart-popup" id="cartPopup">
     <div class="cart-content">
       <h3>Itens no Carrinho</h3>
-      <ul id="cartItemsList">
-        <!-- Itens do carrinho serão inseridos aqui -->
-      </ul>
-      <button onclick="checkout()">Finalizar Compra</button>
+      <ul id="cartItemsList"></ul>
+      <p><strong>Total: R$ <span id="cartTotal">0.00</span></strong></p>
+      <button class="checkout" onclick="checkout()">Finalizar Compra</button>
     </div>
+  </div>
+
+  <div id="checkoutForm">
+    <h3>Finalizar Compra</h3>
+    <form onsubmit="return submitOrder(event)">
+      <label for="name">Nome</label>
+      <input type="text" id="name" required />
+      <label for="email">E-mail</label>
+      <input type="email" id="email" required />
+      <label for="address">Endereço</label>
+      <input type="text" id="address" required />
+      <button class="checkout" type="submit">Confirmar Compra</button>
+    </form>
+  </div>
+
+  <div id="orderSummary">
+    <h3>Resumo do Pedido</h3>
+    <p id="clientInfo"></p>
+    <ul id="orderItems"></ul>
+    <p><strong>Total: R$ <span id="summaryTotal">0.00</span></strong></p>
   </div>
 
   <script>
     const products = [
-      { nome: 'Camiseta JDM', preco: 89.90, imagem: 'https://via.placeholder.com/250x250.png?text=Camiseta+JDM' },
-      { nome: 'Boné Street', preco: 59.90, imagem: 'https://via.placeholder.com/250x250.png?text=Boné+Street' },
-      { nome: 'Chaveiro costumizado', preco: 29.90, imagem: 'https://via.placeholder.com/250x250.png?text=Chaveiro+Turbo' },
-      { nome: 'Parafusos e Engrenagem', preco: 24.90, imagem: 'https://via.placeholder.com/250x250.png?text=Chaveiro+Engrenagem' },
-      { nome: 'Bancos Concha', preco: 799.90, imagem: 'https://via.placeholder.com/250x250.png?text=Bancos+Concha' },
-      { nome: 'Adesivos Reflectivos', preco: 14.90, imagem: 'https://via.placeholder.com/250x250.png?text=Adesivo+Reflectivo' }
+      { 
+        id: 1,
+        nome: 'Camiseta JDM', 
+        preco: 89.90, 
+        imagem: 'https://via.placeholder.com/250x250.webp?text=Camiseta+JDM',
+        estoque: 10
+      },
+      { 
+        id: 2,
+        nome: 'Boné Street', 
+        preco: 59.90, 
+        imagem: 'https://via.placeholder.com/250x250.webp?text=Boné+Street',
+        estoque: 5
+      },
+      { 
+        id: 3,
+        nome: 'Chaveiro Customizado', 
+        preco: 29.90, 
+        imagem: 'https://via.placeholder.com/250x250.webp?text=Chaveiro+Turbo',
+        estoque: 20
+      },
+      { 
+        id: 4,
+        nome: 'Parafusos e Engrenagem', 
+        preco: 24.90, 
+        imagem: 'https://via.placeholder.com/250x250.webp?text=Chaveiro+Engrenagem',
+        estoque: 15
+      },
+      { 
+        id: 5,
+        nome: 'Bancos Concha', 
+        preco: 799.90, 
+        imagem: 'https://via.placeholder.com/250x250.webp?text=Bancos+Concha',
+        estoque: 3
+      },
+      { 
+        id: 6,
+        nome: 'Adesivos Reflectivos', 
+        preco: 14.90, 
+        imagem: 'https://via.placeholder.com/250x250.webp?text=Adesivo+Reflectivo',
+        estoque: 30
+      }
     ];
 
     let cart = [];
 
-    function renderProducts() {
+    function renderProducts(productsToRender = products) {
       const container = document.getElementById('productList');
       container.innerHTML = '';
-
-      products.forEach((product, index) => {
+      productsToRender.forEach((product, index) => {
         container.innerHTML += `
           <div class="product">
-            <img src="${product.imagem}" alt="${product.nome}">
+            <img src="${product.imagem}" alt="${product.nome}" loading="lazy">
             <h3>${product.nome}</h3>
             <p>R$ ${product.preco.toFixed(2)}</p>
             <button onclick="addToCart(${index})">Adicionar ao carrinho</button>
-          </div>
-        `;
+          </div>`;
       });
     }
 
+    function filterProducts() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = products.filter(product => 
+        product.nome.toLowerCase().includes(searchTerm)
+      );
+      renderProducts(filtered);
+    }
+
     function addToCart(index) {
-      cart.push(products[index]);
+      const product = products[index];
+      const existingItem = cart.find(item => item.id === product.id);
+      
+      if (existingItem) {
+        if (existingItem.quantidade < product.estoque) {
+          existingItem.quantidade += 1;
+        } else {
+          alert(`Não há mais ${product.nome} em estoque!`);
+          return;
+        }
+      } else {
+        cart.push({ 
+          ...product, 
+          quantidade: 1 
+        });
+      }
+      
       updateCartCount();
+      renderCartItems();
     }
 
     function updateCartCount() {
-      document.getElementById('cartCount').textContent = cart.length;
+      const totalItems = cart.reduce((acc, item) => acc + item.quantidade, 0);
+      document.getElementById('cartCount').textContent = totalItems;
+      updateCartTotal();
+    }
+
+    function updateCartTotal() {
+      let total = cart.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
+      document.getElementById('cartTotal').textContent = total.toFixed(2);
     }
 
     function toggleCartPopup() {
       const popup = document.getElementById('cartPopup');
       if (cart.length === 0) {
-        alert("Seu carrinho está vazio.");
+        const cartDiv = document.querySelector('.cart');
+        cartDiv.insertAdjacentHTML('beforeend', '<span class="empty-message">(Vazio)</span>');
+        setTimeout(() => {
+          const msg = document.querySelector('.empty-message');
+          if (msg) msg.remove();
+        }, 2000);
         return;
       }
-
       popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
       renderCartItems();
     }
@@ -261,27 +431,77 @@
     function renderCartItems() {
       const list = document.getElementById('cartItemsList');
       list.innerHTML = '';
-
       cart.forEach((item, i) => {
         list.innerHTML += `
           <li>
-            ${item.nome} - R$ ${item.preco.toFixed(2)} 
-            <button onclick="removeFromCart(${i})">Remover</button>
-          </li>
-        `;
+            ${item.nome} 
+            <span>
+              ${item.quantidade}x R$ ${item.preco.toFixed(2)} 
+              <button class="remove" onclick="removeFromCart(${i})">X</button>
+            </span>
+          </li>`;
       });
     }
 
     function removeFromCart(index) {
-      cart.splice(index, 1);
+      if (cart[index].quantidade > 1) {
+        cart[index].quantidade -= 1;
+      } else {
+        cart.splice(index, 1);
+      }
       updateCartCount();
       renderCartItems();
     }
 
     function checkout() {
-      alert('Redirecionando para o checkout...');
+      document.getElementById('checkoutForm').style.display = 'block';
+      document.getElementById('cartPopup').style.display = 'none';
     }
 
+    function submitOrder(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const address = document.getElementById('address').value;
+
+      document.getElementById('checkoutForm').style.display = 'none';
+      document.getElementById('orderSummary').style.display = 'block';
+
+      document.getElementById('clientInfo').innerHTML = `
+        <strong>Cliente:</strong> ${name}<br>
+        <strong>Email:</strong> ${email}<br>
+        <strong>Endereço:</strong> ${address}
+      `;
+
+      const orderList = document.getElementById('orderItems');
+      orderList.innerHTML = '';
+
+      let total = 0;
+      cart.forEach(item => {
+        orderList.innerHTML += `
+          <li>${item.quantidade}x ${item.nome} - R$ ${(item.preco * item.quantidade).toFixed(2)}</li>`;
+        total += item.preco * item.quantidade;
+      });
+
+      document.getElementById('summaryTotal').textContent = total.toFixed(2);
+      
+      const orderNumber = 'CG-' + Date.now().toString().slice(-6);
+      document.getElementById('orderSummary').innerHTML += `
+        <div style="margin-top: 1rem; padding: 1rem; background: #333; border-radius: 4px;">
+          <p style="color: #4caf50;">✔️ Pedido <strong>${orderNumber}</strong> confirmado!</p>
+          <p>Enviamos os detalhes para <strong>${email}</strong>.</p>
+        </div>
+      `;
+      
+      cart = [];
+      updateCartCount();
+      event.target.reset();
+
+      return false;
+    }
+
+    // Inicializa o site
     renderProducts();
   </script>
 </body>
