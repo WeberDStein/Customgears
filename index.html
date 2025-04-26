@@ -8,7 +8,6 @@
   <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning" />
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1-crypto-js.js"></script>
   <style>
     body {
       background: #000;
@@ -262,30 +261,6 @@
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // Criptografar e salvar o carrinho
-    function saveCart() {
-      const encryptedCart = CryptoJS.AES.encrypt(JSON.stringify(cart), 'seuSegredoAqui').toString();
-      localStorage.setItem('cart', encryptedCart);
-      updateCartCount();
-    }
-
-    // Carregar o carrinho
-    function loadCart() {
-      const encryptedCart = localStorage.getItem('cart');
-      if (encryptedCart) {
-        const bytes = CryptoJS.AES.decrypt(encryptedCart, 'seuSegredoAqui');
-        cart = JSON.parse(bytes.toString(CryptoJS.enc.Utf8)) || [];
-        updateCartCount();
-      }
-    }
-
-    // Atualizar o contador do carrinho
-    function updateCartCount() {
-      const count = cart.reduce((a, i) => a + i.quantity, 0);
-      document.getElementById('cartCount').innerText = count;
-    }
-
-    // Exibir os produtos
     function renderProducts() {
       const list = document.getElementById('productList');
       list.innerHTML = '';
@@ -295,86 +270,127 @@
         div.innerHTML = `
           <img src="${p.img}" alt="${p.name}">
           <h3>${p.name}</h3>
-          <p>R$ ${p.price.toFixed(2)}</p>
-          <button onclick="addToCart(${p.id})">Adicionar ao carrinho</button>
+          <p>R$${p.price.toFixed(2)}</p>
+          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
         `;
         list.appendChild(div);
       });
     }
 
-    // Adicionar produto ao carrinho
     function addToCart(id) {
-      const product = products.find(p => p.id === id);
-      const productInCart = cart.find(p => p.id === id);
-      if (productInCart) {
-        productInCart.quantity++;
-      } else {
-        cart.push({ ...product, quantity: 1 });
-      }
+      const prod = products.find(x => x.id === id);
+      const exists = cart.find(x => x.id === id);
+      if (exists) exists.quantity++;
+      else cart.push({ ...prod, quantity: 1 });
       saveCart();
-      showAlert(`${product.name} adicionado ao carrinho`);
+      updateCartCount();
+      showAlert(`${prod.name} adicionado ao carrinho!`);
     }
 
-    // Mostrar alert de sucesso
-    function showAlert(message) {
-      const alert = document.createElement('div');
-      alert.className = 'custom-alert';
-      alert.innerText = message;
-      document.body.appendChild(alert);
-      setTimeout(() => alert.remove(), 2000);
+    function updateCartCount() {
+      const count = cart.reduce((a, i) => a + i.quantity, 0);
+      document.getElementById('cartCount').innerText = count;
     }
 
-    // Abrir e fechar o carrinho
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
     function toggleCartPopup() {
+      let popup = document.querySelector('.cart-popup');
+      if (!popup) createCartPopup();
+      document.querySelector('.cart-popup').style.display = 'flex';
+      renderCartItems();
+    }
+
+    function createCartPopup() {
       const popup = document.createElement('div');
       popup.className = 'cart-popup';
       popup.innerHTML = `
         <div class="cart-content">
           <h3>Seu Carrinho</h3>
-          ${cart.length === 0 ? '<p>Seu carrinho está vazio.</p>' : cart.map(item => `
-            <div class="cart-item">
-              <p>${item.name} x${item.quantity}</p>
-              <button class="remove" onclick="removeFromCart(${item.id})">Remover</button>
-            </div>
-          `).join('')}
-          <hr>
-          <p><strong>Total: R$ ${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}</strong></p>
-          <button class="checkout">Finalizar Compra</button>
+          <div id="cartItems"></div>
+          <p id="cartTotal"></p>
+          <button onclick="checkout()" class="checkout">Finalizar Compra</button>
+          <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
         </div>
       `;
       document.body.appendChild(popup);
-      popup.onclick = (e) => e.target === popup && popup.remove();
     }
 
-    // Remover item do carrinho
+    function renderCartItems() {
+      const items = document.getElementById('cartItems');
+      items.innerHTML = '';
+      let total = 0;
+      cart.forEach(i => {
+        total += i.price * i.quantity;
+        const div = document.createElement('div');
+        div.innerHTML = `<p>${i.name} x${i.quantity} - R$${(i.price * i.quantity).toFixed(2)} <button class="remove" onclick="removeFromCart(${i.id})">X</button></p>`;
+        items.appendChild(div);
+      });
+      document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
+    }
+
     function removeFromCart(id) {
-      cart = cart.filter(item => item.id !== id);
+      cart = cart.filter(x => x.id !== id);
       saveCart();
-      toggleCartPopup();
+      updateCartCount();
+      renderCartItems();
     }
 
-    // Filtrar produtos
+    function closeCart() {
+      document.querySelector('.cart-popup').style.display = 'none';
+    }
+
+    function checkout() {
+      let summary = '<h2>Finalizar Compra</h2><ul>';
+      cart.forEach(i => summary += `<li>${i.name} x${i.quantity} - R$${(i.price * i.quantity).toFixed(2)}</li>`);
+      const total = cart.reduce((a,i) => a + i.price*i.quantity,0);
+      summary += `</ul><p><strong>Total: R$${total.toFixed(2)}</strong></p>`;
+      summary += `<p>Entre em contato no WhatsApp:</p><a href="https://wa.me/5541999737694?text=${encodeURIComponent(generateOrderSummary())}" target="_blank"><button class="checkout">Chamar no WhatsApp</button></a>`;
+      document.querySelector('.container').innerHTML = summary;
+      cart = [];
+      saveCart();
+      updateCartCount();
+      closeCart();
+    }
+
+    function generateOrderSummary() {
+      let text = '';
+      cart.forEach(i => text += `${i.quantity}x ${i.name} (R$${(i.price*i.quantity).toFixed(2)})\n`);
+      text += `Total: R$${cart.reduce((a,i) => a + i.price*i.quantity,0).toFixed(2)}`;
+      return text;
+    }
+
     function filterProducts() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const filteredProducts = products.filter(p => p.name.toLowerCase().includes(query));
+      const term = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
       const list = document.getElementById('productList');
       list.innerHTML = '';
-      filteredProducts.forEach(p => {
+      filtered.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product';
         div.innerHTML = `
           <img src="${p.img}" alt="${p.name}">
           <h3>${p.name}</h3>
-          <p>R$ ${p.price.toFixed(2)}</p>
-          <button onclick="addToCart(${p.id})">Adicionar ao carrinho</button>
+          <p>R$${p.price.toFixed(2)}</p>
+          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
         `;
         list.appendChild(div);
       });
     }
 
-    // Inicializar
-    loadCart();
+    function showAlert(msg) {
+      const alertEl = document.createElement('div');
+      alertEl.className = 'custom-alert';
+      alertEl.innerText = msg;
+      document.body.appendChild(alertEl);
+      setTimeout(() => alertEl.remove(), 2000);
+    }
+
+    // Inicialização
     renderProducts();
+    updateCartCount();
   </script>
 </body>
 </html>
