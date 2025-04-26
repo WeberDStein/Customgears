@@ -17,6 +17,81 @@
       padding-top: 70px;
     }
 
+    /* Menu Mobile */
+    .hamburger-menu {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      z-index: 100;
+      color: #aa88cc;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100vh;
+      background: #111;
+      z-index: 1000;
+      transition: left 0.3s ease;
+      padding: 2rem;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+    }
+
+    .mobile-menu.open {
+      left: 0;
+    }
+
+    .mobile-menu ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 2rem;
+    }
+
+    .mobile-menu ul li {
+      margin: 1.5rem 0;
+    }
+
+    .mobile-menu ul li a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+      display: block;
+      padding: 0.5rem 0;
+    }
+
+    .mobile-menu ul li a:hover {
+      color: #aa88cc;
+    }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 999;
+      display: none;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 1.5rem;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      cursor: pointer;
+      padding: 0;
+    }
+
     header {
       font-family: 'UnifrakturCook', cursive;
       font-size: 3rem;
@@ -75,7 +150,7 @@
     }
 
     .product p {
-      color: #ccc; /* Melhor contraste */
+      color: #ccc;
       font-size: 0.9rem;
       margin-bottom: 1rem;
     }
@@ -121,6 +196,7 @@
       justify-content: space-between;
       min-width: 100px;
       transition: transform 0.2s ease-in-out;
+      z-index: 100;
     }
 
     .cart:hover {
@@ -168,341 +244,4 @@
       margin: 10px 0;
       color: #fff;
       text-align: left;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
-      color: #777;
-      border-top: 1px solid #333;
-      margin-top: 2rem;
-    }
-
-    #checkoutForm, #orderSummary {
-      background: #111;
-      padding: 2rem;
-      max-width: 400px;
-      margin: 2rem auto;
-      border: 1px solid #444;
-      border-radius: 8px;
-      display: none;
-    }
-
-    #checkoutForm label, #checkoutForm input {
-      display: block;
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-
-    #checkoutForm input {
-      padding: 0.5rem;
-      border-radius: 4px;
-      border: none;
-      background: #222;
-      color: #fff;
-    }
-
-    #orderSummary ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    #orderSummary ul li {
-      margin: 0.5rem 0;
-    }
-
-    #searchInput {
-      padding: 0.5rem;
-      width: 100%;
-      max-width: 300px;
-      margin: 1rem auto;
-      display: block;
-      background: #222;
-      border: 1px solid #444;
-      border-radius: 4px;
-      color: #fff;
-    }
-
-    .empty-message {
-      margin-left: 10px;
-      color: #ff6b6b;
-      font-size: 0.8rem;
-    }
-
-    @media (max-width: 768px) {
-      .products {
-        flex-direction: column;
-        align-items: center;
-      }
-      .product {
-        width: 80%;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="cart" onclick="toggleCartPopup()">
-    🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
-  </div>
-
-  <header>Custom Gears</header>
-  <div class="container">
-    <h2>Produtos</h2>
-    <input 
-      type="text" 
-      id="searchInput" 
-      placeholder="Buscar produtos..." 
-      oninput="filterProducts()"
-    >
-    <div class="products" id="productList"></div>
-  </div>
-
-  <footer>
-    <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
-      <div>
-        <h4>Links</h4>
-        <ul style="list-style: none; padding: 0;">
-          <li><a href="#" style="color: #aaa;">Sobre</a></li>
-          <li><a href="#" style="color: #aaa;">Contato</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Redes Sociais</h4>
-        <p>
-          <a href="#" style="color: #aa88cc;">Instagram</a> | 
-          <a href="#" style="color: #aa88cc;">Facebook</a>
-        </p>
-      </div>
-    </div>
-    <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
-  </footer>
-
-  <div class="cart-popup" id="cartPopup">
-    <div class="cart-content">
-      <h3>Itens no Carrinho</h3>
-      <ul id="cartItemsList"></ul>
-      <p><strong>Total: R$ <span id="cartTotal">0.00</span></strong></p>
-      <button class="checkout" onclick="checkout()">Finalizar Compra</button>
-    </div>
-  </div>
-
-  <div id="checkoutForm">
-    <h3>Finalizar Compra</h3>
-    <form onsubmit="return submitOrder(event)">
-      <label for="name">Nome</label>
-      <input type="text" id="name" required />
-      <label for="email">E-mail</label>
-      <input type="email" id="email" required />
-      <label for="address">Endereço</label>
-      <input type="text" id="address" required />
-      <button class="checkout" type="submit">Confirmar Compra</button>
-    </form>
-  </div>
-
-  <div id="orderSummary">
-    <h3>Resumo do Pedido</h3>
-    <p id="clientInfo"></p>
-    <ul id="orderItems"></ul>
-    <p><strong>Total: R$ <span id="summaryTotal">0.00</span></strong></p>
-  </div>
-
-  <script>
-    const products = [
-      { 
-        id: 1,
-        nome: 'Camiseta JDM', 
-        preco: 89.90, 
-        imagem: 'https://via.placeholder.com/250x250.webp?text=Camiseta+JDM',
-        estoque: 10
-      },
-      { 
-        id: 2,
-        nome: 'Boné Street', 
-        preco: 59.90, 
-        imagem: 'https://via.placeholder.com/250x250.webp?text=Boné+Street',
-        estoque: 5
-      },
-      { 
-        id: 3,
-        nome: 'Chaveiro Customizado', 
-        preco: 29.90, 
-        imagem: 'https://via.placeholder.com/250x250.webp?text=Chaveiro+Turbo',
-        estoque: 20
-      },
-      { 
-        id: 4,
-        nome: 'Parafusos e Engrenagem', 
-        preco: 24.90, 
-        imagem: 'https://via.placeholder.com/250x250.webp?text=Chaveiro+Engrenagem',
-        estoque: 15
-      },
-      { 
-        id: 5,
-        nome: 'Bancos Concha', 
-        preco: 799.90, 
-        imagem: 'https://via.placeholder.com/250x250.webp?text=Bancos+Concha',
-        estoque: 3
-      },
-      { 
-        id: 6,
-        nome: 'Adesivos Reflectivos', 
-        preco: 14.90, 
-        imagem: 'https://via.placeholder.com/250x250.webp?text=Adesivo+Reflectivo',
-        estoque: 30
-      }
-    ];
-
-    let cart = [];
-
-    function renderProducts(productsToRender = products) {
-      const container = document.getElementById('productList');
-      container.innerHTML = '';
-      productsToRender.forEach((product, index) => {
-        container.innerHTML += `
-          <div class="product">
-            <img src="${product.imagem}" alt="${product.nome}" loading="lazy">
-            <h3>${product.nome}</h3>
-            <p>R$ ${product.preco.toFixed(2)}</p>
-            <button onclick="addToCart(${index})">Adicionar ao carrinho</button>
-          </div>`;
-      });
-    }
-
-    function filterProducts() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = products.filter(product => 
-        product.nome.toLowerCase().includes(searchTerm)
-      );
-      renderProducts(filtered);
-    }
-
-    function addToCart(index) {
-      const product = products[index];
-      const existingItem = cart.find(item => item.id === product.id);
-      
-      if (existingItem) {
-        if (existingItem.quantidade < product.estoque) {
-          existingItem.quantidade += 1;
-        } else {
-          alert(`Não há mais ${product.nome} em estoque!`);
-          return;
-        }
-      } else {
-        cart.push({ 
-          ...product, 
-          quantidade: 1 
-        });
-      }
-      
-      updateCartCount();
-      renderCartItems();
-    }
-
-    function updateCartCount() {
-      const totalItems = cart.reduce((acc, item) => acc + item.quantidade, 0);
-      document.getElementById('cartCount').textContent = totalItems;
-      updateCartTotal();
-    }
-
-    function updateCartTotal() {
-      let total = cart.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
-      document.getElementById('cartTotal').textContent = total.toFixed(2);
-    }
-
-    function toggleCartPopup() {
-      const popup = document.getElementById('cartPopup');
-      if (cart.length === 0) {
-        const cartDiv = document.querySelector('.cart');
-        cartDiv.insertAdjacentHTML('beforeend', '<span class="empty-message">(Vazio)</span>');
-        setTimeout(() => {
-          const msg = document.querySelector('.empty-message');
-          if (msg) msg.remove();
-        }, 2000);
-        return;
-      }
-      popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
-      renderCartItems();
-    }
-
-    function renderCartItems() {
-      const list = document.getElementById('cartItemsList');
-      list.innerHTML = '';
-      cart.forEach((item, i) => {
-        list.innerHTML += `
-          <li>
-            ${item.nome} 
-            <span>
-              ${item.quantidade}x R$ ${item.preco.toFixed(2)} 
-              <button class="remove" onclick="removeFromCart(${i})">X</button>
-            </span>
-          </li>`;
-      });
-    }
-
-    function removeFromCart(index) {
-      if (cart[index].quantidade > 1) {
-        cart[index].quantidade -= 1;
-      } else {
-        cart.splice(index, 1);
-      }
-      updateCartCount();
-      renderCartItems();
-    }
-
-    function checkout() {
-      document.getElementById('checkoutForm').style.display = 'block';
-      document.getElementById('cartPopup').style.display = 'none';
-    }
-
-    function submitOrder(event) {
-      event.preventDefault();
-
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const address = document.getElementById('address').value;
-
-      document.getElementById('checkoutForm').style.display = 'none';
-      document.getElementById('orderSummary').style.display = 'block';
-
-      document.getElementById('clientInfo').innerHTML = `
-        <strong>Cliente:</strong> ${name}<br>
-        <strong>Email:</strong> ${email}<br>
-        <strong>Endereço:</strong> ${address}
-      `;
-
-      const orderList = document.getElementById('orderItems');
-      orderList.innerHTML = '';
-
-      let total = 0;
-      cart.forEach(item => {
-        orderList.innerHTML += `
-          <li>${item.quantidade}x ${item.nome} - R$ ${(item.preco * item.quantidade).toFixed(2)}</li>`;
-        total += item.preco * item.quantidade;
-      });
-
-      document.getElementById('summaryTotal').textContent = total.toFixed(2);
-      
-      const orderNumber = 'CG-' + Date.now().toString().slice(-6);
-      document.getElementById('orderSummary').innerHTML += `
-        <div style="margin-top: 1rem; padding: 1rem; background: #333; border-radius: 4px;">
-          <p style="color: #4caf50;">✔️ Pedido <strong>${orderNumber}</strong> confirmado!</p>
-          <p>Enviamos os detalhes para <strong>${email}</strong>.</p>
-        </div>
-      `;
-      
-      cart = [];
-      updateCartCount();
-      event.target.reset();
-
-      return false;
-    }
-
-    // Inicializa o site
-    renderProducts();
-  </script>
-</body>
-</html>
+     
