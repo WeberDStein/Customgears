@@ -299,6 +299,205 @@
 
 <!-- Scripts de carrinho e checkout (sem alterações) -->
 <script>
+// Produto catálogo
+const products = [
+  { id: 1, name: 'Cinto de 5 Pontas', price: 449.90, img: 'https://via.placeholder.com/250x250?text=Cinto+5+Pontas' },
+  { id: 2, name: 'Volante Esportivo', price: 499.90, img: 'https://via.placeholder.com/250x250?text=Volante+Esportivo' },
+  { id: 3, name: 'Camisa Oversized', price: 119.90, img: 'https://via.placeholder.com/250x250?text=Camisa+Oversized' },
+  { id: 4, name: 'Cheirinho Custom Gears', price: 14.90, img: 'https://via.placeholder.com/250x250?text=Cheirinho' },
+];
+
+// Carrinho
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Renderizar produtos
+function renderProducts() {
+  const productList = document.getElementById('productList');
+  productList.innerHTML = '';
+  products.forEach(product => {
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `
+      <img src="${product.img}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p>R$${product.price.toFixed(2)}</p>
+      <button onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
+    `;
+    productList.appendChild(div);
+  });
+}
+
+// Adicionar ao carrinho
+function addToCart(productId) {
+  const product = products.find(p => p.id === productId);
+  const existingItem = cart.find(item => item.id === productId);
+  if (existingItem) {
+    existingItem.quantity++;
+  } else {
+    cart.push({ ...product, quantity: 1 });
+  }
+  saveCart();
+  updateCartCount();
+  showAlert(`${product.name} adicionado ao carrinho!`);
+}
+
+// Atualizar contagem
+function updateCartCount() {
+  const count = cart.reduce((acc, item) => acc + item.quantity, 0);
+  document.getElementById('cartCount').innerText = count;
+}
+
+// Salvar no localStorage
+function saveCart() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// Abrir carrinho
+function toggleCartPopup() {
+  const popup = document.querySelector('.cart-popup');
+  if (!popup) {
+    createCartPopup();
+  }
+  document.querySelector('.cart-popup').style.display = 'flex';
+  renderCartItems();
+}
+
+// Criar popup carrinho
+function createCartPopup() {
+  const popup = document.createElement('div');
+  popup.className = 'cart-popup';
+  popup.innerHTML = `
+    <div class="cart-content">
+      <h3>Seu Carrinho</h3>
+      <div id="cartItems"></div>
+      <p id="cartTotal"></p>
+      <button onclick="checkout()" class="checkout">Finalizar Compra</button>
+      <button onclick="closeCart()" style="margin-top: 1rem;">Fechar</button>
+    </div>
+  `;
+  document.body.appendChild(popup);
+}
+
+// Mostrar itens
+function renderCartItems() {
+  const cartItems = document.getElementById('cartItems');
+  cartItems.innerHTML = '';
+  let total = 0;
+  cart.forEach(item => {
+    total += item.price * item.quantity;
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <p>${item.name} x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}
+        <button class="remove" onclick="removeFromCart(${item.id})">X</button>
+      </p>
+    `;
+    cartItems.appendChild(div);
+  });
+  document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
+}
+
+// Remover do carrinho
+function removeFromCart(productId) {
+  cart = cart.filter(item => item.id !== productId);
+  saveCart();
+  updateCartCount();
+  renderCartItems();
+}
+
+// Fechar popup
+function closeCart() {
+  document.querySelector('.cart-popup').style.display = 'none';
+}
+
+// Checkout
+function checkout() {
+  let checkoutHTML = '<h2>Finalizar Compra</h2>';
+  checkoutHTML += '<p>Resumo do Pedido:</p><ul>';
+  cart.forEach(item => {
+    checkoutHTML += `<li>${item.name} x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}</li>`;
+  });
+  checkoutHTML += '</ul>';
+  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  checkoutHTML += `<p><strong>Total: R$${total.toFixed(2)}</strong></p>`;
+  checkoutHTML += `<p>Por favor, entre em contato via WhatsApp para concluir o pedido.</p>`;
+  checkoutHTML += `<a href="https://wa.me/5541999737694?text=Ol%C3%A1!+Quero+concluir+meu+pedido:+${encodeURIComponent(generateOrderSummary())}" target="_blank"><button class="checkout">Chamar no WhatsApp</button></a>`;
+
+  document.querySelector('.container').innerHTML = checkoutHTML;
+  cart = [];
+  saveCart();
+  updateCartCount();
+  closeCart();
+}
+
+// Gerar resumo para WhatsApp
+function generateOrderSummary() {
+  let text = '';
+  cart.forEach(item => {
+    text += `${item.quantity}x ${item.name} (R$${(item.price * item.quantity).toFixed(2)})\n`;
+  });
+  const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  text += `Total: R$${total.toFixed(2)}`;
+  return text;
+}
+
+// Filtro de busca
+function filterProducts() {
+  const searchInput = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = products.filter(p => p.name.toLowerCase().includes(searchInput));
+  const productList = document.getElementById('productList');
+  productList.innerHTML = '';
+  filtered.forEach(product => {
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `
+      <img src="${product.img}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p>R$${product.price.toFixed(2)}</p>
+      <button onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
+    `;
+    productList.appendChild(div);
+  });
+}
+
+// Alertas
+function showAlert(message) {
+  const alert = document.createElement('div');
+  alert.className = 'custom-alert';
+  alert.innerText = message;
+  document.body.appendChild(alert);
+  setTimeout(() => {
+    alert.remove();
+  }, 2000);
+}
+
+// Iniciar
+renderProducts();
+updateCartCount();
+</script>
+
+<!-- Estilo do alerta -->
+<style>
+.custom-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #6a0dad;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  z-index: 9999;
+  animation: fadein 0.5s, fadeout 0.5s 1.5s;
+}
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeout {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-20px); }
+}
+</style>
+
   // ... seu script existente permanece aqui ...
   renderProducts();
 </script>
