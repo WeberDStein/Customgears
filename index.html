@@ -1,137 +1,365 @@
-<!-- Correção e melhorias já aplicadas -->
-<button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Gears</title>
+  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear.">
+  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning">
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Estilos Gerais */
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding-top: 70px;
+    }
+    header {
+      font-family: 'UnifrakturCook', cursive;
+      font-size: 3rem;
+      text-align: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid #333;
+      color: #ccc;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem;
+    }
+    h2 {
+      color: #aa88cc;
+      font-family: 'UnifrakturCook', cursive;
+      border-bottom: 1px solid #444;
+      padding-bottom: 0.5rem;
+      text-align: center;
+    }
+    /* Produtos */
+    .products, .catalog {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .product, .catalog-item {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      width: 250px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .product:hover, .catalog-item:hover {
+      transform: scale(1.05);
+    }
+    .product img, .catalog-item img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+    .product h3 {
+      color: #ddd;
+      margin: 0.5rem 0;
+    }
+    .product p {
+      color: #ccc;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .product select {
+      width: 100%;
+      padding: 0.4rem;
+      margin-bottom: 0.5rem;
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #fff;
+    }
+    /* Botões */
+    button {
+      background: #800080;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #a020f0;
+    }
+    button.checkout {
+      background: #4caf50;
+    }
+    button.remove {
+      background: #f44336;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+      margin-left: 8px;
+    }
+    /* Carrinho */
+    .cart {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      background: #222;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid #444;
+      box-shadow: 0 0 5px #800080;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 100px;
+      z-index: 1001;
+    }
+    .cart-count {
+      background: #800080;
+      padding: 2px 8px;
+      border-radius: 50%;
+      margin-left: 6px;
+      font-size: 0.8rem;
+    }
+    .cart-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .cart-content {
+      background: #333;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    /* Busca */
+    #searchInput {
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 300px;
+      margin: 1rem auto;
+      display: block;
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #fff;
+    }
+    /* Alertas */
+    .custom-alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #6a0dad;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      z-index: 9999;
+      animation: fadein 0.5s, fadeout 0.5s 1.5s;
+    }
+    @keyframes fadein {
+      from {opacity:0; transform:translateY(-20px);}
+      to {opacity:1; transform:translateY(0);}
+    }
+    @keyframes fadeout {
+      from {opacity:1; transform:translateY(0);}
+      to {opacity:0; transform:translateY(-20px);}
+    }
+    /* Rodapé */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #111;
+      border-top: 1px solid #333;
+    }
+    footer h4 {
+      color: #aa88cc;
+      margin-bottom: 1rem;
+    }
+    footer p, footer a {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+    /* Botão Topo */
+    #btnTop {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      font-size: 1.5rem;
+      border: none;
+      outline: none;
+      background: #800080;
+      color: white;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #800080;
+      transition: background 0.3s;
+    }
+    #btnTop:hover {
+      background: #a020f0;
+    }
+    @media(max-width:768px) {
+      .products, .catalog {
+        flex-direction: column;
+        align-items: center;
+      }
+      .product, .catalog-item {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
 
-<script>
-  const products = [
-    { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', sizes:['P','M','G','GG','XG'], colors:['Preto','Branco','Roxo','Cinza'] },
-    { id:2, name:'Blusa moletom Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', sizes:['P','M','G','GG','XG'], colors:['Preto','Branco','Roxo','Cinza'] },
-    { id:3, name:'Manopla câmbio Custom Gears', price:65.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Roxo','Cinza'] },
-    { id:4, name:'Bandeira Custom Gears', price:54.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo','Cinza'] },
-    { id:5, name:'Coifa câmbio Custom Gears', price:59.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo','Cinza'] },
-    { id:6, name:'Caneca personalizada Custom Gears', price:59.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo','Cinza'] },
-    { id:7, name:'Chaveiro e cordão Custom Gears', price:29.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo','Cinza'] },
-    { id:8, name:'Adesivos refletivo Custom Gears', price:19.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo'] },
-    { id:9, name:'Aromatizante automotivo Custom Gears', price:6.90, img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Preto','Branco','Roxo','Cinza'] }
-  ];
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+<body>
+  <div class="cart" onclick="toggleCartPopup()">🛒 Carrinho <span class="cart-count" id="cartCount">0</span></div>
+  <header>Custom Gears</header>
 
-  function renderProducts(list = products) {
-    const productList = document.getElementById('productList');
-    productList.innerHTML = '';
-    list.forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'product';
-      let sizeSel = p.sizes ? `<select id="size-${p.id}"><option value="">Tamanho</option>${p.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}</select>` : '';
-      let colorSel = p.colors ? `<select id="color-${p.id}"><option value="">Cor</option>${p.colors.map(c => `<option value="${c}">${c}</option>`).join('')}</select>` : '';
-      div.innerHTML = `<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p>R$${p.price.toFixed(2)}</p>${sizeSel}${colorSel}<button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;
-      productList.appendChild(div);
-    });
-  }
-  function addToCart(id) {
-    const p = products.find(x => x.id === id);
-    const sz = document.getElementById(`size-${id}`)?.value || '';
-    const col = document.getElementById(`color-${id}`)?.value || '';
-    if (p.sizes && !sz) { showAlert('Selecione um tamanho'); return; }
-    if (p.colors && !col) { showAlert('Selecione uma cor'); return; }
-    const key = `${id}-${sz}-${col}`;
-    let exist = cart.find(x => x.key === key);
-    if (exist) exist.quantity++;
-    else cart.push({...p, quantity:1, size:sz, color:col, key});
-    saveCart(); updateCartCount(); showAlert(`${p.name} adicionado!`);
-  }
-  function renderCartItems() {
-    const el = document.getElementById('cartItems');
-    el.innerHTML = '';
-    let tot = 0;
-    cart.forEach(i => {
-      tot += i.price * i.quantity;
-      el.innerHTML += `<p>${i.name}${i.size ? ` (${i.size})` : ''}${i.color ? ` - ${i.color}` : ''} x${i.quantity} - R$${(i.price*i.quantity).toFixed(2)} <button class="remove" onclick="removeFromCart('${i.key}')">X</button></p>`;
-    });
-    document.getElementById('cartTotal').innerText = `Total: R$${tot.toFixed(2)}`;
-  }
-  function removeFromCart(key) {
-    cart = cart.filter(x => x.key !== key);
-    saveCart(); updateCartCount(); renderCartItems();
-  }
-  function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
-  function updateCartCount() {
-    document.getElementById('cartCount').innerText = cart.reduce((a, i) => a + i.quantity, 0);
-  }
-  function toggleCartPopup() {
-    let pop = document.querySelector('.cart-popup');
-    if (!pop) createCartPopup();
-    document.querySelector('.cart-popup').style.display = 'flex';
-    renderCartItems();
-  }
-  function createCartPopup() {
-    const pop = document.createElement('div');
-    pop.className = 'cart-popup';
-    pop.innerHTML = `<div class="cart-content"><h3>Seu Carrinho</h3><div id="cartItems"></div><p id="cartTotal"></p><button onclick="checkout()" class="checkout">Finalizar Compra</button><button onclick="closeCart()" style="margin-top:1rem">Fechar</button></div>`;
-    document.body.appendChild(pop);
-  }
-  function closeCart() {
-    document.querySelector('.cart-popup').style.display = 'none';
-  }
-  function checkout() {
-    let sum = generateOrderSummary();
-    const url = `https://wa.me/5541999737694?text=${encodeURIComponent(sum)}`;
-    window.location.href = url;
-    cart = []; saveCart(); updateCartCount(); closeCart();
-  }
-  function generateOrderSummary() {
-    let s = '';
-    cart.forEach(i => s += `${i.quantity}x ${i.name}${i.size ? ` (${i.size})` : ''}${i.color ? ` - ${i.color}` : ''} (R$${(i.price*i.quantity).toFixed(2)})\n`);
-    s += `Total: R$${cart.reduce((a,i)=>a+i.price*i.quantity,0).toFixed(2)}`;
-    return s;
-  }
-  function filterProducts() {
-    const t = document.getElementById('searchInput').value.toLowerCase();
-    renderProducts(products.filter(p => p.name.toLowerCase().includes(t)));
-  }
-  function showAlert(msg) {
-    const a = document.createElement('div');
-    a.className = 'custom-alert';
-    a.innerText = msg;
-    document.body.appendChild(a);
-    setTimeout(() => a.remove(), 2000);
-  }
-  window.onscroll = () => toggleBtnTop();
-  function toggleBtnTop() {
-    const b = document.getElementById('btnTop');
-    (document.documentElement.scrollTop > 200 || document.body.scrollTop > 200) ? b.style.display = 'block' : b.style.display = 'none';
-  }
-  function scrollToTop() {
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-  // Inicialização
-  renderProducts();
-  updateCartCount();
-</script>
+  <div class="container">
+    <h2>Produtos</h2>
+    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()">
+    <div class="products" id="productList"></div>
+  </div>
 
-<style>
-/* Ajuste botão Topo */
-#btnTop {
-  display: none;
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  z-index: 999;
-  font-size: 2rem;
-  border: none;
-  outline: none;
-  background: #800080;
-  color: white;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  line-height: 40px;
-  box-shadow: 0 0 10px #800080;
-  transition: background 0.3s;
-}
-#btnTop:hover {
-  background: #a020f0;
-}
-</style>
+  <div class="container">
+    <h2>Para mais informações</h2>
+    <div class="catalog"></div>
+  </div>
+
+  <footer>
+    <h4>Sobre</h4>
+    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
+    <h4>Redes Sociais</h4>
+    <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
+    <p style="margin-top:2rem;color:#777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
+  </footer>
+
+  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+
+  <script>
+    const products = [
+      { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', sizes:['P','M','G','GG','XG'], colors:['Preto','Branco','Roxo','Cinza'] },
+      { id:2, name:'Blusa moletom Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', sizes:['P','M','G','GG','XG'], colors:['Preto','Branco','Roxo','Cinza'] },
+      { id:3, name:'Manopla câmbio Custom Gears', price:65.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Roxo','Cinza'] },
+      { id:4, name:'Bandeira Custom Gears', price:54.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo','Cinza'] },
+      { id:5, name:'Coifa câmbio Custom Gears', price:59.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo','Cinza'] },
+      { id:6, name:'Caneca personalizada Custom Gears', price:59.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo','Cinza'] },
+      { id:7, name:'Chaveiro e cordão Custom Gears', price:29.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo','Cinza'] },
+      { id:8, name:'Adesivos refletivo Custom Gears', price:19.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Roxo'] },
+      { id:9, name:'Aromatizante automotivo Custom Gears', price:6.90, img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Preto','Branco','Roxo','Cinza'] }
+    ];
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderProducts(list = products) {
+      const productList = document.getElementById('productList');
+      productList.innerHTML = '';
+      list.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        let sizeSel = p.sizes ? `<select id="size-${p.id}"><option value="">Tamanho</option>${p.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}</select>` : '';
+        let colorSel = p.colors ? `<select id="color-${p.id}"><option value="">Cor</option>${p.colors.map(c => `<option value="${c}">${c}</option>`).join('')}</select>` : '';
+        div.innerHTML = `<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p>R$${p.price.toFixed(2)}</p>${sizeSel}${colorSel}<button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;
+        productList.appendChild(div);
+      });
+    }
+    function addToCart(id) {
+      const p = products.find(x => x.id === id);
+      const sz = document.getElementById(`size-${id}`)?.value || '';
+      const col = document.getElementById(`color-${id}`)?.value || '';
+      if (p.sizes && !sz) { showAlert('Selecione um tamanho'); return; }
+      if (p.colors && !col) { showAlert('Selecione uma cor'); return; }
+      const key = `${id}-${sz}-${col}`;
+      let exist = cart.find(x => x.key === key);
+      if (exist) exist.quantity++;
+      else cart.push({...p, quantity:1, size:sz, color:col, key});
+      saveCart(); updateCartCount(); showAlert(`${p.name} adicionado!`);
+    }
+    function renderCartItems() {
+      const el = document.getElementById('cartItems');
+      el.innerHTML = '';
+      let tot = 0;
+      cart.forEach(i => {
+        tot += i.price * i.quantity;
+        el.innerHTML += `<p>${i.name}${i.size ? ` (${i.size})` : ''}${i.color ? ` - ${i.color}` : ''} x${i.quantity} - R$${(i.price*i.quantity).toFixed(2)} <button class="remove" onclick="removeFromCart('${i.key}')">X</button></p>`;
+      });
+      document.getElementById('cartTotal').innerText = `Total: R$${tot.toFixed(2)}`;
+    }
+    function removeFromCart(key) {
+      cart = cart.filter(x => x.key !== key);
+      saveCart(); updateCartCount(); renderCartItems();
+    }
+    function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
+    function updateCartCount() {
+      document.getElementById('cartCount').innerText = cart.reduce((a, i) => a + i.quantity, 0);
+    }
+    function toggleCartPopup() {
+      let pop = document.querySelector('.cart-popup');
+      if (!pop) createCartPopup();
+      document.querySelector('.cart-popup').style.display = 'flex';
+      renderCartItems();
+    }
+    function createCartPopup() {
+      const pop = document.createElement('div');
+      pop.className = 'cart-popup';
+      pop.innerHTML = `<div class="cart-content"><h3>Seu Carrinho</h3><div id="cartItems"></div><p id="cartTotal"></p><button onclick="checkout()" class="checkout">Finalizar Compra</button><button onclick="closeCart()" style="margin-top:1rem">Fechar</button></div>`;
+      document.body.appendChild(pop);
+    }
+    function closeCart() {
+      document.querySelector('.cart-popup').style.display = 'none';
+    }
+    function checkout() {
+      let sum = generateOrderSummary();
+      document.querySelector('.container').innerHTML = `<h2>Finalizar Compra</h2><p>Entre em contato no WhatsApp:</p><a href="https://wa.me/5541999737694?text=${encodeURIComponent(sum)}" target="_blank"><button class="checkout">Chamar no WhatsApp</button></a>`;
+      cart = []; saveCart(); updateCartCount(); closeCart();
+    }
+    function generateOrderSummary() {
+      let s = '';
+      cart.forEach(i => s += `${i.quantity}x ${i.name}${i.size ? ` (${i.size})` : ''}${i.color ? ` - ${i.color}` : ''} (R$${(i.price*i.quantity).toFixed(2)})\n`);
+      s += `Total: R$${cart.reduce((a,i)=>a+i.price*i.quantity,0).toFixed(2)}`;
+      return s;
+    }
+    function filterProducts() {
+      const t = document.getElementById('searchInput').value.toLowerCase();
+      renderProducts(products.filter(p => p.name.toLowerCase().includes(t)));
+    }
+    function showAlert(msg) {
+      const a = document.createElement('div');
+      a.className = 'custom-alert';
+      a.innerText = msg;
+      document.body.appendChild(a);
+      setTimeout(() => a.remove(), 2000);
+    }
+    window.onscroll = () => toggleBtnTop();
+    function toggleBtnTop() {
+      const b = document.getElementById('btnTop');
+      (document.documentElement.scrollTop > 200 || document.body.scrollTop > 200) ? b.style.display = 'block' : b.style.display = 'none';
+    }
+    function scrollToTop() {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+    // Inicialização
+    renderProducts();
+    updateCartCount();
+  </script>
+</body>
+</html>
