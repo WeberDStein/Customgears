@@ -2,282 +2,132 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Gears</title>
-  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear.">
-  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning">
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <title>Loja Custom Gears</title>
   <style>
-    /* Estilos Gerais */
-    body {
-      background: #000;
-      color: #fff;
-      font-family: 'Montserrat', sans-serif;
-      margin: 0;
-      padding-top: 70px;
-    }
-    header {
-      font-family: 'UnifrakturCook', cursive;
-      font-size: 3rem;
-      text-align: center;
-      padding: 1.5rem;
-      border-bottom: 1px solid #333;
-      color: #ccc;
-    }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 2rem;
-    }
-    h2 {
-      color: #aa88cc;
-      font-family: 'UnifrakturCook', cursive;
-      border-bottom: 1px solid #444;
-      padding-bottom: 0.5rem;
-      text-align: center;
-    }
-    /* Produtos */
-    .products, .catalog {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-    .product, .catalog-item {
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      width: 250px;
-      padding: 1rem;
-      text-align: center;
-      transition: transform 0.2s ease;
-    }
-    .product:hover, .catalog-item:hover {
-      transform: scale(1.05);
-    }
-    .product img, .catalog-item img {
-      width: 100%;
-      border-radius: 6px;
-      margin-bottom: 0.5rem;
-    }
-    .product h3 {
-      color: #ddd;
-      margin: 0.5rem 0;
-    }
-    .product p {
-      color: #ccc;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-    }
-    .product select {
-      width: 100%;
-      padding: 0.4rem;
-      margin-bottom: 0.5rem;
-      background: #222;
-      border: 1px solid #444;
-      border-radius: 4px;
-      color: #fff;
-    }
-    /* Botões */
-    button {
-      background: #800080;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #a020f0;
-    }
-    button.checkout {
-      background: #4caf50;
-    }
-    button.remove {
-      background: #f44336;
-      font-size: 0.8rem;
-      padding: 0.3rem 0.6rem;
-      margin-left: 8px;
-    }
-    /* Carrinho */
-    .cart {
-      position: fixed;
-      top: 15px;
-      right: 20px;
-      background: #222;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      border: 1px solid #444;
-      box-shadow: 0 0 5px #800080;
-      cursor: pointer;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 100px;
-      z-index: 1001;
-    }
-    .cart-count {
-      background: #800080;
-      padding: 2px 8px;
-      border-radius: 50%;
-      margin-left: 6px;
-      font-size: 0.8rem;
-    }
-    .cart-popup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .cart-content {
-      background: #333;
-      padding: 20px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    /* Rodapé */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      background: #111;
-      border-top: 1px solid #333;
-    }
-    footer h4 {
-      color: #aa88cc;
-      margin-bottom: 1rem;
-    }
-    footer p, footer a {
-      color: #ccc;
-      font-size: 0.9rem;
-    }
-    /* Botão Topo */
-    #btnTop {
-      display: none;
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 999;
-      font-size: 1.5rem;
-      border: none;
-      outline: none;
-      background: #800080;
-      color: white;
-      cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #800080;
-      transition: background 0.3s;
-    }
-    #btnTop:hover {
-      background: #a020f0;
-    }
+    body { background: #000; color: #fff; font-family: Arial, sans-serif; }
+    .product { border: 1px solid #fff; padding: 10px; margin-bottom: 20px; }
+    select, input[type="number"] { margin-bottom: 10px; }
+    button { background: purple; color: white; border: none; padding: 5px 10px; cursor: pointer; }
   </style>
 </head>
-
 <body>
-  <div class="cart" onclick="toggleCartPopup()">🛒 Carrinho <span class="cart-count" id="cartCount">0</span></div>
-  <header>Custom Gears</header>
 
-  <div class="container">
-    <h2>Produtos</h2>
-    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()">
-    <div class="products" id="productList"></div>
-  </div>
+<h1>Produtos Custom Gears</h1>
 
-  <div class="container">
-    <h2>Para mais informações</h2>
-    <div class="catalog"></div>
-  </div>
+<div id="product-list"></div>
 
-  <footer>
-    <h4>Sobre</h4>
-    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
-    <h4>Redes Sociais</h4>
-    <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
-    <p style="margin-top:2rem;color:#777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
-  </footer>
+<h2>Carrinho</h2>
+<ul id="cart-list"></ul>
 
-  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+<script>
+const products = [
+  {
+    id: 1,
+    name: "Camiseta Custom Gears",
+    price: 120,
+    sizes: ["P", "M", "G"],
+    colors: [
+      { name: "Preto", stock: 10 },
+      { name: "Branco", stock: 5 }
+    ],
+    image: "https://via.placeholder.com/150"
+  },
+  {
+    id: 2,
+    name: "Boné Custom Gears",
+    price: 80,
+    sizes: [],
+    colors: [
+      { name: "Preto", stock: 7 },
+      { name: "Roxo", stock: 3 }
+    ],
+    image: "https://via.placeholder.com/150"
+  }
+];
 
-  <script>
-    const products = [
-      { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', sizes:['P','M','G','GG','XG'], colors:[{name:'Preto', stock:10}, {name:'Branco', stock:8}, {name:'Roxo', stock:5}, {name:'Cinza', stock:3}] },
-      { id:2, name:'Blusa moletom Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', sizes:['P','M','G','GG','XG'], colors:[{name:'Preto', stock:7}, {name:'Branco', stock:5}, {name:'Roxo', stock:4}, {name:'Cinza', stock:2}] },
-      { id:3, name:'Manopla câmbio Custom Gears', price:65.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:[{name:'Preto', stock:6}, {name:'Roxo', stock:3}, {name:'Cinza', stock:2}] },
-      { id:4, name:'Bandeira Custom Gears', price:54.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:[{name:'Preto', stock:8}, {name:'Branco', stock:6}, {name:'Roxo', stock:4}, {name:'Cinza', stock:3}] },
-      { id:5, name:'Coifa câmbio Custom Gears', price:59.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:[{name:'Preto', stock:7}, {name:'Branco', stock:5}, {name:'Roxo', stock:4}, {name:'Cinza', stock:2}] },
-      { id:6, name:'Caneca personalizada Custom Gears', price:59.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:[{name:'Preto', stock:6}, {name:'Branco', stock:4}, {name:'Roxo', stock:3}, {name:'Cinza', stock:1}] },
-      { id:7, name:'Chaveiro e cordão Custom Gears', price:29.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:[{name:'Preto', stock:10}, {name:'Branco', stock:8}, {name:'Roxo', stock:5}, {name:'Cinza', stock:3}] },
-      { id:8, name:'Adesivos refletivo Custom Gears', price:19.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:[{name:'Preto', stock:12}, {name:'Branco', stock:9}, {name:'Roxo', stock:7}] },
-      { id:9, name:'Aromatizante automotivo Custom Gears', price:6.90, img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:[{name:'Preto', stock:8}, {name:'Branco', stock:6}, {name:'Roxo', stock:5}, {name:'Cinza', stock:3}] }
-    ];
+let cart = [];
 
-    function renderProducts(list = products) {
-      const productList = document.getElementById('productList');
-      productList.innerHTML = '';
-      list.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'product';
-        let sizeSel = p.sizes ? `<select id="size-${p.id}"><option value="">Tamanho</option>${p.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}</select>` : '';
-        let colorSel = `<select id="color-${p.id}"><option value="">Selecione a cor</option>${p.colors.map(c => `<option value="${c.name}">${c.name} (${c.stock} unidades)</option>`).join('')}</select>`;
-        div.innerHTML = `
-          <img src="${p.img}" alt="${p.name}">
-          <h3>${p.name}</h3>
-          <p>R$ ${p.price.toFixed(2)}</p>
-          ${sizeSel}
-          ${colorSel}
-          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
-        `;
-        productList.appendChild(div);
-      });
+function renderProducts() {
+  const productList = document.getElementById('product-list');
+  productList.innerHTML = '';
+
+  products.forEach(p => {
+    let sizeSel = '';
+    if (p.sizes.length) {
+      sizeSel = `<label>Tamanho: </label><select id="size-${p.id}">` +
+        p.sizes.map(size => `<option value="${size}">${size}</option>`).join('') +
+        `</select><br>`;
     }
 
-    function addToCart(productId) {
-      const size = document.getElementById(`size-${productId}`).value;
-      const color = document.getElementById(`color-${productId}`).value;
-      if (!color || !size) {
-        alert('Por favor, selecione tamanho e cor.');
-        return;
-      }
-      const product = products.find(p => p.id === productId);
-      const cartItem = {
-        ...product,
-        size,
-        color,
-        quantity: 1
-      };
-      cart.push(cartItem);
-      updateCart();
-    }
+    let colorSel = `<label>Cor: </label><select id="color-${p.id}">` +
+      p.colors.map(c => `<option value="${c.name}">${c.name} (${c.stock} disponíveis)</option>`).join('') +
+      `</select><br>`;
 
-    function updateCart() {
-      const cartCount = document.getElementById('cartCount');
-      cartCount.innerText = cart.length;
-    }
+    let qtyInput = `<label>Quantidade: </label><input type="number" id="qty-${p.id}" value="1" min="1" style="width:60px;"><br>`;
 
-    function filterProducts() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = products.filter(p => p.name.toLowerCase().includes(search));
-      renderProducts(filtered);
-    }
+    productList.innerHTML += `
+      <div class="product">
+        <img src="${p.image}" alt="${p.name}" style="width:100px;"><br>
+        <strong>${p.name}</strong><br>
+        R$${p.price}<br><br>
+        ${sizeSel}
+        ${colorSel}
+        ${qtyInput}
+        <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
+      </div>
+    `;
+  });
+}
 
-    let cart = [];
-    window.onload = () => renderProducts();
-  </script>
+function addToCart(productId) {
+  const sizeSelect = document.getElementById(`size-${productId}`);
+  const colorSelect = document.getElementById(`color-${productId}`);
+  const qtyInput = document.getElementById(`qty-${productId}`);
+
+  const size = sizeSelect ? sizeSelect.value : '';
+  const color = colorSelect.value;
+  const qty = parseInt(qtyInput.value);
+
+  const product = products.find(p => p.id === productId);
+  const colorStock = product.colors.find(c => c.name === color);
+
+  if (!colorStock) {
+    alert('Cor inválida.');
+    return;
+  }
+
+  if (qty > colorStock.stock) {
+    alert(`Só temos ${colorStock.stock} unidades disponíveis dessa cor.`);
+    return;
+  }
+
+  colorStock.stock -= qty; // diminui estoque
+
+  cart.push({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    size: size,
+    color: color,
+    quantity: qty
+  });
+
+  updateCart();
+  renderProducts(); // atualiza lista para mostrar estoque atualizado
+}
+
+function updateCart() {
+  const cartList = document.getElementById('cart-list');
+  cartList.innerHTML = '';
+
+  cart.forEach(item => {
+    cartList.innerHTML += `<li>${item.quantity}x ${item.name} - Cor: ${item.color} ${item.size ? '- Tamanho: ' + item.size : ''} - R$${item.price * item.quantity}</li>`;
+  });
+}
+
+// Inicializa
+renderProducts();
+</script>
+
 </body>
 </html>
