@@ -33,7 +33,7 @@
 .product button:hover:not(:disabled) { background: #a020f0; }
 .sold-out { position: absolute; top: 8px; left: 8px; background: #f00; color: #fff; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; }
 
-/* Busca e filtros */
+/* Busca */
 #searchInput { width: 100%; max-width: 300px; margin: 1rem auto 2rem; display: block; padding: 0.6rem; background: #222; border: 1px solid #444; border-radius: 4px; color: #fff; }
 
 /* Carrinho */
@@ -43,7 +43,7 @@
 .cart-popup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100; }
 .cart-content { background: #333; padding: 20px; border-radius: 8px; width: 90%; max-width: 400px; text-align: left; max-height: 80vh; overflow-y: auto; }
 .cart-content h3 { margin-top: 0; }
-.cart-content button { width: 100%; }
+.cart-content button { width: 100%; margin-top: 1rem; }
 
 /* Alertas */
 .custom-alert { position: fixed; top: 20px; right: 20px; background: #6a0dad; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold; z-index: 999; opacity: 0; animation: slideIn 0.5s forwards, fadeOut 0.5s 1.5s forwards; }
@@ -63,26 +63,68 @@ footer p, footer a { color: #ccc; font-size: 0.9rem; }
 </head>
 <body>
   <button class="cart" aria-label="Abrir carrinho" onclick="toggleCartPopup()">🛒<span class="cart-count" id="cartCount">0</span></button>
-  <header>Custom Gears</header>  <main class="container" role="main">
+  <header>Custom Gears</header>
+  <main class="container" role="main">
     <h2>Produtos</h2>
     <input type="search" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()" aria-label="Buscar produtos">
     <div class="products" id="productList">
-      <!-- Skeleton temporário até JS carregar -->
       <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
     </div>
-  </main>  <div class="container">
+  </main>
+  <div class="container">
     <h2>Para mais informações</h2>
     <div class="catalog"></div>
-  </div>  <footer role="contentinfo">
+  </div>
+  <footer role="contentinfo">
     <h4>Sobre</h4>
     <p>Na Custom Gears, transformamos paixão automotiva em estilo...</p>
     <h4>Redes Sociais</h4>
     <p><a href="https://www.instagram.com/custom_gears17" target="_blank" rel="noopener">Instagram</a></p>
     <p style="margin-top:2rem;color:#777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
-  </footer><button id="btnTop" title="Voltar ao Topo" aria-label="Voltar ao Topo" onclick="scrollToTop()">↑</button>
-
+  </footer>
+  <button id="btnTop" title="Voltar ao Topo" aria-label="Voltar ao Topo" onclick="scrollToTop()">↑</button>
   <script>
-    // ... (JS permanece idêntico, mantendo lógica de estoque e carrinho)
-    // Para brevidade, o script não foi alterado aqui, mas incluir o código anterior completo.  
-  </script></body>
-</html>
+    // Estoque e Produtos
+    const products = [
+      { id:1, name:'Camiseta oversized', price:119.9, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', sizes:['P','M','G','GG','XG'], colors:['Preto','Branco','Roxo','Cinza'], stock:{Preto:5,Branco:5,Roxo:5,Cinza:5} },
+      { id:2, name:'Blusa moletom', price:159.9, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', sizes:['P','M','G','GG','XG'], colors:['Preto','Branco','Roxo','Cinza'], stock:{Preto:3,Branco:2,Roxo:4,Cinza:1} },
+      { id:3, name:'Manopla câmbio', price:65.9, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Roxo','Cinza'], stock:{Preto:2,Roxo:0,Cinza:1} },
+    ];
+    let cart = JSON.parse(localStorage.getItem('cart'))||[];
+    function renderProducts(list=products){
+      const container=document.getElementById('productList'); container.innerHTML='';
+      list.forEach(p=>{
+        const available=p.colors.filter(c=>p.stock[c]>0);
+        const card=document.createElement('div'); card.className='product';
+        if(!available.length){
+          card.innerHTML=`<span class="sold-out">Esgotado</span><img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p>R$${p.price.toFixed(2)}</p>`;
+        } else {
+          const sizeSel=p.sizes?`<select id="size-${p.id}" aria-label="Tamanho"><option value="">Tamanho</option>${p.sizes.map(s=>`<option>${s}</option>`).join('')}</select>`:'';
+          const colorSel=`<select id="color-${p.id}" onchange="updateQtyMax(${p.id})" aria-label="Cor"><option value="">Cor</option>${available.map(c=>`<option value="${c}">${c} (${p.stock[c]})</option>`).join('')}</select>`;
+          const qty=`<input type="number" id="qty-${p.id}" min="1" value="1" disabled aria-label="Quantidade">`;
+          card.innerHTML=`<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p>R$${p.price.toFixed(2)}</p>${sizeSel}${colorSel}${qty}<button onclick="addToCart(${p.id})" disabled>Adicionar</button>`;
+        }
+        container.appendChild(card);
+      });
+    }
+    function updateQtyMax(id){const p=products.find(x=>x.id===id);const v=document.getElementById(`color-${id}`).value;const q=document.getElementById(`qty-${id}`);const b=document.querySelector(`.product button[onclick="addToCart(${id})"]`);if(v){q.disabled=false;q.max=p.stock[v];q.value=1;b.disabled=false;}else{q.disabled=true;b.disabled=true;}}
+    function addToCart(id){const p=products.find(x=>x.id===id);const sz=document.getElementById(`size-${id}`)?.value||'';const col=document.getElementById(`color-${id}`).value;const qty=parseInt(document.getElementById(`qty-${id}`).value,10)||1;if(p.sizes&&!sz){showAlert('Selecione tamanho');return;}if(!col){showAlert('Selecione cor');return;}if(qty<1||qty>p.stock[col]){showAlert(`Apenas ${p.stock[col]} disponíveis`);return;}p.stock[col]-=qty;const key=`${id}-${sz}-${col}`;const ex=cart.find(x=>x.key===key);if(ex)ex.quantity+=qty;else cart.push({...p,quantity:qty,size:sz,color:col,key});saveCart();updateCartCount();showAlert(`${qty}x ${p.name}(${col}) adicionado`);renderProducts();}
+    // Carrinho
+    function renderCartItems(){const e=document.getElementById('cartItems');e.innerHTML='';let t=0;cart.forEach(i=>{t+=i.price*i.quantity;e.innerHTML+=`<p>${i.name}${i.size?`(${i.size})`:''} - ${i.color} x${i.quantity} R$${(i.price*i.quantity).toFixed(2)} <button class="remove" onclick="removeFromCart('${i.key}')">X</button></p>`;});document.getElementById('cartTotal').innerText=`Total: R$${t.toFixed(2)}`;}
+    function removeFromCart(k){cart=cart.filter(x=>x.key!==k);saveCart();updateCartCount();renderCartItems();}
+    function saveCart(){localStorage.setItem('cart',JSON.stringify(cart));}
+    function updateCartCount(){document.getElementById('cartCount').innerText=cart.reduce((a,i)=>a+i.quantity,0);}
+    function toggleCartPopup(){if(!document.querySelector('.cart-popup'))createCartPopup();document.querySelector('.cart-popup').style.display='flex';renderCartItems();}
+    function createCartPopup(){const p=document.createElement('div');p.className='cart-popup';p.innerHTML=`<div class="cart-content"><h3>Seu Carrinho</h3><div id="cartItems"></div><p id="cartTotal"></p><button onclick="checkout()" class="checkout">Finalizar</button><button onclick="closeCart()">Fechar</button></div>`;document.body.appendChild(p);}
+    function closeCart(){document.querySelector('.cart-popup').style.display='none';}
+    function checkout(){const s=generateOrderSummary();document.querySelector('main').innerHTML=`<h2>Finalizar Compra</h2><p><a href="https://wa.me/5541999737694?text=${encodeURIComponent(s)}" target="_blank">Chamar no WhatsApp</a></p>`;cart=[];saveCart();updateCartCount();}
+    function generateOrderSummary(){let str='';cart.forEach(i=>str+=`${i.quantity}x ${i.name}(${i.color}) R$${(i.price*i.quantity).toFixed(2)}\n`);str+=`Total: R$${cart.reduce((a,i)=>a+i.price*i.quantity,0).toFixed(2)}`;return str;}
+    function filterProducts(){const t=document.getElementById('searchInput').value.toLowerCase();renderProducts(products.filter(p=>p.name.toLowerCase().includes(t)));}
+    function showAlert(msg){const d=document.createElement('div');d.className='custom-alert';d.innerText=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),2000);}
+    window.onscroll=()=>{const b=document.getElementById('btnTop');(document.documentElement.scrollTop>200||document.body.scrollTop>200)?b.style.display='block':b.style.display='none';};
+    function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}    
+    // Init
+    renderProducts();updateCartCount();
+  </script>
+</body>
+</html
