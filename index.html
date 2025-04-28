@@ -27,8 +27,8 @@ const products = [
     price: 120,
     sizes: ["P", "M", "G"],
     colors: [
-      { name: "Preto", stock: 10 },
-      { name: "Branco", stock: 5 }
+      { name: "Preto", stock: 3 },
+      { name: "Branco", stock: 2 }
     ],
     image: "https://via.placeholder.com/150"
   },
@@ -38,8 +38,8 @@ const products = [
     price: 80,
     sizes: [],
     colors: [
-      { name: "Preto", stock: 7 },
-      { name: "Roxo", stock: 3 }
+      { name: "Preto", stock: 1 },
+      { name: "Roxo", stock: 1 }
     ],
     image: "https://via.placeholder.com/150"
   }
@@ -59,8 +59,21 @@ function renderProducts() {
         `</select><br>`;
     }
 
+    // Só mostra cores que ainda têm estoque
+    let availableColors = p.colors.filter(c => c.stock > 0);
+    if (availableColors.length === 0) {
+      productList.innerHTML += `
+        <div class="product">
+          <img src="${p.image}" alt="${p.name}" style="width:100px;"><br>
+          <strong>${p.name}</strong><br>
+          <span style="color: red;">Produto Esgotado</span>
+        </div>
+      `;
+      return;
+    }
+
     let colorSel = `<label>Cor: </label><select id="color-${p.id}">` +
-      p.colors.map(c => `<option value="${c.name}">${c.name} (${c.stock} disponíveis)</option>`).join('') +
+      availableColors.map(c => `<option value="${c.name}">${c.name} (${c.stock} disponíveis)</option>`).join('') +
       `</select><br>`;
 
     let qtyInput = `<label>Quantidade: </label><input type="number" id="qty-${p.id}" value="1" min="1" style="width:60px;"><br>`;
@@ -84,6 +97,11 @@ function addToCart(productId) {
   const colorSelect = document.getElementById(`color-${productId}`);
   const qtyInput = document.getElementById(`qty-${productId}`);
 
+  if (!colorSelect) {
+    alert('Produto sem cores disponíveis.');
+    return;
+  }
+
   const size = sizeSelect ? sizeSelect.value : '';
   const color = colorSelect.value;
   const qty = parseInt(qtyInput.value);
@@ -101,7 +119,7 @@ function addToCart(productId) {
     return;
   }
 
-  colorStock.stock -= qty; // diminui estoque
+  colorStock.stock -= qty; // Diminui estoque
 
   cart.push({
     id: product.id,
@@ -113,7 +131,7 @@ function addToCart(productId) {
   });
 
   updateCart();
-  renderProducts(); // atualiza lista para mostrar estoque atualizado
+  renderProducts(); // Atualiza lista, removendo a cor se esgotar
 }
 
 function updateCart() {
