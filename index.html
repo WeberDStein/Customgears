@@ -144,26 +144,26 @@
       color: #ccc;
       font-size: 0.9rem;
     }
-    /* Botão Topo */
-    #btnTop {
+    /* Checkout */
+    .checkout-popup {
       display: none;
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 999;
-      font-size: 1.5rem;
-      border: none;
-      outline: none;
-      background: #800080;
-      color: white;
-      cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #800080;
-      transition: background 0.3s;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #222;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #800080;
+      z-index: 1002;
     }
-    #btnTop:hover {
-      background: #a020f0;
+    .checkout-popup input {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border-radius: 4px;
+      background: #333;
+      color: white;
     }
   </style>
 </head>
@@ -187,6 +187,17 @@
   </footer>
 
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+
+  <!-- Checkout Popup -->
+  <div id="checkoutPopup" class="checkout-popup">
+    <h2>Finalizar Compra</h2>
+    <form onsubmit="handleCheckout(event)">
+      <input type="text" id="name" placeholder="Nome Completo" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="phone" placeholder="Telefone" required>
+      <button type="submit">Confirmar Compra</button>
+    </form>
+  </div>
 
   <script>
     const products = [
@@ -240,13 +251,13 @@
       updateCartCount();
     }
 
+    function showAlert(msg) {
+      alert(msg);
+    }
+
     function updateCartCount() {
       const count = cart.reduce((sum, item) => sum + item.qty, 0);
       document.getElementById('cartCount').innerText = count;
-    }
-
-    function showAlert(msg) {
-      alert(msg);
     }
 
     function toggleCartPopup() {
@@ -255,6 +266,14 @@
       }).join('');
       const popupContent = cartItems || '<p>Carrinho vazio</p>';
       alert(popupContent);
+    }
+
+    function handleCheckout(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      alert(`Compra finalizada! \nNome: ${name} \nEmail: ${email} \nTelefone: ${phone}`);
     }
 
     function filterProducts() {
