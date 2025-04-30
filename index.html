@@ -161,6 +161,16 @@
       color: #fff;
     }
 
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      background: #222;
+      border-radius: 6px;
+    }
+
     /* Campo de Busca */
     #searchInput {
       padding: 0.5rem;
@@ -284,6 +294,7 @@
     <div class="cart-content">
       <h2>Seu Carrinho</h2>
       <div id="cartItems"></div>
+      <p><strong>Subtotal:</strong> R$<span id="subtotal">0.00</span></p>
       <button onclick="checkout()">Finalizar Compra</button>
     </div>
   </div>
@@ -310,50 +321,44 @@
     function renderProducts(list = products) {
       const productList = document.getElementById('productList');
       productList.innerHTML = '';
-      list.forEach(p => {
+      list.forEach(product => {
         const div = document.createElement('div');
         div.className = 'product';
         div.innerHTML = `
-          <img src="${p.img}" alt="${p.name}">
-          <h3>${p.name}</h3>
-          <p>R$${p.price.toFixed(2)}</p>
-          <label for="size-${p.id}">Tamanho:</label>
-          <select id="size-${p.id}">
+          <img src="${product.img}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>R$${product.price.toFixed(2)}</p>
+          <label for="size-${product.id}">Tamanho:</label>
+          <select id="size-${product.id}">
             <option value="P">P</option>
             <option value="M">M</option>
             <option value="G">G</option>
             <option value="GG">GG</option>
             <option value="XG">XG</option>
           </select>
-          <label for="color-${p.id}">Cor:</label>
-          <select id="color-${p.id}">
+          <label for="color-${product.id}">Cor:</label>
+          <select id="color-${product.id}">
             <option value="preto">Preto</option>
             <option value="branco">Branco</option>
             <option value="roxo">Roxo</option>
             <option value="cinza">Cinza</option>
           </select>
-          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
+          <button onclick="addToCart(${product.id})">Adicionar ao carrinho</button>
         `;
         productList.appendChild(div);
       });
     }
 
-    function addToCart(id) {
-      const size = document.getElementById(`size-${id}`).value;
-      const color = document.getElementById(`color-${id}`).value;
-      const product = products.find(p => p.id === id);
-      const item = {
-        ...product,
-        size,
-        color,
-        quantity: 1
-      };
+    function addToCart(productId) {
+      const size = document.getElementById(`size-${productId}`).value;
+      const color = document.getElementById(`color-${productId}`).value;
+      const product = products.find(p => p.id === productId);
+      const existingItem = cart.find(item => item.id === productId && item.size === size && item.color === color);
 
-      const existingItem = cart.find(i => i.id === id && i.size === size && i.color === color);
       if (existingItem) {
         existingItem.quantity++;
       } else {
-        cart.push(item);
+        cart.push({ ...product, size, color, quantity: 1 });
       }
 
       localStorage.setItem('cart', JSON.stringify(cart));
@@ -361,15 +366,15 @@
       showAlert('Produto adicionado ao carrinho!');
     }
 
-    function updateCartCount() {
-      const count = cart.reduce((total, item) => total + item.quantity, 0);
-      document.getElementById('cartCount').textContent = count;
+    function removeFromCart(id, size, color) {
+      cart = cart.filter(item => !(item.id === id && item.size === size && item.color === color));
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      renderCartItems();
     }
 
-    function toggleCartPopup() {
-      const cartPopup = document.getElementById('cartPopup');
-      cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
-      renderCartItems();
+    function updateCartCount() {
+      document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
     }
 
     function renderCartItems() {
@@ -378,6 +383,7 @@
       if (cart.length === 0) {
         cartItems.innerHTML = '<p>Seu carrinho está vazio.</p>';
       } else {
+        let subtotal = 0;
         cart.forEach(item => {
           const div = document.createElement('div');
           div.className = 'cart-item';
@@ -387,14 +393,15 @@
             <button class="remove" onclick="removeFromCart(${item.id}, '${item.size}', '${item.color}')">Remover</button>
           `;
           cartItems.appendChild(div);
+          subtotal += item.price * item.quantity;
         });
+        document.getElementById('subtotal').textContent = subtotal.toFixed(2);
       }
     }
 
-    function removeFromCart(id, size, color) {
-      cart = cart.filter(item => !(item.id === id && item.size === size && item.color === color));
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
+    function toggleCartPopup() {
+      const cartPopup = document.getElementById('cartPopup');
+      cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
       renderCartItems();
     }
 
@@ -418,20 +425,6 @@
       alert.textContent = message;
       document.body.appendChild(alert);
       setTimeout(() => alert.remove(), 2000);
-    }
-
-    // Ação de scroll para o topo
-    window.onscroll = function () {
-      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        document.getElementById('btnTop').style.display = "block";
-      } else {
-        document.getElementById('btnTop').style.display = "none";
-      }
-    };
-
-    function scrollToTop() {
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
     }
 
     // Inicializa o carrinho
