@@ -158,6 +158,7 @@
       text-align: center;
       max-height: 80vh;
       overflow-y: auto;
+      color: #fff;
     }
 
     /* Campo de Busca */
@@ -267,14 +268,6 @@
     <div class="products" id="productList"></div>
   </div>
 
-  <!-- Informações -->
-  <div class="container">
-    <h2>Para mais informações</h2>
-    <div class="catalog">
-      <!-- Conteúdo futuro -->
-    </div>
-  </div>
-
   <!-- Rodapé -->
   <footer>
     <h4>Sobre</h4>
@@ -285,6 +278,15 @@
 
     <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
+
+  <!-- Popup Carrinho -->
+  <div id="cartPopup" class="cart-popup">
+    <div class="cart-content">
+      <h2>Seu Carrinho</h2>
+      <div id="cartItems"></div>
+      <button onclick="checkout()">Finalizar Compra</button>
+    </div>
+  </div>
 
   <!-- Botão Voltar ao Topo -->
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
@@ -367,6 +369,47 @@
     function toggleCartPopup() {
       const cartPopup = document.getElementById('cartPopup');
       cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
+      renderCartItems();
+    }
+
+    function renderCartItems() {
+      const cartItems = document.getElementById('cartItems');
+      cartItems.innerHTML = '';
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p>Seu carrinho está vazio.</p>';
+      } else {
+        cart.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'cart-item';
+          div.innerHTML = `
+            <p>${item.name} (${item.size}, ${item.color}) - R$${(item.price * item.quantity).toFixed(2)}</p>
+            <p>Quantidade: ${item.quantity}</p>
+            <button class="remove" onclick="removeFromCart(${item.id}, '${item.size}', '${item.color}')">Remover</button>
+          `;
+          cartItems.appendChild(div);
+        });
+      }
+    }
+
+    function removeFromCart(id, size, color) {
+      cart = cart.filter(item => !(item.id === id && item.size === size && item.color === color));
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      renderCartItems();
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert('Seu carrinho está vazio!');
+      } else {
+        alert('Finalizando compra...');
+      }
+    }
+
+    function filterProducts() {
+      const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+      const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery));
+      renderProducts(filteredProducts);
     }
 
     function showAlert(message) {
@@ -374,26 +417,27 @@
       alert.className = 'custom-alert';
       alert.textContent = message;
       document.body.appendChild(alert);
-      setTimeout(() => {
-        alert.remove();
-      }, 2000);
+      setTimeout(() => alert.remove(), 2000);
     }
 
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    window.onscroll = function() {
-      const btnTop = document.getElementById('btnTop');
-      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-        btnTop.style.display = 'block';
+    // Ação de scroll para o topo
+    window.onscroll = function () {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById('btnTop').style.display = "block";
       } else {
-        btnTop.style.display = 'none';
+        document.getElementById('btnTop').style.display = "none";
       }
     };
 
-    renderProducts();
+    function scrollToTop() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+
+    // Inicializa o carrinho
     updateCartCount();
+    renderProducts();
   </script>
+
 </body>
 </html>
