@@ -2,100 +2,415 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ds Company - Eventos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Gears</title>
+  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
+  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning" />
+
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
+    /* Estilos Gerais */
     body {
+      background: #000;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #ffd700;
+      padding-top: 70px;
     }
 
     header {
-      background-color: #111;
-      padding: 20px;
+      font-family: 'UnifrakturCook', cursive;
+      font-size: 3rem;
+      text-align: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid #333;
+      color: #ccc;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    h2 {
+      color: #aa88cc;
+      font-family: 'UnifrakturCook', cursive;
+      border-bottom: 1px solid #444;
+      padding-bottom: 0.5rem;
       text-align: center;
     }
 
-    header h1 {
-      font-size: 2.5em;
-      margin: 0;
+    /* Produtos */
+    .products, .catalog {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0;
     }
 
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: #ffd700;
+    .product, .catalog-item {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      width: 250px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .product:hover, .catalog-item:hover {
+      transform: scale(1.05);
+    }
+
+    .product img, .catalog-item img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+
+    .product h3 {
+      color: #ddd;
+      margin: 0.5rem 0;
+    }
+
+    .product p {
+      color: #ccc;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Botões */
+    button {
+      background: #800080;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #a020f0;
+    }
+
+    button.checkout {
+      background: #4caf50;
+    }
+
+    button.remove {
+      background: #f44336;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+      margin-left: 8px;
+    }
+
+    /* Carrinho */
+    .cart {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      background: #222;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid #444;
+      box-shadow: 0 0 5px #800080;
+      cursor: pointer;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 100px;
+      z-index: 1001;
     }
 
-    .hero {
-      padding: 80px 20px;
+    .cart-count {
+      background: #800080;
+      padding: 2px 8px;
+      border-radius: 50%;
+      margin-left: 6px;
+      font-size: 0.8rem;
+    }
+
+    /* Popup Carrinho */
+    .cart-popup {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .cart-content {
+      background: #333;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
       text-align: center;
-      background-color: #222;
+      max-height: 80vh;
+      overflow-y: auto;
     }
 
-    section {
-      padding: 40px 20px;
-      text-align: center;
+    /* Campo de Busca */
+    #searchInput {
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 300px;
+      margin: 1rem auto;
+      display: block;
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 4px;
+      color: #fff;
     }
 
+    /* Alertas */
+    .custom-alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #6a0dad;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      z-index: 9999;
+      animation: fadein 0.5s, fadeout 0.5s 1.5s;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeout {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-20px); }
+    }
+
+    /* Footer Centralizado */
     footer {
-      background-color: #111;
       text-align: center;
-      padding: 15px;
-      font-size: 0.9em;
-      color: #666;
+      padding: 2rem;
+      background-color: #111;
+      border-top: 1px solid #333;
     }
 
-    a {
-      color: #ffd700;
+    footer h4 {
+      color: #aa88cc;
+      margin-bottom: 1rem;
     }
 
-    a:hover {
-      text-decoration: underline;
+    footer p, footer a {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+
+    /* Botão Voltar para o Topo */
+    #btnTop {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      font-size: 1.5rem;
+      border: none;
+      outline: none;
+      background-color: #800080;
+      color: white;
+      cursor: pointer;
+      padding: 0.5rem 0.8rem;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #800080;
+      transition: background-color 0.3s;
+    }
+
+    #btnTop:hover {
+      background-color: #a020f0;
+    }
+
+    /* Responsivo */
+    @media (max-width: 768px) {
+      .products, .catalog {
+        flex-direction: column;
+        align-items: center;
+      }
+      .product, .catalog-item {
+        width: 80%;
+      }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <h1>Ds Company</h1>
-    <nav>
-      <a href="#inicio">Início</a>
-      <a href="#sobre">Sobre</a>
-      <a href="#eventos">Eventos</a>
-      <a href="#contato">Contato</a>
-    </nav>
-  </header>
 
-  <section id="inicio" class="hero">
-    <h2>Eventos com Elegância e Modernidade</h2>
-    <p>Transformamos momentos em experiências inesquecíveis.</p>
-  </section>
+  <!-- Carrinho -->
+  <div class="cart" onclick="toggleCartPopup()">
+    🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
+  </div>
 
-  <section id="sobre">
-    <h2>Sobre Nós</h2>
-    <p>A Ds Company é especializada em organizar e divulgar eventos de alto padrão, com sofisticação, criatividade e excelência.</p>
-  </section>
+  <!-- Cabeçalho -->
+  <header>Custom Gears</header>
 
-  <section id="eventos">
-    <h2>Próximos Eventos</h2>
-    <ul>
-      <li><strong>Baile de Gala</strong> - 10 de Maio - Curitiba/PR</li>
-      <li><strong>Sunset Lux</strong> - 24 de Maio - Balneário Camboriú/SC</li>
-      <li><strong>Black Party</strong> - 7 de Junho - São Paulo/SP</li>
-    </ul>
-  </section>
+  <!-- Seção Produtos -->
+  <div class="container">
+    <h2>Produtos</h2>
+    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()">
+    <div class="products" id="productList"></div>
+  </div>
 
-  <section id="contato">
-    <h2>Fale Conosco</h2>
-    <p>WhatsApp: <a href="https://wa.me/5541999737694" target="_blank">+55 41 99973-7694</a></p>
-    <p>Instagram: <a href="https://www.instagram.com/custom_gears17" target="_blank">@custom_gears17</a></p>
-  </section>
+  <!-- Informações -->
+  <div class="container">
+    <h2>Para mais informações</h2>
+    <div class="catalog">
+      <!-- Conteúdo futuro -->
+    </div>
+  </div>
 
+  <!-- Rodapé -->
   <footer>
-    <p>&copy; 2025 Ds Company. Todos os direitos reservados.</p>
+    <h4>Sobre</h4>
+    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
+    
+    <h4>Redes Sociais</h4>
+    <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
+
+    <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
+
+  <!-- Botão Voltar ao Topo -->
+  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+
+  <!-- Scripts -->
+  <script>
+    // ► ESTOQUE POR COR E TAMANHO (apenas para o produto de ID 8)
+    const stock = {
+      8: {
+        preto:  { P: 5, M: 5, G: 5 },
+        branco: { P: 3, M: 3, G: 3 },
+        roxo:   { P: 4, M: 4, G: 4 }
+      }
+    };
+
+    const products = [
+      { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg' },
+      { id: 2, name: 'Blusa moletom Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg' },
+      { id: 3, name: 'Manopla câmbio Custom Gears', price: 65.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
+      { id: 4, name: 'Bandeira Custom Gears', price: 54.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
+      { id: 5, name: 'Coifa câmbio Custom Gears', price: 59.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
+      { id: 6, name: 'Caneca personalizada Custom Gears', price: 59.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
+      { id: 7, name: 'Chaveiro e cordão Custom Gears', price: 29.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
+      { id: 8, name: 'Adesivos refletivo Custom Gears', price: 19.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
+      { id: 9, name: 'Aromatizante automotivo Custom Gears', price: 6.90, img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg' }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderProducts(list = products) {
+      const productList = document.getElementById('productList');
+      productList.innerHTML = '';
+      list.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>R$${p.price.toFixed(2)}</p>
+          ${ stock[p.id]
+            ? `
+              <label>Cor:</label>
+              <select id="colorSelect-${p.id}">
+                ${Object.keys(stock[p.id]).map(c => `<option value="${c}">${c[0].toUpperCase()+c.slice(1)}</option>`).join('')}
+              </select>
+
+              <label>Tamanho:</label>
+              <select id="sizeSelect-${p.id}">
+                ${Object.keys(stock[p.id][Object.keys(stock[p.id])[0]]).map(sz => `<option value="${sz}">${sz}</option>`).join('')}
+              </select>
+
+              <label>Qtd:</label>
+              <input type="number" id="qtyInput-${p.id}" min="1" value="1" style="width:50px;">
+            `
+            : ''
+          }
+          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      let qty = 1, color, size;
+
+      if (stock[id]) {
+        color = document.getElementById(`colorSelect-${id}`).value;
+        size  = document.getElementById(`sizeSelect-${id}`).value;
+        qty   = parseInt(document.getElementById(`qtyInput-${id}`).value, 10);
+
+        const available = stock[id][color][size] || 0;
+        if (available === 0) {
+          return showAlert(`${product.name} (${color.toUpperCase()} ${size}) indisponível.`);
+        }
+        if (qty > available) {
+          return showAlert(`Só temos ${available} unid. de ${color.toUpperCase()} (${size}).`);
+        }
+        stock[id][color][size] -= qty;
+
+        // remove tamanho esgotado
+        if (stock[id][color][size] === 0) {
+          document.getElementById(`sizeSelect-${id}`)
+            .querySelector(`option[value="${size}"]`).remove();
+        }
+        // remove cor esgotada
+        if (Object.values(stock[id][color]).every(v => v === 0)) {
+          delete stock[id][color];
+          document.getElementById(`colorSelect-${p.id}`)
+            .querySelector(`option[value="${color}"]`).remove();
+        }
+        // se acabou tudo
+        if (Object.keys(stock[id]).length === 0) {
+          const btn = document.querySelector(`.product button[onclick="addToCart(${id})"]`);
+          btn.disabled = true;
+          btn.innerText = 'Esgotado';
+        }
+      }
+
+      // adiciona ao carrinho
+      const exists = cart.find(item =>
+        item.id === id && item.color === color && item.size === size
+      );
+      if (exists) exists.quantity += qty;
+      else cart.push({ id, name: product.name, price: product.price, quantity: qty, color, size });
+
+      saveCart();
+      updateCartCount();
+      showAlert(`${product.name} adicionado ao carrinho!`);
+    }
+
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('cartCount').innerText = count;
+    }
+
+    // ... resto das suas funções inalteradas (toggleCartPopup, createCartPopup, renderCartItems, removeFromCart, showAlert, checkout, generateOrderSummary, filterProducts, scrollToTop, etc.) ...
+
+    // Inicializar
+    renderProducts();
+    updateCartCount();
+  </script>
+
 </body>
 </html>
