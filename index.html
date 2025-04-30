@@ -315,6 +315,21 @@
           <img src="${p.img}" alt="${p.name}">
           <h3>${p.name}</h3>
           <p>R$${p.price.toFixed(2)}</p>
+          <label for="size-${p.id}">Tamanho:</label>
+          <select id="size-${p.id}">
+            <option value="P">P</option>
+            <option value="M">M</option>
+            <option value="G">G</option>
+            <option value="GG">GG</option>
+            <option value="XG">XG</option>
+          </select>
+          <label for="color-${p.id}">Cor:</label>
+          <select id="color-${p.id}">
+            <option value="preto">Preto</option>
+            <option value="branco">Branco</option>
+            <option value="roxo">Roxo</option>
+            <option value="cinza">Cinza</option>
+          </select>
           <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
         `;
         productList.appendChild(div);
@@ -322,128 +337,50 @@
     }
 
     function addToCart(id) {
+      const size = document.getElementById(`size-${id}`).value;
+      const color = document.getElementById(`color-${id}`).value;
       const product = products.find(p => p.id === id);
-      const exists = cart.find(p => p.id === id);
-      if (exists) exists.quantity++;
-      else cart.push({ ...product, quantity: 1 });
-      saveCart();
-      updateCartCount();
-      showAlert(`${product.name} adicionado ao carrinho!`);
-    }
+      const item = {
+        ...product,
+        size,
+        color,
+        quantity: 1
+      };
 
-    function saveCart() {
+      const existingItem = cart.find(i => i.id === id && i.size === size && i.color === color);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push(item);
+      }
+
       localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      showAlert('Produto adicionado ao carrinho!');
     }
 
     function updateCartCount() {
       const count = cart.reduce((total, item) => total + item.quantity, 0);
-      document.getElementById('cartCount').innerText = count;
+      document.getElementById('cartCount').textContent = count;
     }
 
     function toggleCartPopup() {
-      let popup = document.querySelector('.cart-popup');
-      if (!popup) createCartPopup();
-      document.querySelector('.cart-popup').style.display = 'flex';
-      renderCartItems();
-    }
-
-    function createCartPopup() {
-      const popup = document.createElement('div');
-      popup.className = 'cart-popup';
-      popup.innerHTML = `
-        <div class="cart-content">
-          <h3>Seu Carrinho</h3>
-          <div id="cartItems"></div>
-          <p id="cartTotal"></p>
-          <button onclick="checkout()" class="checkout">Finalizar Compra</button>
-          <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
-        </div>
-      `;
-      document.body.appendChild(popup);
-    }
-
-    function renderCartItems() {
-      const cartItems = document.getElementById('cartItems');
-      cartItems.innerHTML = '';
-      let total = 0;
-      cart.forEach(item => {
-        total += item.price * item.quantity;
-        cartItems.innerHTML += `
-          <p>${item.name} x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}
-          <button class="remove" onclick="removeFromCart(${item.id})">X</button></p>
-        `;
-      });
-      document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
-    }
-
-    function removeFromCart(id) {
-      cart = cart.filter(item => item.id !== id);
-      saveCart();
-      updateCartCount();
-      renderCartItems();
-    }
-
-    function closeCart() {
-      document.querySelector('.cart-popup').style.display = 'none';
-    }
-
-    function checkout() {
-      let orderSummary = generateOrderSummary();
-      document.querySelector('.container').innerHTML = `
-        <h2>Finalizar Compra</h2>
-        <p>Entre em contato no WhatsApp:</p>
-        <a href="https://wa.me/5541999737694?text=${encodeURIComponent(orderSummary)}" target="_blank">
-          <button class="checkout">Chamar no WhatsApp</button>
-        </a>
-      `;
-      cart = [];
-      saveCart();
-      updateCartCount();
-      closeCart();
-    }
-
-    function generateOrderSummary() {
-      let summary = '';
-      cart.forEach(item => {
-        summary += `${item.quantity}x ${item.name} (R$${(item.price * item.quantity).toFixed(2)})\n`;
-      });
-      summary += `Total: R$${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}`;
-      return summary;
-    }
-
-    function filterProducts() {
-      const term = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-      renderProducts(filtered);
+      const cartPopup = document.getElementById('cartPopup');
+      cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
     }
 
     function showAlert(message) {
-      const alertEl = document.createElement('div');
-      alertEl.className = 'custom-alert';
-      alertEl.innerText = message;
-      document.body.appendChild(alertEl);
-      setTimeout(() => alertEl.remove(), 2000);
+      const alert = document.createElement('div');
+      alert.className = 'custom-alert';
+      alert.textContent = message;
+      document.body.appendChild(alert);
+      setTimeout(() => {
+        alert.remove();
+      }, 2000);
     }
 
-    // Voltar ao topo
-    window.onscroll = function() { toggleBtnTop() };
-
-    function toggleBtnTop() {
-      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-        document.getElementById('btnTop').style.display = 'block';
-      } else {
-        document.getElementById('btnTop').style.display = 'none';
-      }
-    }
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Inicializar
     renderProducts();
     updateCartCount();
   </script>
-
 </body>
 </html>
