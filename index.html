@@ -379,6 +379,19 @@
       }, 2000);
     }
 
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.onscroll = function() {
+      const btnTop = document.getElementById('btnTop');
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        btnTop.style.display = 'block';
+      } else {
+        btnTop.style.display = 'none';
+      }
+    };
+
     renderProducts();
     updateCartCount();
   </script>
