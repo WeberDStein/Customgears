@@ -267,6 +267,14 @@
     <div class="products" id="productList"></div>
   </div>
 
+  <!-- Informações -->
+  <div class="container">
+    <h2>Para mais informações</h2>
+    <div class="catalog">
+      <!-- Conteúdo futuro -->
+    </div>
+  </div>
+
   <!-- Rodapé -->
   <footer>
     <h4>Sobre</h4>
@@ -284,86 +292,155 @@
   <!-- Scripts -->
   <script>
     const products = [
-      { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', sizes: ['P', 'M', 'G'], colors: ['preto', 'roxo'] },
-      { id: 2, name: 'Blusa moletom Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', sizes: ['M', 'G', 'GG'], colors: ['preto', 'branco'] },
-      { id: 3, name: 'Manopla câmbio Custom Gears', price: 65.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', sizes: ['G', 'GG'], colors: ['preto', 'roxo'] },
-      { id: 4, name: 'Bandeira Custom Gears', price: 54.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', sizes: ['M', 'G'], colors: ['preto'] }
+      { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg' },
+      { id: 2, name: 'Blusa moletom Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg' },
+      { id: 3, name: 'Manopla câmbio Custom Gears', price: 65.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
+      { id: 4, name: 'Bandeira Custom Gears', price: 54.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
+      { id: 5, name: 'Coifa câmbio Custom Gears', price: 59.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
+      { id: 6, name: 'Caneca Custom Gears', price: 39.90, img: 'https://i.postimg.cc/0yb8YvQT/caneca.jpg' },
     ];
 
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    function renderProducts(list = products) {
+    // Função para renderizar os produtos
+    function renderProducts() {
       const productList = document.getElementById('productList');
       productList.innerHTML = '';
-      list.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'product';
-        div.innerHTML = `
-          <img src="${p.img}" alt="${p.name}">
-          <h3>${p.name}</h3>
-          <p>R$${p.price.toFixed(2)}</p>
-          <select id="size${p.id}">
-            ${p.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
-          </select>
-          <select id="color${p.id}">
-            ${p.colors.map(color => `<option value="${color}">${color}</option>`).join('')}
-          </select>
-          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
+      products.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product');
+        productDiv.innerHTML = `
+          <img src="${product.img}" alt="${product.name}" />
+          <h3>${product.name}</h3>
+          <p>R$ ${product.price.toFixed(2)}</p>
+          <button onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
         `;
-        productList.appendChild(div);
+        productList.appendChild(productDiv);
       });
+      updateCartCount();
     }
 
-    function addToCart(id) {
-      const product = products.find(p => p.id === id);
-      const size = document.getElementById(`size${id}`).value;
-      const color = document.getElementById(`color${id}`).value;
-      const item = { ...product, size, color, quantity: 1 };
-      cart.push(item);
+    // Função para adicionar produto ao carrinho
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      const cartItem = cart.find(item => item.id === productId);
+
+      if (cartItem) {
+        cartItem.quantity += 1;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+
       localStorage.setItem('cart', JSON.stringify(cart));
       updateCartCount();
       showAlert('Produto adicionado ao carrinho!');
     }
 
+    // Atualiza a contagem do carrinho
     function updateCartCount() {
-      document.getElementById('cartCount').innerText = cart.length;
+      const cartCount = document.getElementById('cartCount');
+      cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
     }
 
+    // Função para exibir/ocultar o carrinho
     function toggleCartPopup() {
-      const popup = document.getElementById('cartPopup');
-      popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+      const cartPopup = document.querySelector('.cart-popup');
+      if (!cartPopup) {
+        createCartPopup();
+      } else {
+        cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
+      }
     }
 
-    function filterProducts() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
-      renderProducts(filtered);
+    // Função para criar popup do carrinho
+    function createCartPopup() {
+      const cartPopup = document.createElement('div');
+      cartPopup.classList.add('cart-popup');
+
+      const cartContent = document.createElement('div');
+      cartContent.classList.add('cart-content');
+      cartContent.innerHTML = `
+        <h2>Seu Carrinho</h2>
+        <div id="cartItems"></div>
+        <button class="checkout" onclick="checkout()">Finalizar Compra</button>
+        <button onclick="toggleCartPopup()">Fechar</button>
+      `;
+      cartPopup.appendChild(cartContent);
+      document.body.appendChild(cartPopup);
+      renderCartItems();
     }
 
+    // Função para renderizar os itens do carrinho
+    function renderCartItems() {
+      const cartItemsDiv = document.getElementById('cartItems');
+      cartItemsDiv.innerHTML = '';
+      cart.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('cart-item');
+        itemDiv.innerHTML = `
+          <p>${item.name} x${item.quantity}</p>
+          <p>R$ ${(item.price * item.quantity).toFixed(2)}</p>
+          <button class="remove" onclick="removeFromCart(${item.id})">Remover</button>
+        `;
+        cartItemsDiv.appendChild(itemDiv);
+      });
+    }
+
+    // Função para remover item do carrinho
+    function removeFromCart(productId) {
+      const index = cart.findIndex(item => item.id === productId);
+      if (index !== -1) {
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCartItems();
+        updateCartCount();
+      }
+    }
+
+    // Função para finalizar compra
+    function checkout() {
+      alert('Compra finalizada!');
+      localStorage.removeItem('cart');
+      cart.length = 0;
+      renderCartItems();
+      updateCartCount();
+    }
+
+    // Função de alerta
     function showAlert(message) {
       const alert = document.createElement('div');
-      alert.className = 'custom-alert';
-      alert.innerText = message;
+      alert.classList.add('custom-alert');
+      alert.textContent = message;
       document.body.appendChild(alert);
       setTimeout(() => alert.remove(), 2000);
     }
 
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Função de busca
+    function filterProducts() {
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchInput));
+      renderFilteredProducts(filteredProducts);
     }
 
-    window.addEventListener('scroll', () => {
-      const btnTop = document.getElementById('btnTop');
-      if (window.scrollY > 200) {
-        btnTop.style.display = 'block';
-      } else {
-        btnTop.style.display = 'none';
-      }
-    });
+    // Função para renderizar produtos filtrados
+    function renderFilteredProducts(filteredProducts) {
+      const productList = document.getElementById('productList');
+      productList.innerHTML = '';
+      filteredProducts.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product');
+        productDiv.innerHTML = `
+          <img src="${product.img}" alt="${product.name}" />
+          <h3>${product.name}</h3>
+          <p>R$ ${product.price.toFixed(2)}</p>
+          <button onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
+        `;
+        productList.appendChild(productDiv);
+      });
+    }
 
+    // Chama a renderização dos produtos ao carregar a página
     renderProducts();
-    updateCartCount();
   </script>
-
 </body>
 </html>
