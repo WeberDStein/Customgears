@@ -291,15 +291,6 @@
 
   <!-- Scripts -->
   <script>
-    // ► ESTOQUE POR COR E TAMANHO (apenas para o produto de ID 8)
-    const stock = {
-      8: {
-        preto:  { P: 5, M: 5, G: 5 },
-        branco: { P: 3, M: 3, G: 3 },
-        roxo:   { P: 4, M: 4, G: 4 }
-      }
-    };
-
     const products = [
       { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg' },
       { id: 2, name: 'Blusa moletom Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg' },
@@ -324,23 +315,6 @@
           <img src="${p.img}" alt="${p.name}">
           <h3>${p.name}</h3>
           <p>R$${p.price.toFixed(2)}</p>
-          ${ stock[p.id]
-            ? `
-              <label>Cor:</label>
-              <select id="colorSelect-${p.id}">
-                ${Object.keys(stock[p.id]).map(c => `<option value="${c}">${c[0].toUpperCase()+c.slice(1)}</option>`).join('')}
-              </select>
-
-              <label>Tamanho:</label>
-              <select id="sizeSelect-${p.id}">
-                ${Object.keys(stock[p.id][Object.keys(stock[p.id])[0]]).map(sz => `<option value="${sz}">${sz}</option>`).join('')}
-              </select>
-
-              <label>Qtd:</label>
-              <input type="number" id="qtyInput-${p.id}" min="1" value="1" style="width:50px;">
-            `
-            : ''
-          }
           <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
         `;
         productList.appendChild(div);
@@ -349,48 +323,9 @@
 
     function addToCart(id) {
       const product = products.find(p => p.id === id);
-      let qty = 1, color, size;
-
-      if (stock[id]) {
-        color = document.getElementById(`colorSelect-${id}`).value;
-        size  = document.getElementById(`sizeSelect-${id}`).value;
-        qty   = parseInt(document.getElementById(`qtyInput-${id}`).value, 10);
-
-        const available = stock[id][color][size] || 0;
-        if (available === 0) {
-          return showAlert(`${product.name} (${color.toUpperCase()} ${size}) indisponível.`);
-        }
-        if (qty > available) {
-          return showAlert(`Só temos ${available} unid. de ${color.toUpperCase()} (${size}).`);
-        }
-        stock[id][color][size] -= qty;
-
-        // remove tamanho esgotado
-        if (stock[id][color][size] === 0) {
-          document.getElementById(`sizeSelect-${id}`)
-            .querySelector(`option[value="${size}"]`).remove();
-        }
-        // remove cor esgotada
-        if (Object.values(stock[id][color]).every(v => v === 0)) {
-          delete stock[id][color];
-          document.getElementById(`colorSelect-${p.id}`)
-            .querySelector(`option[value="${color}"]`).remove();
-        }
-        // se acabou tudo
-        if (Object.keys(stock[id]).length === 0) {
-          const btn = document.querySelector(`.product button[onclick="addToCart(${id})"]`);
-          btn.disabled = true;
-          btn.innerText = 'Esgotado';
-        }
-      }
-
-      // adiciona ao carrinho
-      const exists = cart.find(item =>
-        item.id === id && item.color === color && item.size === size
-      );
-      if (exists) exists.quantity += qty;
-      else cart.push({ id, name: product.name, price: product.price, quantity: qty, color, size });
-
+      const exists = cart.find(p => p.id === id);
+      if (exists) exists.quantity++;
+      else cart.push({ ...product, quantity: 1 });
       saveCart();
       updateCartCount();
       showAlert(`${product.name} adicionado ao carrinho!`);
@@ -405,7 +340,105 @@
       document.getElementById('cartCount').innerText = count;
     }
 
-    // ... resto das suas funções inalteradas (toggleCartPopup, createCartPopup, renderCartItems, removeFromCart, showAlert, checkout, generateOrderSummary, filterProducts, scrollToTop, etc.) ...
+    function toggleCartPopup() {
+      let popup = document.querySelector('.cart-popup');
+      if (!popup) createCartPopup();
+      document.querySelector('.cart-popup').style.display = 'flex';
+      renderCartItems();
+    }
+
+    function createCartPopup() {
+      const popup = document.createElement('div');
+      popup.className = 'cart-popup';
+      popup.innerHTML = `
+        <div class="cart-content">
+          <h3>Seu Carrinho</h3>
+          <div id="cartItems"></div>
+          <p id="cartTotal"></p>
+          <button onclick="checkout()" class="checkout">Finalizar Compra</button>
+          <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
+        </div>
+      `;
+      document.body.appendChild(popup);
+    }
+
+    function renderCartItems() {
+      const cartItems = document.getElementById('cartItems');
+      cartItems.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price * item.quantity;
+        cartItems.innerHTML += `
+          <p>${item.name} x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}
+          <button class="remove" onclick="removeFromCart(${item.id})">X</button></p>
+        `;
+      });
+      document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      saveCart();
+      updateCartCount();
+      renderCartItems();
+    }
+
+    function closeCart() {
+      document.querySelector('.cart-popup').style.display = 'none';
+    }
+
+    function checkout() {
+      let orderSummary = generateOrderSummary();
+      document.querySelector('.container').innerHTML = `
+        <h2>Finalizar Compra</h2>
+        <p>Entre em contato no WhatsApp:</p>
+        <a href="https://wa.me/5541999737694?text=${encodeURIComponent(orderSummary)}" target="_blank">
+          <button class="checkout">Chamar no WhatsApp</button>
+        </a>
+      `;
+      cart = [];
+      saveCart();
+      updateCartCount();
+      closeCart();
+    }
+
+    function generateOrderSummary() {
+      let summary = '';
+      cart.forEach(item => {
+        summary += `${item.quantity}x ${item.name} (R$${(item.price * item.quantity).toFixed(2)})\n`;
+      });
+      summary += `Total: R$${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}`;
+      return summary;
+    }
+
+    function filterProducts() {
+      const term = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+      renderProducts(filtered);
+    }
+
+    function showAlert(message) {
+      const alertEl = document.createElement('div');
+      alertEl.className = 'custom-alert';
+      alertEl.innerText = message;
+      document.body.appendChild(alertEl);
+      setTimeout(() => alertEl.remove(), 2000);
+    }
+
+    // Voltar ao topo
+    window.onscroll = function() { toggleBtnTop() };
+
+    function toggleBtnTop() {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        document.getElementById('btnTop').style.display = 'block';
+      } else {
+        document.getElementById('btnTop').style.display = 'none';
+      }
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     // Inicializar
     renderProducts();
