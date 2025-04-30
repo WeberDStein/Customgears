@@ -354,4 +354,121 @@
       showAlert('Produto adicionado ao carrinho!');
     }
 
-    // Atual
+    // Atualiza a contagem do carrinho
+    function updateCartCount() {
+      const cartCount = document.getElementById('cartCount');
+      cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    // Função para exibir/ocultar o carrinho
+    function toggleCartPopup() {
+      const cartPopup = document.querySelector('.cart-popup');
+      if (!cartPopup) {
+        createCartPopup();
+      } else {
+        cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
+      }
+    }
+
+    // Função para criar popup do carrinho
+    function createCartPopup() {
+      const cartPopup = document.createElement('div');
+      cartPopup.classList.add('cart-popup');
+
+      const cartContent = document.createElement('div');
+      cartContent.classList.add('cart-content');
+      cartContent.innerHTML = `
+        <h2>Seu Carrinho</h2>
+        <div id="cartItems"></div>
+        <button class="checkout" onclick="checkout()">Finalizar Compra</button>
+        <button onclick="toggleCartPopup()">Fechar</button>
+      `;
+      cartPopup.appendChild(cartContent);
+      document.body.appendChild(cartPopup);
+      renderCartItems();
+    }
+
+    // Função para renderizar os itens do carrinho
+    function renderCartItems() {
+      const cartItemsDiv = document.getElementById('cartItems');
+      cartItemsDiv.innerHTML = '';
+      cart.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('cart-item');
+        itemDiv.innerHTML = `
+          <p>${item.name} (${item.color}, ${item.size}) x${item.quantity}</p>
+          <p>R$ ${(item.price * item.quantity).toFixed(2)}</p>
+          <button class="remove" onclick="removeFromCart(${item.id}, '${item.color}', '${item.size}')">Remover</button>
+        `;
+        cartItemsDiv.appendChild(itemDiv);
+      });
+    }
+
+    // Função para remover item do carrinho
+    function removeFromCart(productId, color, size) {
+      const index = cart.findIndex(item => item.id === productId && item.color === color && item.size === size);
+      if (index !== -1) {
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCartItems();
+        updateCartCount();
+      }
+    }
+
+    // Função para finalizar compra
+    function checkout() {
+      alert('Compra finalizada!');
+      localStorage.removeItem('cart');
+      cart.length = 0;
+      renderCartItems();
+      updateCartCount();
+    }
+
+    // Função de alerta
+    function showAlert(message) {
+      const alert = document.createElement('div');
+      alert.classList.add('custom-alert');
+      alert.textContent = message;
+      document.body.appendChild(alert);
+      setTimeout(() => alert.remove(), 2000);
+    }
+
+    // Função de busca
+    function filterProducts() {
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchInput));
+      renderFilteredProducts(filteredProducts);
+    }
+
+    // Função para renderizar produtos filtrados
+    function renderFilteredProducts(filteredProducts) {
+      const productList = document.getElementById('productList');
+      productList.innerHTML = '';
+      filteredProducts.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.classList.add('product');
+        const colorOptions = product.colors.map(color => `<option value="${color}">${color}</option>`).join('');
+        const sizeOptions = product.sizes.map(size => `<option value="${size}">${size}</option>`).join('');
+        productDiv.innerHTML = `
+          <img src="${product.img}" alt="${product.name}" />
+          <h3>${product.name}</h3>
+          <p>R$ ${product.price.toFixed(2)}</p>
+          <select class="color-select">
+            <option value="">Selecione a cor</option>
+            ${colorOptions}
+          </select>
+          <select class="size-select">
+            <option value="">Selecione o tamanho</option>
+            ${sizeOptions}
+          </select>
+          <button onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
+        `;
+        productList.appendChild(productDiv);
+      });
+    }
+
+    // Chama a renderização dos produtos ao carregar a página
+    renderProducts();
+  </script>
+</body>
+</html>
