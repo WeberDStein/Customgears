@@ -158,17 +158,6 @@
       text-align: center;
       max-height: 80vh;
       overflow-y: auto;
-      color: #fff;
-    }
-
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      padding: 0.5rem;
-      background: #222;
-      border-radius: 6px;
     }
 
     /* Campo de Busca */
@@ -289,31 +278,16 @@
     <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
 
-  <!-- Popup Carrinho -->
-  <div id="cartPopup" class="cart-popup">
-    <div class="cart-content">
-      <h2>Seu Carrinho</h2>
-      <div id="cartItems"></div>
-      <p><strong>Subtotal:</strong> R$<span id="subtotal">0.00</span></p>
-      <button onclick="checkout()">Finalizar Compra</button>
-    </div>
-  </div>
-
   <!-- Botão Voltar ao Topo -->
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
   <!-- Scripts -->
   <script>
     const products = [
-      { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg' },
-      { id: 2, name: 'Blusa moletom Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg' },
-      { id: 3, name: 'Manopla câmbio Custom Gears', price: 65.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 4, name: 'Bandeira Custom Gears', price: 54.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 5, name: 'Coifa câmbio Custom Gears', price: 59.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 6, name: 'Caneca personalizada Custom Gears', price: 59.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 7, name: 'Chaveiro e cordão Custom Gears', price: 29.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 8, name: 'Adesivos refletivo Custom Gears', price: 19.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 9, name: 'Aromatizante automotivo Custom Gears', price: 6.90, img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg' }
+      { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', sizes: ['P', 'M', 'G'], colors: ['preto', 'roxo'] },
+      { id: 2, name: 'Blusa moletom Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', sizes: ['M', 'G', 'GG'], colors: ['preto', 'branco'] },
+      { id: 3, name: 'Manopla câmbio Custom Gears', price: 65.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', sizes: ['G', 'GG'], colors: ['preto', 'roxo'] },
+      { id: 4, name: 'Bandeira Custom Gears', price: 54.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', sizes: ['M', 'G'], colors: ['preto'] }
     ];
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -321,115 +295,74 @@
     function renderProducts(list = products) {
       const productList = document.getElementById('productList');
       productList.innerHTML = '';
-      list.forEach(product => {
+      list.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product';
         div.innerHTML = `
-          <img src="${product.img}" alt="${product.name}">
-          <h3>${product.name}</h3>
-          <p>R$${product.price.toFixed(2)}</p>
-          <label for="size-${product.id}">Tamanho:</label>
-          <select id="size-${product.id}">
-            <option value="P">P</option>
-            <option value="M">M</option>
-            <option value="G">G</option>
-            <option value="GG">GG</option>
-            <option value="XG">XG</option>
+          <img src="${p.img}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>R$${p.price.toFixed(2)}</p>
+          <select id="size${p.id}">
+            ${p.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
           </select>
-          <label for="color-${product.id}">Cor:</label>
-          <select id="color-${product.id}">
-            <option value="preto">Preto</option>
-            <option value="branco">Branco</option>
-            <option value="roxo">Roxo</option>
-            <option value="cinza">Cinza</option>
+          <select id="color${p.id}">
+            ${p.colors.map(color => `<option value="${color}">${color}</option>`).join('')}
           </select>
-          <button onclick="addToCart(${product.id})">Adicionar ao carrinho</button>
+          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
         `;
         productList.appendChild(div);
       });
     }
 
-    function addToCart(productId) {
-      const size = document.getElementById(`size-${productId}`).value;
-      const color = document.getElementById(`color-${productId}`).value;
-      const product = products.find(p => p.id === productId);
-      const existingItem = cart.find(item => item.id === productId && item.size === size && item.color === color);
-
-      if (existingItem) {
-        existingItem.quantity++;
-      } else {
-        cart.push({ ...product, size, color, quantity: 1 });
-      }
-
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const size = document.getElementById(`size${id}`).value;
+      const color = document.getElementById(`color${id}`).value;
+      const item = { ...product, size, color, quantity: 1 };
+      cart.push(item);
       localStorage.setItem('cart', JSON.stringify(cart));
       updateCartCount();
       showAlert('Produto adicionado ao carrinho!');
     }
 
-    function removeFromCart(id, size, color) {
-      cart = cart.filter(item => !(item.id === id && item.size === size && item.color === color));
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
-      renderCartItems();
-    }
-
     function updateCartCount() {
-      document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-    }
-
-    function renderCartItems() {
-      const cartItems = document.getElementById('cartItems');
-      cartItems.innerHTML = '';
-      if (cart.length === 0) {
-        cartItems.innerHTML = '<p>Seu carrinho está vazio.</p>';
-      } else {
-        let subtotal = 0;
-        cart.forEach(item => {
-          const div = document.createElement('div');
-          div.className = 'cart-item';
-          div.innerHTML = `
-            <p>${item.name} (${item.size}, ${item.color}) - R$${(item.price * item.quantity).toFixed(2)}</p>
-            <p>Quantidade: ${item.quantity}</p>
-            <button class="remove" onclick="removeFromCart(${item.id}, '${item.size}', '${item.color}')">Remover</button>
-          `;
-          cartItems.appendChild(div);
-          subtotal += item.price * item.quantity;
-        });
-        document.getElementById('subtotal').textContent = subtotal.toFixed(2);
-      }
+      document.getElementById('cartCount').innerText = cart.length;
     }
 
     function toggleCartPopup() {
-      const cartPopup = document.getElementById('cartPopup');
-      cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
-      renderCartItems();
-    }
-
-    function checkout() {
-      if (cart.length === 0) {
-        alert('Seu carrinho está vazio!');
-      } else {
-        alert('Finalizando compra...');
-      }
+      const popup = document.getElementById('cartPopup');
+      popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
     }
 
     function filterProducts() {
-      const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-      const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchQuery));
-      renderProducts(filteredProducts);
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+      renderProducts(filtered);
     }
 
     function showAlert(message) {
       const alert = document.createElement('div');
       alert.className = 'custom-alert';
-      alert.textContent = message;
+      alert.innerText = message;
       document.body.appendChild(alert);
       setTimeout(() => alert.remove(), 2000);
     }
 
-    // Inicializa o carrinho
-    updateCartCount();
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('scroll', () => {
+      const btnTop = document.getElementById('btnTop');
+      if (window.scrollY > 200) {
+        btnTop.style.display = 'block';
+      } else {
+        btnTop.style.display = 'none';
+      }
+    });
+
     renderProducts();
+    updateCartCount();
   </script>
 
 </body>
