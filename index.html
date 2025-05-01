@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Gears</title>
   <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
-  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning" />
-
-  <!-- Fontes -->
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-
-  <style>
+  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning" />  <!-- Fontes -->  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">  <style>
+    /* CSS original preservado */
     body { background: #000; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding-top: 70px; }
     header { font-family: 'UnifrakturCook', cursive; font-size: 3rem; text-align: center; padding: 1.5rem; border-bottom: 1px solid #333; color: #ccc; position: fixed; width: 100%; top: 0; background: #000; z-index: 1000; }
     .container { max-width: 1000px; margin: auto; padding: 2rem; padding-top: 100px; }
@@ -42,8 +37,7 @@
     #btnTop { display:none; position:fixed; bottom:30px; right:30px; z-index:999; font-size:1.5rem; border:none; outline:none; background-color:#800080; color:white; cursor:pointer; padding:0.5rem 0.8rem; border-radius:50%; box-shadow:0 0 10px #800080; transition:background-color 0.3s; }
     #btnTop:hover { background-color:#a020f0; }
     @media (max-width:768px) { .products { flex-direction:column; align-items:center;} .product { width:80%; } }
-  </style>
-</head>
+  </style></head>
 <body>
   <div class="cart" onclick="toggleCartPopup()">🛒 Carrinho <span class="cart-count" id="cartCount">0</span></div>
   <header>Custom Gears</header>
@@ -59,140 +53,22 @@
     <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
     <p style="margin-top:2rem;color:#777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
-  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
-
-  <script>
-    // Modelo de dados com variações
+  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>  <script>
+    // ===== Modelo de dados com variações e estoque =====
     const products = [
-      {
-        id: 1,
-        name: 'Camiseta oversized Custom Gears',
-        img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg',
-        variacoes: [
+      { id: 1, name: 'Camiseta oversized Custom Gears', img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', variacoes: [
           { cor: 'Branco', tamanho: 'P', preco: 119.90, estoque: 5 },
           { cor: 'Branco', tamanho: 'M', preco: 119.90, estoque: 0 },
           { cor: 'Preto',  tamanho: 'P', preco: 119.90, estoque: 2 },
-          { cor: 'Roxo',   tamanho: 'G', preco: 119.90, estoque: 0 },
+          { cor: 'Roxo',   tamanho: 'G', preco: 119.90, estoque: 0 }
         ]
       },
-      {
-        id: 2,
-        name: 'Blusa moletom com capuz Custom Gears',
-        img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg',
-        variacoes: [
+      { id: 2, name: 'Blusa moletom com capuz Custom Gears', img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', variacoes: [
           { cor: 'Branco', tamanho: 'P', preco: 159.90, estoque: 3 },
           { cor: 'Preto',  tamanho: 'M', preco: 159.90, estoque: 0 },
           { cor: 'Cinza',  tamanho: 'G', preco: 159.90, estoque: 1 },
-          { cor: 'Roxo',   tamanho: 'GG', preco: 159.90, estoque: 0 },
+          { cor: 'Roxo',   tamanho: 'GG',preco: 159.90, estoque: 0 }
         ]
       },
-      // ... adicione as demais variações para cada produto
-    ];
-
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    // Renderiza produtos com estoques > 0
-    function renderProducts(list = products) {
-      const productList = document.getElementById('productList');
-      productList.innerHTML = '';
-
-      list.forEach(p => {
-        const disponiveis = p.variacoes.filter(v => v.estoque > 0);
-        if (!disponiveis.length) return; // produto totalmente esgotado
-
-        const cores = [...new Set(disponiveis.map(v => v.cor))];
-        const tamanhosPorCor = {};
-        cores.forEach(c => {
-          tamanhosPorCor[c] = disponiveis
-            .filter(v => v.cor === c)
-            .map(v => v.tamanho);
-        });
-
-        const div = document.createElement('div');
-        div.className = 'product';
-        div.id = `prod-${p.id}`;
-
-        let colorOptions = cores.map(c => `<option value="${c}">${c}</option>`).join('');
-        const primeiraCor = cores[0];
-        let sizeOptions = tamanhosPorCor[primeiraCor]
-          .map(s => `<option value="${s}">${s}</option>`).join('');
-
-        const getPreco = (cor, size) => {
-          const v = p.variacoes.find(x => x.cor === cor && x.tamanho === size);
-          return v ? v.preco.toFixed(2) : '0.00';
-        };
-
-        div.innerHTML = `
-          <div class="added-label" id="added-${p.id}">Adicionado</div>
-          <img src="${p.img}" alt="${p.name}"/>
-          <h3>${p.name}</h3>
-          <p id="preco-${p.id}">R$ ${getPreco(primeiraCor, tamanhosPorCor[primeiraCor][0])}</p>
-          <label>Cor:
-            <select id="cor-${p.id}">${colorOptions}</select>
-          </label><br>
-          <label>Tamanho:
-            <select id="tamanho-${p.id}">${sizeOptions}</select>
-          </label><br>
-          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
-        `;
-        productList.appendChild(div);
-
-        const corSelect = document.getElementById(`cor-${p.id}`);
-        const tamaSelect = document.getElementById(`tamanho-${p.id}`);
-        const precoEl   = document.getElementById(`preco-${p.id}`);
-
-        corSelect.addEventListener('change', () => {
-          const c = corSelect.value;
-          tamaSelect.innerHTML = tamanhosPorCor[c]
-            .map(s => `<option value="${s}">${s}</option>`).join('');
-          precoEl.textContent = `R$ ${getPreco(c, tamaSelect.value)}`;
-        });
-
-        tamaSelect.addEventListener('change', () => {
-          precoEl.textContent = `R$ ${getPreco(corSelect.value, tamaSelect.value)}`;
-        });
-      });
-    }
-
-    function addToCart(id) {
-      const p = products.find(x => x.id === id);
-      const cor = document.getElementById(`cor-${id}`).value;
-      const tamanho = document.getElementById(`tamanho-${id}`).value;
-      const vari = p.variacoes.find(v => v.cor === cor && v.tamanho === tamanho);
-
-      if (!vari || vari.estoque <= 0) {
-        alert('Essa variação está esgotada.');
-        return;
-      }
-
-      vari.estoque--;
-      renderProducts();
-
-      const exists = cart.find(i => i.id===id && i.cor===cor && i.tamanho===tamanho);
-      if (exists) exists.quantity++;
-      else cart.push({ id, name: p.name, price: vari.preco, quantity: 1, cor, tamanho });
-
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
-      showAlert(`${p.name} — ${cor} / ${tamanho} adicionado!`);
-    }
-
-    // Suas funções de carrinho (updateCartCount, filterProducts, toggleCartPopup etc.) permanecem iguais
-    function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((t,i)=>t+i.quantity,0); }
-    function filterProducts() { const term = document.getElementById('searchInput').value.toLowerCase(); renderProducts(products.filter(p => p.name.toLowerCase().includes(term))); }
-    function toggleCartPopup() { let pop = document.querySelector('.cart-popup'); if (!pop) createCartPopup(); pop.style.display='flex'; renderCartItems(); }
-    function createCartPopup() {/* ... igual ao seu código ... */}
-    function renderCartItems() {/* ... igual ao seu código ... */}
-    function changeQty(id,cor,tam,delta){/* ... */ }
-    function removeFromCart(id,cor,tam){/* ... */ }
-    function closeCart(){ document.querySelector('.cart-popup').style.display='none'; }
-    function checkout(){/* ... */ }
-    function showAlert(m){ const el=document.createElement('div'); el.className='custom-alert'; el.innerText=m; document.body.appendChild(el); setTimeout(()=>el.remove(),2000); }
-    function scrollToTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
-
-    // Inicialização
-    renderProducts();
-    updateCartCount();
-  </script>
-</body>
-</html>
+      // ... completar para cada produto mantendo`
+]}]}
