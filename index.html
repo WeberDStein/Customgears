@@ -45,7 +45,7 @@
     }
 
     /* Produtos */
-    .products {
+    .products, .catalog {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -53,7 +53,7 @@
       margin: 2rem 0;
     }
 
-    .product {
+    .product, .catalog-item {
       background: #111;
       border: 1px solid #333;
       border-radius: 8px;
@@ -63,11 +63,11 @@
       transition: transform 0.2s ease;
     }
 
-    .product:hover {
+    .product:hover, .catalog-item:hover {
       transform: scale(1.05);
     }
 
-    .product img {
+    .product img, .catalog-item img {
       width: 100%;
       border-radius: 6px;
       margin-bottom: 0.5rem;
@@ -239,11 +239,11 @@
 
     /* Responsivo */
     @media (max-width: 768px) {
-      .products {
+      .products, .catalog {
         flex-direction: column;
         align-items: center;
       }
-      .product {
+      .product, .catalog-item {
         width: 80%;
       }
     }
@@ -267,6 +267,14 @@
     <div class="products" id="productList"></div>
   </div>
 
+  <!-- Informações -->
+  <div class="container">
+    <h2>Para mais informações</h2>
+    <div class="catalog">
+      <!-- Conteúdo futuro -->
+    </div>
+  </div>
+
   <!-- Rodapé -->
   <footer>
     <h4>Sobre</h4>
@@ -277,6 +285,9 @@
 
     <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
+
+  <!-- Botão Voltar ao Topo -->
+  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
   <!-- Scripts -->
   <script>
@@ -292,10 +303,12 @@
       { id: 9, name: 'Aromatizante automotivo Custom Gears', price: 6.90, img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg' }
     ];
 
-    function renderProducts() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderProducts(list = products) {
       const productList = document.getElementById('productList');
       productList.innerHTML = '';
-      products.forEach(p => {
+      list.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product';
         div.innerHTML = `
@@ -309,12 +322,128 @@
     }
 
     function addToCart(id) {
-      alert('Produto adicionado ao carrinho!');
-      // Adicionar lógica para o carrinho aqui
+      const product = products.find(p => p.id === id);
+      const exists = cart.find(p => p.id === id);
+      if (exists) exists.quantity++;
+      else cart.push({ ...product, quantity: 1 });
+      saveCart();
+      updateCartCount();
+      showAlert(`${product.name} adicionado ao carrinho!`);
     }
 
-    // Carregar produtos ao inicializar
-    window.onload = renderProducts;
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('cartCount').innerText = count;
+    }
+
+    function toggleCartPopup() {
+      let popup = document.querySelector('.cart-popup');
+      if (!popup) createCartPopup();
+      document.querySelector('.cart-popup').style.display = 'flex';
+      renderCartItems();
+    }
+
+    function createCartPopup() {
+      const popup = document.createElement('div');
+      popup.className = 'cart-popup';
+      popup.innerHTML = `
+        <div class="cart-content">
+          <h3>Seu Carrinho</h3>
+          <div id="cartItems"></div>
+          <p id="cartTotal"></p>
+          <button onclick="checkout()" class="checkout">Finalizar Compra</button>
+          <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
+        </div>
+      `;
+      document.body.appendChild(popup);
+    }
+
+    function renderCartItems() {
+      const cartItems = document.getElementById('cartItems');
+      cartItems.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price * item.quantity;
+        cartItems.innerHTML += `
+          <p>${item.name} x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}
+          <button class="remove" onclick="removeFromCart(${item.id})">X</button></p>
+        `;
+      });
+      document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      saveCart();
+      updateCartCount();
+      renderCartItems();
+    }
+
+    function closeCart() {
+      document.querySelector('.cart-popup').style.display = 'none';
+    }
+
+    function checkout() {
+      let orderSummary = generateOrderSummary();
+      document.querySelector('.container').innerHTML = `
+        <h2>Finalizar Compra</h2>
+        <p>Entre em contato no WhatsApp:</p>
+        <a href="https://wa.me/5541999737694?text=${encodeURIComponent(orderSummary)}" target="_blank">
+          <button class="checkout">Chamar no WhatsApp</button>
+        </a>
+      `;
+      cart = [];
+      saveCart();
+      updateCartCount();
+      closeCart();
+    }
+
+    function generateOrderSummary() {
+      let summary = '';
+      cart.forEach(item => {
+        summary += `${item.quantity}x ${item.name} (R$${(item.price * item.quantity).toFixed(2)})\n`;
+      });
+      summary += `Total: R$${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}`;
+      return summary;
+    }
+
+    function filterProducts() {
+      const term = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+      renderProducts(filtered);
+    }
+
+    function showAlert(message) {
+      const alertEl = document.createElement('div');
+      alertEl.className = 'custom-alert';
+      alertEl.innerText = message;
+      document.body.appendChild(alertEl);
+      setTimeout(() => alertEl.remove(), 2000);
+    }
+
+    // Voltar ao topo
+    window.onscroll = function() { toggleBtnTop() };
+
+    function toggleBtnTop() {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        document.getElementById('btnTop').style.display = 'block';
+      } else {
+        document.getElementById('btnTop').style.display = 'none';
+      }
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Inicializar
+    renderProducts();
+    updateCartCount();
   </script>
+
 </body>
 </html>
