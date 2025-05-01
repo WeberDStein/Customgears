@@ -1,169 +1,100 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Gears</title>
   <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
-  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning" />
-
-  <!-- Fontes -->
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-
-  <style>
-    /* (seu CSS existente permanece inalterado) */
-    /* … */
-    select {
-      margin: 0.5rem;
-      padding: 0.3rem;
-      background: #222;
-      color: #fff;
-      border: 1px solid #444;
-      border-radius: 4px;
-    }
-    strong.esgotado {
-      color: #f44336;
-      font-size: 1.1rem;
-      display: block;
-      margin: 1rem 0;
-    }
-  </style>
-</head>
-
+  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning" />  <!-- Fontes -->  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">  <style>
+    /* Seu CSS existente permanece inalterado */
+    select { margin: 0.5rem; padding: 0.3rem; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; }
+    strong.esgotado { color: #f44336; font-size: 1.1rem; display: block; margin: 1rem 0; }
+  </style></head>
 <body>
-  <!-- Carrinho, Header, Footer etc idênticos -->
-  <!-- … -->
-
-  <!-- Seção Produtos -->
-  <div class="container">
+  <!-- Carrinho e Cabeçalho existentes -->  <!-- Seção Produtos -->  <div class="container">
     <h2>Produtos</h2>
     <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()">
     <div class="products" id="productList"></div>
-  </div>
-
-  <!-- Scripts -->
-  <script>
+  </div>  <!-- Footer existente -->  <script>
+    // Define estoque inicial de variações (exemplo: 5 unidades de cada combinação)
+    const defaultStock = { P:5, M:5, G:5, GG:5, XG:5 };
     const products = [
-      { id: 1,  name: 'Camiseta oversized Custom Gears',       price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg' },
-      { id: 2,  name: 'Blusa moletom Custom Gears',             price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg' },
-      { id: 3,  name: 'Manopla câmbio Custom Gears',            price: 65.90,  img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 4,  name: 'Bandeira Custom Gears',                  price: 54.90,  img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 5,  name: 'Coifa câmbio Custom Gears',              price: 59.90,  img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 6,  name: 'Caneca personalizada Custom Gears',      price: 59.90,  img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      { id: 7,  name: 'Chaveiro e cordão Custom Gears',         price: 29.90,  img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg' },
-      // Agora com variações e estoque
-      { id: 8,  name: 'Adesivos refletivo Custom Gears',        price: 19.90,  img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg',
+      // Todos os produtos agora incluem variações de cor e tamanho
+      { id: 1, name: 'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg',
         variations: {
-          preto: { P:3, M:2, G:1, GG:0, XG:0 },
-          cinza: { P:2, M:1, G:0, GG:0, XG:0 },
-          branco:{ P:0, M:1, G:1, GG:1, XG:0 },
-          roxo:  { P:1, M:1, G:1, GG:0, XG:0 }
+          preto:{...defaultStock}, cinza:{...defaultStock}, branco:{...defaultStock}, roxo:{...defaultStock}
         }
       },
-      { id: 9,  name: 'Aromatizante automotivo Custom Gears',    price: 6.90,   img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg' }
+      { id: 2, name: 'Blusa moletom Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg',
+        variations:{ preto:{...defaultStock}, cinza:{...defaultStock}, branco:{...defaultStock}, roxo:{...defaultStock} }
+      },
+      { id: 3, name: 'Manopla câmbio Custom Gears', price:65.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',
+        variations:{ preto:{...defaultStock}, cinza:{...defaultStock}, branco:{...defaultStock}, roxo:{...defaultStock} }
+      },
+      { id: 4, name: 'Bandeira Custom Gears', price:54.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',
+        variations:{ preto:{...defaultStock}, cinza:{...defaultStock}, branco:{...defaultStock}, roxo:{...defaultStock} }
+      },
+      { id: 5, name: 'Coifa câmbio Custom Gears', price:59.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',
+        variations:{ preto:{...defaultStock}, cinza:{...defaultStock}, branco:{...defaultStock}, roxo:{...defaultStock} }
+      },
+      { id: 6, name: 'Caneca personalizada Custom Gears', price:59.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',
+        variations:{ preto:{...defaultStock}, cinza:{...defaultStock}, branco:{...defaultStock}, roxo:{...defaultStock} }
+      },
+      { id: 7, name: 'Chaveiro e cordão Custom Gears', price:29.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',
+        variations:{ preto:{...defaultStock}, cinza:{...defaultStock}, branco:{...defaultStock}, roxo:{...defaultStock} }
+      },
+      { id: 8, name: 'Adesivos refletivo Custom Gears', price:19.90, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',
+        variations:{ preto:{...defaultStock}, cinza:{...defaultStock}, branco:{...defaultStock}, roxo:{...defaultStock} }
+      },
+      { id: 9, name: 'Aromatizante automotivo Custom Gears', price:6.90, img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg',
+        variations:{ preto:{...defaultStock}, cinza:{...defaultStock}, branco:{...defaultStock}, roxo:{...defaultStock} }
+      }
     ];
 
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cart = JSON.parse(localStorage.getItem('cart'))||[];
 
-    function renderProducts(list = products) {
-      const productList = document.getElementById('productList');
-      productList.innerHTML = '';
-      list.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'product';
-
-        let html = `
-          <img src="${p.img}" alt="${p.name}">
-          <h3>${p.name}</h3>
-          <p>R$${p.price.toFixed(2)}</p>
-        `;
-
-        if (p.variations) {
-          // filtra cores com algum estoque
-          const cores = Object.keys(p.variations)
-            .filter(c => Object.values(p.variations[c]).some(q => q > 0));
-
-          if (cores.length === 0) {
-            html += `<strong class="esgotado">Esgotado</strong>`;
-          } else {
-            // seletor de cores
-            html += `<label>Cor:
-                <select id="color-${p.id}" onchange="updateSizes(${p.id}, this.value)">
-                  ${cores.map(c =>
-                    `<option value="${c}">${c.charAt(0).toUpperCase()+c.slice(1)}</option>`
-                  ).join('')}
-                </select>
-              </label>
-            `;
-            // seletor de tamanhos (preenchido depois)
-            html += `<label>Tamanho:
-                <select id="size-${p.id}"></select>
-              </label>
-              <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;
-          }
-        } else {
-          html += `<button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;
+    function renderProducts(list=products) {
+      const el = document.getElementById('productList'); el.innerHTML = '';
+      list.forEach(p=>{
+        const div=document.createElement('div'); div.className='product';
+        let html=`<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p>R$${p.price.toFixed(2)}</p>`;
+        const cores = Object.keys(p.variations).filter(c=>Object.values(p.variations[c]).some(q=>q>0));
+        if(!cores.length) html+=`<strong class="esgotado">Esgotado</strong>`;
+        else {
+          html+=`<label>Cor:<select id="color-${p.id}" onchange="updateSizes(${p.id},this.value)">${cores.map(c=>`<option value="${c}">${c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join('')}</select></label>`;
+          html+=`<label>Tamanho:<select id="size-${p.id}"></select></label><button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;
         }
-
-        div.innerHTML = html;
-        productList.appendChild(div);
-
-        // após inserir, atualiza tamanhos para a primeira cor disponível
-        if (p.variations && cores.length) {
-          updateSizes(p.id, cores[0]);
-        }
+        div.innerHTML=html; el.appendChild(div);
+        if(cores.length) updateSizes(p.id,cores[0]);
       });
     }
 
-    function updateSizes(id, cor) {
-      const prod = products.find(p => p.id === id);
-      const sel = document.getElementById(`size-${id}`);
-      sel.innerHTML = '';
-      const tamanhos = prod.variations[cor];
-      for (let t in tamanhos) {
-        if (tamanhos[t] > 0) {
-          sel.innerHTML += `<option value="${t}">${t}</option>`;
-        }
-      }
+    function updateSizes(id,cor){
+      const prod=products.find(p=>p.id===id);
+      const sel=document.getElementById(`size-${id}`); sel.innerHTML='';
+      const tams=prod.variations[cor];
+      for(let t in tams) if(tams[t]>0) sel.innerHTML+=`<option value="${t}">${t}</option>`;
     }
 
-    function addToCart(id) {
-      const prod = products.find(p => p.id === id);
-      if (prod.variations) {
-        const cor  = document.getElementById(`color-${id}`).value;
-        const tam  = document.getElementById(`size-${id}`).value;
-        if (prod.variations[cor][tam] > 0) {
-          prod.variations[cor][tam]--;
-          alert(`Adicionado: ${prod.name} — ${cor}/${tam}`);
-          renderProducts();
-        } else {
-          alert('Indisponível');
-        }
-      } else {
-        alert(`Adicionado: ${prod.name}`);
-      }
-      // lógica de cart permanece como você tinha
-      const exists = cart.find(i => i.id === id && (!prod.variations || (i.color===cor && i.size===tam)));
-      if (exists) exists.quantity++;
-      else {
-        let item = { id: prod.id, name: prod.name, price: prod.price, quantity: 1 };
-        if (prod.variations) { item.color = cor; item.size = tam; }
-        cart.push(item);
-      }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
+    function addToCart(id){
+      const prod=products.find(p=>p.id===id);
+      const cor=document.getElementById(`color-${id}`).value;
+      const tam=document.getElementById(`size-${id}`).value;
+      if(prod.variations[cor][tam]>0){ prod.variations[cor][tam]--; alert(`Adicionado: ${prod.name} — ${cor}/${tam}`); renderProducts(); }
+      else alert('Indisponível');
+      // carrinho
+      let item=cart.find(i=>i.id===id&&i.color===cor&&i.size===tam);
+      if(item) item.quantity++; else cart.push({ id, name:prod.name, price:prod.price, color:cor, size:tam, quantity:1});
+      localStorage.setItem('cart',JSON.stringify(cart)); updateCartCount();
     }
 
-    function updateCartCount() {
-      const cnt = cart.reduce((s,a) => s + a.quantity, 0);
-      document.getElementById('cartCount').innerText = cnt;
+    function updateCartCount(){
+      const cnt=cart.reduce((s,i)=>s+i.quantity,0);
+      document.getElementById('cartCount').innerText=cnt;
     }
 
-    /* restante das suas funções de carrinho, filterProducts, scrollToTop etc. sem alterações */
+    // Mantém suas demais funções de carrinho, filtro e scroll sem alterações
     // ...
-    renderProducts();
-    updateCartCount();
-  </script>
-</body>
+    renderProducts(); updateCartCount();
+  </script></body>
 </html>
