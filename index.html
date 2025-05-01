@@ -160,42 +160,6 @@
       overflow-y: auto;
     }
 
-    /* Campo de Busca */
-    #searchInput {
-      padding: 0.5rem;
-      width: 100%;
-      max-width: 300px;
-      margin: 1rem auto;
-      display: block;
-      background: #222;
-      border: 1px solid #444;
-      border-radius: 4px;
-      color: #fff;
-    }
-
-    /* Alertas */
-    .custom-alert {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #6a0dad;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      z-index: 9999;
-      animation: fadein 0.5s, fadeout 0.5s 1.5s;
-    }
-
-    @keyframes fadein {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeout {
-      from { opacity: 1; transform: translateY(0); }
-      to { opacity: 0; transform: translateY(-20px); }
-    }
-
     /* Footer Centralizado */
     footer {
       text-align: center;
@@ -278,6 +242,16 @@
     <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
 
+  <!-- Popup Carrinho -->
+  <div class="cart-popup" id="cartPopup">
+    <div class="cart-content">
+      <h3>Seu Carrinho</h3>
+      <div id="cartItems"></div>
+      <button class="checkout" onclick="finalizePurchase()">Finalizar Compra</button>
+      <button onclick="toggleCartPopup()">Fechar</button>
+    </div>
+  </div>
+
   <!-- Botão Voltar ao Topo -->
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
@@ -293,6 +267,8 @@
       { id: 7, name: 'Chaveiro e cordão Custom Gears', price: 29.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', options: { colors: ['Roxo', 'Cinza'], sizes: ['P', 'M'] } },
       { id: 8, name: 'Adesivos refletivo Custom Gears', price: 19.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', options: { colors: ['Preto', 'Roxo'], sizes: ['P', 'M'] } }
     ];
+
+    let cart = [];
 
     // Mostrar os produtos na página
     function showProducts() {
@@ -322,6 +298,72 @@
           </div>
         `;
       });
+    }
+
+    function addToCart(productId) {
+      const color = document.getElementById(`color-${productId}`).value;
+      const size = document.getElementById(`size-${productId}`).value;
+      const product = products.find(p => p.id === productId);
+      
+      if (!color || !size) {
+        alert('Por favor, selecione cor e tamanho.');
+        return;
+      }
+
+      const cartItem = { 
+        productId, 
+        name: product.name, 
+        price: product.price, 
+        color, 
+        size 
+      };
+      
+      cart.push(cartItem);
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartCount = document.getElementById('cartCount');
+      cartCount.innerText = cart.length;
+    }
+
+    function toggleCartPopup() {
+      const cartPopup = document.getElementById('cartPopup');
+      cartPopup.style.display = cartPopup.style.display === 'none' || cartPopup.style.display === '' ? 'flex' : 'none';
+      displayCartItems();
+    }
+
+    function displayCartItems() {
+      const cartItemsContainer = document.getElementById('cartItems');
+      cartItemsContainer.innerHTML = '';
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>O carrinho está vazio.</p>';
+        return;
+      }
+
+      cart.forEach(item => {
+        cartItemsContainer.innerHTML += `
+          <div>
+            <p>${item.name} - ${item.color} - ${item.size}</p>
+            <p>R$ ${item.price.toFixed(2)}</p>
+            <button class="remove" onclick="removeFromCart(${cart.indexOf(item)})">Remover</button>
+          </div>
+        `;
+      });
+
+      let total = cart.reduce((sum, item) => sum + item.price, 0);
+      cartItemsContainer.innerHTML += `<h3>Total: R$ ${total.toFixed(2)}</h3>`;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+      displayCartItems();
+    }
+
+    function finalizePurchase() {
+      alert('Compra finalizada! Implementar integração com pagamento.');
     }
 
     showProducts();
