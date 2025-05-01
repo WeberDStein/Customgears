@@ -163,5 +163,77 @@
     function scrollToTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
     renderProducts(); updateCartCount();
   </script>
+  <!-- === Início do plugin de estoque === -->
+  <script>
+    // 1) Cria um objeto inventory com estoque = 5 para cada cor×tamanho de cada produto
+    const inventory = products.reduce((acc, p) => {
+      acc[p.id] = [];
+      (p.colors || []).forEach(cor => {
+        (p.sizes || []).forEach(tam => {
+          acc[p.id].push({ cor, tamanho: tam, estoque: 5 });
+        });
+      });
+      return acc;
+    }, {});
+
+    // 2) Atualiza a UI, ocultando options zerados e cards totalmente esgotados
+    function updateStockUI() {
+      document.querySelectorAll('.product').forEach(card => {
+        // extrai o id do produto (supondo que cada card tenha id="prod-<id>")
+        const m = card.id.match(/prod-(\d+)/);
+        if (!m) return;
+        const id = +m[1];
+        const inv = inventory[id] || [];
+
+        const corSel = card.querySelector(`#cor-${id}`);
+        const tamSel = card.querySelector(`#tamanho-${id}`);
+        if (!corSel || !tamSel) return;  // sem selects, ignora
+
+        // apenas variações com estoque >0
+        const ativos = inv.filter(v => v.estoque > 0);
+        const coresAtivas = [...new Set(ativos.map(v => v.cor))];
+        const tamsAtivos  = [...new Set(ativos.map(v => v.tamanho))];
+
+        // esconde opções sem estoque
+        Array.from(corSel.options).forEach(o => o.hidden = !coresAtivas.includes(o.value));
+        Array.from(tamSel.options).forEach(o => o.hidden = !tamsAtivos.includes(o.value));
+
+        // se não sobrar nenhuma opção visível, esconde todo o card
+        const temOpcao = corSel.querySelector('option:not([hidden])') 
+                       && tamSel.querySelector('option:not([hidden])');
+        card.style.display = temOpcao ? '' : 'none';
+      });
+    }
+
+    // 3) Monkey-patch em addToCart: decrementar estoque e atualizar UI
+    if (typeof addToCart === 'function') {
+      const originalAdd = window.addToCart;
+      window.addToCart = function(id) {
+        const cor  = document.getElementById(`cor-${id}`)?.value;
+        const tamanho = document.getElementById(`tamanho-${id}`)?.value;
+        const inv = inventory[id] || [];
+        const idx = inv.findIndex(v => v.cor===cor && v.tamanho===tamanho);
+        if (idx < 0 || inv[idx].estoque <= 0) {
+          showAlert('Essa variação está esgotada.');
+          return;
+        }
+        // decrementa estoque
+        inv[idx].estoque--;
+        // chama sua função original
+        originalAdd(id);
+        // reflete mudanças na UI
+        updateStockUI();
+      }
+    }
+
+    // 4) Dispara no carregamento inicial
+    document.addEventListener('DOMContentLoaded', () => {
+      // Se seu renderProducts() roda antes, você pode chamar com setTimeout(updateStockUI,0)
+      updateStockUI();
+    });
+  </script>
+  <!-- === Fim do plugin de estoque === -->
+</body>
+</html>
 </body>
 </html>
