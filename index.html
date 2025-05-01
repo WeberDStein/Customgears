@@ -3,95 +3,93 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Gears</title>
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    /* Adicionar estilos do site aqui (omitido para foco no recurso solicitado) */
-  </style>
-</head>
+  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
+  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning" />  <!-- Fontes -->  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">  <style>
+    /* Estilos Gerais */
+    body { background: #000; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding-top: 70px; }
+    header { font-family: 'UnifrakturCook', cursive; font-size: 3rem; text-align: center; padding: 1.5rem; border-bottom: 1px solid #333; color: #ccc; }
+    .container { max-width: 1000px; margin: auto; padding: 2rem; }
+    h2 { color: #aa88cc; font-family: 'UnifrakturCook', cursive; border-bottom: 1px solid #444; padding-bottom: 0.5rem; text-align: center; }
+    .products { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin: 2rem 0; }
+    .product { background: #111; border: 1px solid #333; border-radius: 8px; width: 250px; padding: 1rem; text-align: center; transition: transform 0.2s ease; }
+    .product:hover { transform: scale(1.05); }
+    .product img { width: 100%; border-radius: 6px; margin-bottom: 0.5rem; }
+    .product h3 { color: #ddd; margin: 0.5rem 0; }
+    .product p { color: #ccc; font-size: 0.9rem; margin-bottom: 1rem; }
+    button { background: #800080; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
+    button:hover { background: #a020f0; }
+    select { margin: 0.5rem; padding: 0.3rem; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; }
+    strong.esgotado { color: #f44336; font-size: 1.1rem; }
+    /* restante do CSS omitido para brevidade */
+  </style></head>
 <body>
   <header>Custom Gears</header>
   <div class="container">
     <h2>Produtos</h2>
     <div class="products" id="productList"></div>
   </div>  <script>
+    // Produtos com variações para o produto 8 (Adesivos refletivo Custom Gears)
     const products = [
-      {
-        id: 1,
-        name: 'Camiseta oversized Custom Gears',
-        price: 119.90,
-        img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg',
+      { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg' },
+      /* ... outros produtos sem variação ... */
+      { id: 8, name: 'Adesivos refletivo Custom Gears', price: 19.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg',
         variations: {
-          preto: { P: 3, M: 2, G: 0, GG: 1, XG: 0 },
-          branco: { P: 1, M: 0, G: 2, GG: 1, XG: 0 },
-          cinza: { P: 0, M: 0, G: 0, GG: 0, XG: 0 },
-          roxo: { P: 2, M: 1, G: 1, GG: 0, XG: 0 }
+          preto: { P: 3, M: 2, G: 1, GG: 0, XG: 0 },
+          cinza: { P: 2, M: 1, G: 0, GG: 0, XG: 0 },
+          branco: { P: 0, M: 1, G: 1, GG: 1, XG: 0 },
+          roxo: { P: 1, M: 1, G: 1, GG: 0, XG: 0 }
         }
       }
     ];
 
     function renderProducts() {
-      const productList = document.getElementById('productList');
-      productList.innerHTML = '';
+      const listEl = document.getElementById('productList');
+      listEl.innerHTML = '';
       products.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product';
-
-        const availableColors = Object.keys(p.variations).filter(cor => {
-          return Object.values(p.variations[cor]).some(qtd => qtd > 0);
-        });
-
-        const allOut = availableColors.length === 0;
-
-        div.innerHTML = `
-          <img src="${p.img}" alt="${p.name}" style="width: 100%">
-          <h3>${p.name}</h3>
-          <p>R$${p.price.toFixed(2)}</p>
-          ${allOut ? '<strong style="color:red">Esgotado</strong>' : `
-            <label>Cor:
-              <select onchange="updateTamanhos(${p.id}, this.value)" id="color-${p.id}">
-                ${availableColors.map(cor => `<option value="${cor}">${cor}</option>`).join('')}
-              </select>
-            </label>
-            <label>Tamanho:
-              <select id="size-${p.id}"></select>
-            </label>
-            <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`
+        let inner = `<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p>R$${p.price.toFixed(2)}</p>`;
+        if (p.variations) {
+          const colors = Object.keys(p.variations).filter(c => Object.values(p.variations[c]).some(q => q>0));
+          if (colors.length === 0) {
+            inner += '<strong class="esgotado">Esgotado</strong>';
+          } else {
+            inner += `<label>Cor:<select id="color-${p.id}" onchange="updateSizes(${p.id}, this.value)">` +
+                     colors.map(c => `<option value="${c}">${c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join('') +
+                     '</select></label>' +
+                     `<label>Tamanho:<select id="size-${p.id}"></select></label>` +
+                     `<button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;
           }
-        `;
-
-        productList.appendChild(div);
-        if (!allOut) updateTamanhos(p.id, availableColors[0]);
+        } else {
+          inner += `<button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;
+        }
+        div.innerHTML = inner;
+        listEl.appendChild(div);
+        if (p.variations) updateSizes(p.id, Object.keys(p.variations)[0]);
       });
     }
 
-    function updateTamanhos(id, cor) {
-      const product = products.find(p => p.id === id);
-      const select = document.getElementById(`size-${id}`);
-      select.innerHTML = '';
-
-      const tamanhos = product.variations[cor];
-      for (let tamanho in tamanhos) {
-        if (tamanhos[tamanho] > 0) {
-          const opt = document.createElement('option');
-          opt.value = tamanho;
-          opt.textContent = tamanho;
-          select.appendChild(opt);
-        }
-      }
+    function updateSizes(id, color) {
+      const prod = products.find(p=>p.id===id);
+      const sel = document.getElementById(`size-${id}`);
+      sel.innerHTML = '';
+      const sizes = prod.variations[color];
+      for (let sz in sizes) if (sizes[sz]>0) sel.innerHTML += `<option value="${sz}">${sz}</option>`;
     }
 
     function addToCart(id) {
-      const color = document.getElementById(`color-${id}`).value;
-      const size = document.getElementById(`size-${id}`).value;
-      const product = products.find(p => p.id === id);
-
-      if (product.variations[color][size] > 0) {
-        product.variations[color][size]--;
-        alert(`Adicionado: ${product.name} - Cor: ${color} - Tamanho: ${size}`);
-        renderProducts();
+      const prod = products.find(p=>p.id===id);
+      if (prod.variations) {
+        const color = document.getElementById(`color-${id}`).value;
+        const size = document.getElementById(`size-${id}`).value;
+        if (prod.variations[color][size] > 0) {
+          prod.variations[color][size]--;
+          alert(`Adicionado: ${prod.name} - ${color}/${size}`);
+          renderProducts();
+        } else alert('Indisponível');
       } else {
-        alert('Produto indisponível');
+        alert(`Adicionado: ${prod.name}`);
       }
     }
 
