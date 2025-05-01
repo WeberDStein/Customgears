@@ -248,12 +248,68 @@
       }
     }
   </style>
+  .produto {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 20px;
+  background-color: #111;
+  color: white;
+  border-radius: 8px;
+}
+
+.produto img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.opcoes {
+  margin-top: 10px;
+}
+
+.opcoes label {
+  display: block;
+  margin-top: 10px;
+}
+
+.opcoes select {
+  width: 100%;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #222;
+  color: white;
+}
 </head>
 
 <body>
 
   <!-- Carrinho -->
   <div class="cart" onclick="toggleCartPopup()">
+    <div class="produto">
+  <h2>Nome do Produto</h2>
+  <img src="caminho-da-imagem-do-produto.jpg" alt="Produto">
+  
+  <div class="opcoes">
+    <label for="cor">Cor:</label>
+    <select name="cor" id="cor">
+      <option value="branco">Branco</option>
+      <option value="preto">Preto</option>
+      <option value="roxo">Roxo</option>
+      <option value="cinza">Cinza</option>
+    </select>
+
+    <label for="tamanho">Tamanho:</label>
+    <select name="tamanho" id="tamanho">
+      <option value="P">P</option>
+      <option value="M">M</option>
+      <option value="G">G</option>
+      <option value="GG">GG</option>
+      <option value="XG">XG</option>
+    </select>
+  </div>
+
+  <button>Adicionar ao Carrinho</button>
+    </div>
     🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
   </div>
 
