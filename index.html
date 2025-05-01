@@ -45,7 +45,7 @@
     }
 
     /* Produtos */
-    .products, .catalog {
+    .products {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -53,7 +53,7 @@
       margin: 2rem 0;
     }
 
-    .product, .catalog-item {
+    .product {
       background: #111;
       border: 1px solid #333;
       border-radius: 8px;
@@ -63,11 +63,11 @@
       transition: transform 0.2s ease;
     }
 
-    .product:hover, .catalog-item:hover {
+    .product:hover {
       transform: scale(1.05);
     }
 
-    .product img, .catalog-item img {
+    .product img {
       width: 100%;
       border-radius: 6px;
       margin-bottom: 0.5rem;
@@ -239,46 +239,13 @@
 
     /* Responsivo */
     @media (max-width: 768px) {
-      .products, .catalog {
+      .products {
         flex-direction: column;
         align-items: center;
       }
-      .product, .catalog-item {
+      .product {
         width: 80%;
       }
-    }
-
-    /* Produto */
-    .produto {
-      border: 1px solid #ccc;
-      padding: 16px;
-      margin-bottom: 20px;
-      background-color: #111;
-      color: white;
-      border-radius: 8px;
-    }
-
-    .produto img {
-      max-width: 100%;
-      border-radius: 8px;
-    }
-
-    .opcoes {
-      margin-top: 10px;
-    }
-
-    .opcoes label {
-      display: block;
-      margin-top: 10px;
-    }
-
-    .opcoes select {
-      width: 100%;
-      padding: 6px;
-      border-radius: 4px;
-      border: 1px solid #555;
-      background-color: #222;
-      color: white;
     }
   </style>
 </head>
@@ -300,14 +267,6 @@
     <div class="products" id="productList"></div>
   </div>
 
-  <!-- Informações -->
-  <div class="container">
-    <h2>Para mais informações</h2>
-    <div class="catalog">
-      <!-- Conteúdo futuro -->
-    </div>
-  </div>
-
   <!-- Rodapé -->
   <footer>
     <h4>Sobre</h4>
@@ -318,9 +277,6 @@
 
     <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
-
-  <!-- Botão Voltar ao Topo -->
-  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
   <!-- Scripts -->
   <script>
@@ -336,12 +292,10 @@
       { id: 9, name: 'Aromatizante automotivo Custom Gears', price: 6.90, img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg' }
     ];
 
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    function renderProducts(list = products) {
+    function renderProducts() {
       const productList = document.getElementById('productList');
       productList.innerHTML = '';
-      list.forEach(p => {
+      products.forEach(p => {
         const div = document.createElement('div');
         div.className = 'product';
         div.innerHTML = `
@@ -355,5 +309,12 @@
     }
 
     function addToCart(id) {
-      const product = products.find(p => p.id === id);
-      const exists = cart.find(p => p.id === id);
+      alert('Produto adicionado ao carrinho!');
+      // Adicionar lógica para o carrinho aqui
+    }
+
+    // Carregar produtos ao inicializar
+    window.onload = renderProducts;
+  </script>
+</body>
+</html>
