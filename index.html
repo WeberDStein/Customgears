@@ -10,7 +10,6 @@
   <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
   <style>
     /* Estilos Gerais */
@@ -46,7 +45,7 @@
     }
 
     /* Produtos */
-    .products, .catalog {
+    .products {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -54,7 +53,7 @@
       margin: 2rem 0;
     }
 
-    .product, .catalog-item {
+    .product {
       background: #111;
       border: 1px solid #333;
       border-radius: 8px;
@@ -64,11 +63,11 @@
       transition: transform 0.2s ease;
     }
 
-    .product:hover, .catalog-item:hover {
+    .product:hover {
       transform: scale(1.05);
     }
 
-    .product img, .catalog-item img {
+    .product img {
       width: 100%;
       border-radius: 6px;
       margin-bottom: 0.5rem;
@@ -240,11 +239,11 @@
 
     /* Responsivo */
     @media (max-width: 768px) {
-      .products, .catalog {
+      .products {
         flex-direction: column;
         align-items: center;
       }
-      .product, .catalog-item {
+      .product {
         width: 80%;
       }
     }
@@ -279,73 +278,53 @@
     <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
 
+  <!-- Botão Voltar ao Topo -->
+  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+
   <!-- Scripts -->
   <script>
     const products = [
-      { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg' },
-      { id: 2, name: 'Blusa moletom Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg' },
-      { id: 3, name: 'Cinto de 5 Pontas Custom Gears', price: 249.90, img: 'https://i.postimg.cc/6pKM7wbd/cinto.jpg' }
+      { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', options: { colors: ['Preto', 'Branco', 'Roxo', 'Cinza'], sizes: ['P', 'M', 'G', 'GG', 'XG'] } },
+      { id: 2, name: 'Blusa moletom Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', options: { colors: ['Preto', 'Branco', 'Roxo', 'Cinza'], sizes: ['P', 'M', 'G', 'GG', 'XG'] } },
+      { id: 3, name: 'Manopla câmbio Custom Gears', price: 65.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', options: { colors: ['Preto', 'Branco', 'Roxo'], sizes: ['P', 'M', 'G'] } },
+      { id: 4, name: 'Bandeira Custom Gears', price: 54.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', options: { colors: ['Preto', 'Branco'], sizes: ['P', 'M'] } },
+      { id: 5, name: 'Coifa câmbio Custom Gears', price: 59.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', options: { colors: ['Preto', 'Cinza'], sizes: ['M', 'G', 'GG'] } },
+      { id: 6, name: 'Caneca personalizada Custom Gears', price: 59.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', options: { colors: ['Preto', 'Branco'], sizes: ['P'] } },
+      { id: 7, name: 'Chaveiro e cordão Custom Gears', price: 29.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', options: { colors: ['Roxo', 'Cinza'], sizes: ['P', 'M'] } },
+      { id: 8, name: 'Adesivos refletivo Custom Gears', price: 19.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', options: { colors: ['Preto', 'Roxo'], sizes: ['P', 'M'] } }
     ];
 
-    // Exibe os produtos na página
-    function displayProducts() {
-      const productList = document.getElementById("productList");
-      productList.innerHTML = "";
+    // Mostrar os produtos na página
+    function showProducts() {
+      const productList = document.getElementById('productList');
+      productList.innerHTML = '';
       products.forEach(product => {
-        const productDiv = document.createElement("div");
-        productDiv.classList.add("product");
-        productDiv.innerHTML = `
-          <img src="${product.img}" alt="${product.name}">
-          <h3>${product.name}</h3>
-          <p>R$ ${product.price.toFixed(2)}</p>
-          <button onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
+        let colorOptions = product.options.colors.map(color => {
+          return `<option value="${color}">${color}</option>`;
+        }).join('');
+
+        let sizeOptions = product.options.sizes.map(size => {
+          return `<option value="${size}">${size}</option>`;
+        }).join('');
+
+        productList.innerHTML += `
+          <div class="product">
+            <img src="${product.img}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p>R$ ${product.price.toFixed(2)}</p>
+            <select id="color-${product.id}">
+              ${colorOptions}
+            </select>
+            <select id="size-${product.id}">
+              ${sizeOptions}
+            </select>
+            <button onclick="addToCart(${product.id})">Adicionar ao carrinho</button>
+          </div>
         `;
-        productList.appendChild(productDiv);
       });
     }
 
-    // Carrinho
-    let cart = [];
-    function addToCart(productId) {
-      const product = products.find(p => p.id === productId);
-      cart.push(product);
-      updateCart();
-    }
-
-    function updateCart() {
-      document.getElementById('cartCount').textContent = cart.length;
-    }
-
-    function toggleCartPopup() {
-      const cartPopup = document.getElementById('cartPopup');
-      cartPopup.style.display = cartPopup.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function filterProducts() {
-      const searchInput = document.getElementById("searchInput").value.toLowerCase();
-      const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchInput));
-      displayFilteredProducts(filteredProducts);
-    }
-
-    function displayFilteredProducts(filteredProducts) {
-      const productList = document.getElementById("productList");
-      productList.innerHTML = "";
-      filteredProducts.forEach(product => {
-        const productDiv = document.createElement("div");
-        productDiv.classList.add("product");
-        productDiv.innerHTML = `
-          <img src="${product.img}" alt="${product.name}">
-          <h3>${product.name}</h3>
-          <p>R$ ${product.price.toFixed(2)}</p>
-          <button onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
-        `;
-        productList.appendChild(productDiv);
-      });
-    }
-
-    // Inicialização
-    displayProducts();
+    showProducts();
   </script>
-
 </body>
 </html>
