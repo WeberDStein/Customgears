@@ -247,69 +247,46 @@
         width: 80%;
       }
     }
+
+    /* Produto */
+    .produto {
+      border: 1px solid #ccc;
+      padding: 16px;
+      margin-bottom: 20px;
+      background-color: #111;
+      color: white;
+      border-radius: 8px;
+    }
+
+    .produto img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    .opcoes {
+      margin-top: 10px;
+    }
+
+    .opcoes label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .opcoes select {
+      width: 100%;
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background-color: #222;
+      color: white;
+    }
   </style>
-  .produto {
-  border: 1px solid #ccc;
-  padding: 16px;
-  margin-bottom: 20px;
-  background-color: #111;
-  color: white;
-  border-radius: 8px;
-}
-
-.produto img {
-  max-width: 100%;
-  border-radius: 8px;
-}
-
-.opcoes {
-  margin-top: 10px;
-}
-
-.opcoes label {
-  display: block;
-  margin-top: 10px;
-}
-
-.opcoes select {
-  width: 100%;
-  padding: 6px;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background-color: #222;
-  color: white;
-}
 </head>
 
 <body>
 
   <!-- Carrinho -->
   <div class="cart" onclick="toggleCartPopup()">
-    <div class="produto">
-  <h2>Nome do Produto</h2>
-  <img src="caminho-da-imagem-do-produto.jpg" alt="Produto">
-  
-  <div class="opcoes">
-    <label for="cor">Cor:</label>
-    <select name="cor" id="cor">
-      <option value="branco">Branco</option>
-      <option value="preto">Preto</option>
-      <option value="roxo">Roxo</option>
-      <option value="cinza">Cinza</option>
-    </select>
-
-    <label for="tamanho">Tamanho:</label>
-    <select name="tamanho" id="tamanho">
-      <option value="P">P</option>
-      <option value="M">M</option>
-      <option value="G">G</option>
-      <option value="GG">GG</option>
-      <option value="XG">XG</option>
-    </select>
-  </div>
-
-  <button>Adicionar ao Carrinho</button>
-    </div>
     🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
   </div>
 
@@ -380,126 +357,3 @@
     function addToCart(id) {
       const product = products.find(p => p.id === id);
       const exists = cart.find(p => p.id === id);
-      if (exists) exists.quantity++;
-      else cart.push({ ...product, quantity: 1 });
-      saveCart();
-      updateCartCount();
-      showAlert(`${product.name} adicionado ao carrinho!`);
-    }
-
-    function saveCart() {
-      localStorage.setItem('cart', JSON.stringify(cart));
-    }
-
-    function updateCartCount() {
-      const count = cart.reduce((total, item) => total + item.quantity, 0);
-      document.getElementById('cartCount').innerText = count;
-    }
-
-    function toggleCartPopup() {
-      let popup = document.querySelector('.cart-popup');
-      if (!popup) createCartPopup();
-      document.querySelector('.cart-popup').style.display = 'flex';
-      renderCartItems();
-    }
-
-    function createCartPopup() {
-      const popup = document.createElement('div');
-      popup.className = 'cart-popup';
-      popup.innerHTML = `
-        <div class="cart-content">
-          <h3>Seu Carrinho</h3>
-          <div id="cartItems"></div>
-          <p id="cartTotal"></p>
-          <button onclick="checkout()" class="checkout">Finalizar Compra</button>
-          <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
-        </div>
-      `;
-      document.body.appendChild(popup);
-    }
-
-    function renderCartItems() {
-      const cartItems = document.getElementById('cartItems');
-      cartItems.innerHTML = '';
-      let total = 0;
-      cart.forEach(item => {
-        total += item.price * item.quantity;
-        cartItems.innerHTML += `
-          <p>${item.name} x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}
-          <button class="remove" onclick="removeFromCart(${item.id})">X</button></p>
-        `;
-      });
-      document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
-    }
-
-    function removeFromCart(id) {
-      cart = cart.filter(item => item.id !== id);
-      saveCart();
-      updateCartCount();
-      renderCartItems();
-    }
-
-    function closeCart() {
-      document.querySelector('.cart-popup').style.display = 'none';
-    }
-
-    function checkout() {
-      let orderSummary = generateOrderSummary();
-      document.querySelector('.container').innerHTML = `
-        <h2>Finalizar Compra</h2>
-        <p>Entre em contato no WhatsApp:</p>
-        <a href="https://wa.me/5541999737694?text=${encodeURIComponent(orderSummary)}" target="_blank">
-          <button class="checkout">Chamar no WhatsApp</button>
-        </a>
-      `;
-      cart = [];
-      saveCart();
-      updateCartCount();
-      closeCart();
-    }
-
-    function generateOrderSummary() {
-      let summary = '';
-      cart.forEach(item => {
-        summary += `${item.quantity}x ${item.name} (R$${(item.price * item.quantity).toFixed(2)})\n`;
-      });
-      summary += `Total: R$${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}`;
-      return summary;
-    }
-
-    function filterProducts() {
-      const term = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-      renderProducts(filtered);
-    }
-
-    function showAlert(message) {
-      const alertEl = document.createElement('div');
-      alertEl.className = 'custom-alert';
-      alertEl.innerText = message;
-      document.body.appendChild(alertEl);
-      setTimeout(() => alertEl.remove(), 2000);
-    }
-
-    // Voltar ao topo
-    window.onscroll = function() { toggleBtnTop() };
-
-    function toggleBtnTop() {
-      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-        document.getElementById('btnTop').style.display = 'block';
-      } else {
-        document.getElementById('btnTop').style.display = 'none';
-      }
-    }
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Inicializar
-    renderProducts();
-    updateCartCount();
-  </script>
-
-</body>
-</html>
