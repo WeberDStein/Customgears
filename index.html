@@ -84,6 +84,26 @@
       margin-bottom: 1rem;
     }
 
+    /* Seletores de Cor e Tamanho */
+    .product-selectors {
+      margin: 10px 0;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .product-selectors select {
+      background: #222;
+      border: 1px solid #444;
+      color: #fff;
+      padding: 5px;
+      border-radius: 4px;
+    }
+
+    .product-selectors option {
+      background: #333;
+    }
+
     /* Botões */
     button {
       background: #800080;
@@ -315,6 +335,21 @@
           <img src="${p.img}" alt="${p.name}">
           <h3>${p.name}</h3>
           <p>R$${p.price.toFixed(2)}</p>
+          <div class="product-selectors">
+            <select class="color-select">
+              <option value="branco">Branco</option>
+              <option value="cinza">Cinza</option>
+              <option value="preto">Preto</option>
+              <option value="roxo">Roxo</option>
+            </select>
+            <select class="size-select">
+              <option value="P">P</option>
+              <option value="M">M</option>
+              <option value="G">G</option>
+              <option value="GG">GG</option>
+              <option value="XG">XG</option>
+            </select>
+          </div>
           <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
         `;
         productList.appendChild(div);
@@ -323,12 +358,31 @@
 
     function addToCart(id) {
       const product = products.find(p => p.id === id);
-      const exists = cart.find(p => p.id === id);
-      if (exists) exists.quantity++;
-      else cart.push({ ...product, quantity: 1 });
+      const productElement = event.target.closest('.product');
+      
+      const cor = productElement.querySelector('.color-select').value;
+      const tamanho = productElement.querySelector('.size-select').value.toUpperCase();
+
+      const exists = cart.find(p => 
+        p.id === id && 
+        p.cor === cor.toLowerCase() && 
+        p.tamanho === tamanho
+      );
+
+      if (exists) {
+        exists.quantity++;
+      } else {
+        cart.push({ 
+          ...product,
+          cor: cor.toLowerCase(),
+          tamanho,
+          quantity: 1
+        });
+      }
+      
       saveCart();
       updateCartCount();
-      showAlert(`${product.name} adicionado ao carrinho!`);
+      showAlert(`${product.name} (${cor}, ${tamanho}) adicionado ao carrinho!`);
     }
 
     function saveCart() {
@@ -369,15 +423,18 @@
       cart.forEach(item => {
         total += item.price * item.quantity;
         cartItems.innerHTML += `
-          <p>${item.name} x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}
-          <button class="remove" onclick="removeFromCart(${item.id})">X</button></p>
+          <p>${item.name}
+          <br>▸ Cor: ${item.cor.charAt(0).toUpperCase() + item.cor.slice(1)}
+          <br>▸ Tamanho: ${item.tamanho}
+          <br>▸ Quantidade: x${item.quantity} - R$${(item.price * item.quantity).toFixed(2)}
+          <button class="remove" onclick="removeFromCart('${item.id}-${item.cor}-${item.tamanho}')">X</button></p>
         `;
       });
       document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
     }
 
-    function removeFromCart(id) {
-      cart = cart.filter(item => item.id !== id);
+    function removeFromCart(itemId) {
+      cart = cart.filter(item => `${item.id}-${item.cor}-${item.tamanho}` !== itemId);
       saveCart();
       updateCartCount();
       renderCartItems();
@@ -403,11 +460,14 @@
     }
 
     function generateOrderSummary() {
-      let summary = '';
+      let summary = '🚗 Pedido Custom Gears 🚗\n\n`;
       cart.forEach(item => {
-        summary += `${item.quantity}x ${item.name} (R$${(item.price * item.quantity).toFixed(2)})\n`;
+        summary += `▸ ${item.quantity}x ${item.name}\n`;
+        summary += `   Cor: ${item.cor.charAt(0).toUpperCase() + item.cor.slice(1)}\n`;
+        summary += `   Tamanho: ${item.tamanho}\n`;
+        summary += `   Subtotal: R$${(item.price * item.quantity).toFixed(2)}\n\n`;
       });
-      summary += `Total: R$${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}`;
+      summary += `💰 Total: R$${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}`;
       return summary;
     }
 
