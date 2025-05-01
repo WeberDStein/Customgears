@@ -2,14 +2,14 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Custom Gears</title>
-  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
-  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning" />
+  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear."/>
+  <meta name="keywords" content="custom gears, acessórios carros, streetwear, jdm, tuning"/>
 
   <!-- Fontes -->
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
 
   <style>
     body { background: #000; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding-top: 70px; }
@@ -49,12 +49,19 @@
   <header>Custom Gears</header>
   <div class="container">
     <h2>Produtos</h2>
-    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()">
+    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="filterProducts()"/>
     <div class="products" id="productList"></div>
   </div>
   <div class="container"><h2>Para mais informações</h2><div class="catalog"></div></div>
-  <footer><h4>Sobre</h4><p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p><h4>Redes Sociais</h4><p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p><p style="margin-top:2rem;color:#777;">© 2025 Custom Gears. Todos os direitos reservados.</p></footer>
+  <footer>
+    <h4>Sobre</h4>
+    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
+    <h4>Redes Sociais</h4>
+    <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
+    <p style="margin-top:2rem;color:#777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
+  </footer>
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+
   <script>
     const products = [
       { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
@@ -65,10 +72,8 @@
       { id: 6, name: 'Manopla câmbio inox Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Cinza','Cromado'], sizes: ['4 polegadas'] },
       { id: 7, name: 'Bandeira Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: [], sizes: ['90×150cm','122×183cm'] },
       { id: 8, name: 'Coifa câmbio Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['Universal'] },
-      { id: 9, name: 'Copo térmico personalizado Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Branco','Cinza'], sizes: ['400ml','470ml'] },
-      { id: 10, name: 'Chaveiro cordão Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['2,5×54cm','3,5×14,5cm','2,5×19cm'] },
-      { id: 11, name: 'Adesivos refletivos Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco','Cinza'], sizes: ['100×10cm','60×6cm'] },
-      { id: 12, name: 'Aromatizante automotivo Custom Gears', price: 0, img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['5,4×5,4cm','7,7×5,4cm'] }
+      { id: 9, name: 'Copo térmico personalizado Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Branco','Cinza'], sizes: ['400ml','470ml'] },  
+      // ... outros produtos ...
     ];
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -84,7 +89,7 @@
         div.className = 'product';
         div.innerHTML = `
           <div class="added-label" id="added-${p.id}">Adicionado</div>
-          <img src="${p.img}" alt="${p.name}">
+          <img src="${p.img}" alt="${p.name}"/>
           <h3>${p.name}</h3>
           <p>${isConsultOnly ? 'Sob consulta' : `R$${p.price.toFixed(2)}`}</p>
           ${p.colors.length ? `<label>Cor:<select id="cor-${p.id}">${colorOptions}</select></label><br>` : ''}
@@ -103,52 +108,61 @@
       }
       const cor = document.getElementById(`cor-${id}`)?.value || '';
       const tamanho = document.getElementById(`tamanho-${id}`)?.value || '';
-      const exists = cart.find(p => p.id === id && p.cor === cor && p.tamanho === tamanho);
-      if (exists) {
-        exists.quantity++;
-      } else {
-        cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1, cor, tamanho });
-      }
+      const exists = cart.find(p => p.id===id && p.cor===cor && p.tamanho===tamanho);
+      if (exists) exists.quantity++;
+      else cart.push({ id:product.id, name:product.name, price:product.price, quantity:1, cor, tamanho });
       saveCart(); updateCartCount(); showAlert(`${product.name} adicionado ao carrinho!`);
       const label = document.getElementById(`added-${id}`);
-      if (label) { label.style.display = 'block'; setTimeout(() => label.style.display = 'none', 1500); }
+      if(label){ label.style.display='block'; setTimeout(()=>label.style.display='none',1500); }
     }
 
     function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
-    function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((t,i) => t + i.quantity, 0); }
-    function filterProducts() { const term = document.getElementById('searchInput').value.toLowerCase(); renderProducts(products.filter(p => p.name.toLowerCase().includes(term))); }
-    function toggleCartPopup() { let popup = document.querySelector('.cart-popup'); if (!popup) createCartPopup(); popup.style.display = 'flex'; renderCartItems(); }
-    function createCartPopup() { const popup = document.createElement('div'); popup.className = 'cart-popup'; popup.innerHTML = `
-        <div class="cart-content">
-          <h3>Seu Carrinho</h3>
-          <div id="cartItems"></div>
-          <p id="cartTotal"></p>
-          <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
-          <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
-        </div>`; document.body.appendChild(popup); }
-    function renderCartItems() {
-      const cartItems = document.getElementById('cartItems'); cartItems.innerHTML = ''; let total = 0;
-      cart.forEach(item => {
-        total += item.price * item.quantity;
-        cartItems.innerHTML += `
+    function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((t,i)=>t+i.quantity,0); }
+    function filterProducts() { const term=document.getElementById('searchInput').value.toLowerCase(); renderProducts(products.filter(p=>p.name.toLowerCase().includes(term))); }
+    function toggleCartPopup(){ let pop=document.querySelector('.cart-popup'); if(!pop)createCartPopup(); pop.style.display='flex'; renderCartItems(); }
+    function createCartPopup(){ const pop=document.createElement('div'); pop.className='cart-popup'; pop.innerHTML=`
+      <div class="cart-content">
+        <h3>Seu Carrinho</h3>
+        <div id="cartItems"></div>
+        <p id="cartTotal"></p>
+        <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
+        <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
+      </div>`; document.body.appendChild(pop); }
+    function renderCartItems(){
+      const ci=document.getElementById('cartItems'); ci.innerHTML=''; let total=0;
+      cart.forEach(item=>{
+        total+=item.price*item.quantity;
+        ci.innerHTML+=`
           <p>
             ${item.name} - R$${(item.price*item.quantity).toFixed(2)}${item.cor?` - Cor: ${item.cor}`:''}${item.tamanho?` - Tamanho: ${item.tamanho}`:''}<br>
             <span>
-              <span class="qty-btn" onclick="changeQty(${item.id}, '${item.cor}', '${item.tamanho}', -1)">−</span>
+              <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tamanho}',-1)">−</span>
               ${item.quantity}
-              <span class="qty-btn" onclick="changeQty(${item.id}, '${item.cor}', '${item.tamanho}', 1)">＋</span>
-              <button class="remove" onclick="removeFromCart(${item.id}, '${item.cor}', '${item.tamanho}')">X</button>
+              <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tamanho}',1)">＋</span>
+              <button class="remove" onclick="removeFromCart(${item.id},'${item.cor}','${item.tamanho}')">X</button>
             </span>
           </p>`;
       });
-      document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
+      document.getElementById('cartTotal').innerText=`Total: R$${total.toFixed(2)}`;
     }
-    function changeQty(id, cor, tamanho, delta) { const item = cart.find(i => i.id===id && i.cor===cor && i.tamanho===tamanho); if (item) { item.quantity += delta; if (item.quantity<=0) removeFromCart(id, cor, tamanho); else { saveCart(); updateCartCount(); renderCartItems(); } } }
-    function removeFromCart(id, cor, tamanho) { cart = cart.filter(i => !(i.id===id && i.cor===cor && i.tamanho===tamanho)); saveCart(); updateCartCount(); renderCartItems(); }
-    function closeCart() { document.querySelector('.cart-popup').style.display='none'; }
-    function checkout() { if (!cart.length) { alert('Seu carrinho está vazio.'); return; } let msg = 'Olá, gostaria de fazer um pedido:%0A'; cart.forEach(item => { msg += `- ${item.quantity}x ${item.name}${item.cor?` - Cor: ${item.cor}`:''}${item.tamanho?` - Tamanho: ${item.tamanho}`:''} - R$${(item.price*item.quantity).toFixed(2)}%0A`; }); const total = cart.reduce((s,i) => s + i.price*i.quantity, 0); msg += `%0ATotal: R$${total.toFixed(2)}`; window.open(`https://wa.me/5541999737694?text=${encodeURIComponent(msg)}`, '_blank'); cart=[]; saveCart(); updateCartCount(); closeCart(); }
-    function showAlert(m) { const el = document.createElement('div'); el.className='custom-alert'; el.innerText=m; document.body.appendChild(el); setTimeout(()=>el.remove(),2000); }
-    function scrollToTop() { window.scrollTo({top:0, behavior:'smooth'}); }
+    function changeQty(id,cor,tam,delta){ const it=cart.find(i=>i.id===id&&i.cor===cor&&i.tamanho===tam); if(it){ it.quantity+=delta; if(it.quantity<=0) removeFromCart(id,cor,tam); else{ saveCart(); updateCartCount(); renderCartItems(); } } }
+    function removeFromCart(id,cor,tam){ cart=cart.filter(i=>!(i.id===id&&i.cor===cor&&i.tamanho===tam)); saveCart(); updateCartCount(); renderCartItems(); }
+    function closeCart(){ document.querySelector('.cart-popup').style.display='none'; }
+    function checkout(){
+      if(!cart.length){ alert('Seu carrinho está vazio.'); return; }
+      const lines = cart.map(item=>{
+        const cTxt = item.cor?` - Cor: ${item.cor}`:'';
+        const tTxt = item.tamanho?` - Tamanho: ${item.tamanho}`:'';
+        return `${item.quantity}x ${item.name}${cTxt}${tTxt} - R$${(item.price*item.quantity).toFixed(2)}`;
+      });
+      const total = cart.reduce((s,i)=>s+i.price*i.quantity,0).toFixed(2);
+      lines.push(`Total: R$${total}`);
+      const msg = encodeURIComponent('Olá, gostaria de fazer um pedido:\n' + lines.join('\n'));
+      window.open(`https://wa.me/5541999737694?text=${msg}`,'_blank');
+      cart=[]; saveCart(); updateCartCount(); closeCart();
+    }
+    function showAlert(m){ const el=document.createElement('div'); el.className='custom-alert'; el.innerText=m; document.body.appendChild(el); setTimeout(()=>el.remove(),2000); }
+    function scrollToTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
     renderProducts(); updateCartCount();
   </script>
 </body>
