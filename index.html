@@ -132,6 +132,28 @@
       font-size: 0.8rem;
     }
 
+    /* Popup Carrinho */
+    .cart-popup {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .cart-content {
+      background: #333;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
     /* Restante do CSS mantido igual */
     /* ... [Manter todo o restante do CSS anterior] ... */
   </style>
@@ -155,7 +177,13 @@
 
   <!-- Rodapé -->
   <footer>
-    <!-- ... [Manter footer igual] ... -->
+    <h4>Sobre</h4>
+    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
+    
+    <h4>Redes Sociais</h4>
+    <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
+
+    <p style="margin-top: 2rem; color: #777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
 
   <!-- Scripts -->
@@ -217,33 +245,66 @@
       }
     ];
 
-    // ... [Manter todo o JavaScript anterior] ...
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    function renderCartItems() {
-      const cartItems = document.getElementById('cartItems');
-      cartItems.innerHTML = '';
-      let total = 0;
-      
-      cart.forEach(item => {
-        total += item.price * item.quantity;
-        cartItems.innerHTML += `
-          <div class="cart-item">
-            <p>${item.name}</p>
-            <small>
-              Cor: ${item.cor.charAt(0).toUpperCase() + item.cor.slice(1)} | 
-              Tamanho: ${item.tamanho} | 
-              Qtd: ${item.quantity}
-            </small>
-            <p>R$${(item.price * item.quantity).toFixed(2)}</p>
-            <button class="remove" onclick="removeFromCart(${item.id})">×</button>
+    function renderProducts(list = products) {
+      const productList = document.getElementById('productList');
+      productList.innerHTML = '';
+      list.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>R$${p.price.toFixed(2)}</p>
+          <div class="product-selectors">
+            <select class="color-select">
+              <option value="branco">Branco</option>
+              <option value="cinza">Cinza</option>
+              <option value="preto">Preto</option>
+              <option value="roxo">Roxo</option>
+            </select>
+            <select class="size-select">
+              <option value="P">P</option>
+              <option value="M">M</option>
+              <option value="G">G</option>
+              <option value="GG">GG</option>
+              <option value="XG">XG</option>
+            </select>
           </div>
+          <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
         `;
+        productList.appendChild(div);
       });
+    }
 
-      document.getElementById('cartTotal').innerHTML = `
-        <hr>
-        <h4>Total: R$${total.toFixed(2)}</h4>
-      `;
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const productElement = event.target.closest('.product');
+      
+      const cor = productElement.querySelector('.color-select').value;
+      const tamanho = productElement.querySelector('.size-select').value.toUpperCase();
+
+      const exists = cart.find(p => 
+        p.id === id && 
+        p.cor === cor.toLowerCase() && 
+        p.tamanho === tamanho
+      );
+
+      if (exists) {
+        exists.quantity++;
+      } else {
+        cart.push({ 
+          ...product,
+          cor: cor.toLowerCase(),
+          tamanho,
+          quantity: 1
+        });
+      }
+      
+      saveCart();
+      updateCartCount();
+      showAlert(`${product.name} (${cor}, ${tamanho}) adicionado ao carrinho!`);
     }
 
     // ... [Manter o restante das funções JavaScript] ...
