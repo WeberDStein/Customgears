@@ -21,23 +21,18 @@
     .product:hover { transform: scale(1.05); }
     .product img { width: 100%; border-radius: 6px; margin-bottom: 0.5rem; }
     .product h3 { color: #ddd; margin: 0.5rem 0; }
-    .product p { color: #ccc; font-size: 0.9rem; margin-bottom: 1rem; }
-    .added-label { position: absolute; top: 10px; right: 10px; background: #4caf50; color: #fff; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; display: none; }
+    .product p { color: #ccc; font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .stock-label { font-size: 0.9rem; color: #ccc; margin-bottom: 0.5rem; }
+    .sold-out-text { color: #c00; font-weight: bold; margin-top: 0.5rem; display: block; }
     button { background: #800080; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
     button:hover { background: #a020f0; }
-    .checkout { background: #4caf50 !important; }
-    .remove { background: #f44336 !important; font-size: 0.8rem; padding: 0.3rem 0.6rem; margin-left: 8px; }
-    .qty-btn { display: inline-block; padding: 0 6px; background: #555; color: #fff; border-radius: 4px; margin: 0 4px; cursor: pointer; }
+    .sold-out-btn { background: #555; cursor: not-allowed; opacity: 0.6; }
     .cart { position: fixed; top: 15px; right: 20px; background: #222; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #444; box-shadow: 0 0 5px #800080; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; min-width: 100px; z-index: 1001; }
     .cart-count { background: #800080; padding: 2px 8px; border-radius: 50%; margin-left: 6px; font-size: 0.8rem; }
-    .cart-popup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index:1000; }
-    .cart-content { background: #333; padding: 20px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; max-height: 80vh; overflow-y: auto; }
-    #searchInput { padding: 0.5rem; width: 100%; max-width: 300px; margin: 1rem auto; display: block; background: #222; border: 1px solid #444; border-radius: 4px; color: #fff; }
     .custom-alert { position: fixed; top: 20px; right: 20px; background: #6a0dad; color: white; padding: 10px 20px; border-radius: 8px; z-index:9999; animation: fadein 0.5s, fadeout 0.5s 1.5s; }
     @keyframes fadein { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeout { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
     footer { text-align: center; padding: 2rem; background-color: #111; border-top:1px solid #333; }
-    footer h4 { color: #aa88cc; margin-bottom:1rem; }
     footer p, footer a { color:#ccc; font-size:0.9rem; }
     #btnTop { display:none; position:fixed; bottom:30px; right:30px; z-index:999; font-size:1.5rem; border:none; outline:none; background-color:#800080; color:white; cursor:pointer; padding:0.5rem 0.8rem; border-radius:50%; box-shadow:0 0 10px #800080; transition:background-color 0.3s; }
     #btnTop:hover { background-color:#a020f0; }
@@ -53,29 +48,33 @@
     <div class="products" id="productList"></div>
   </div>
   <footer>
-    <h4>Sobre</h4>
-    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
-    <h4>Redes Sociais</h4>
-    <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
-    <p style="margin-top:2rem;color:#777;">© 2025 Custom Gears. Todos os direitos reservados.</p>
+    <p>© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
   <script>
+    // Produtos originais
     const products = [
       { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
       { id: 2, name: 'Blusa moletom com capuz Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
       { id: 3, name: 'Blusa moletom Custom Gears', price: 149.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
       { id: 4, name: 'Calça moletom Custom Gears', price: 139.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
       { id: 5, name: 'Meias cano alto Custom Gears', price: 29.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['M','G','GG'] },
-      { id: 6, name: 'Manopla câmbio inox Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Cinza','Cromado'], sizes: ['4 polegadas'] },
-      { id: 7, name: 'Bandeira Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: [], sizes: ['90×150cm','122×183cm'] },
-      { id: 8, name: 'Coifa câmbio Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['Universal'] },
-      { id: 9, name: 'Copo térmico personalizado Custom Gears', price: 0, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Branco','Cinza'], sizes: ['400ml','470ml'] },
+      { id: 6, name: 'Manopla câmbio inox Custom Gears', price: 39.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Cinza','Cromado'], sizes: ['4 polegadas'] },
+      { id: 7, name: 'Bandeira Custom Gears', price: 49.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Branco'], sizes: ['90×150cm','122×183cm'] },
+      { id: 8, name: 'Coifa câmbio Custom Gears', price: 24.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['Universal'] },
+      { id: 9, name: 'Copo térmico personalizado Custom Gears', price: 19.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Branco','Cinza'], sizes: ['400ml','470ml'] },
       { id: 10, name: 'Chaveiro cordão Custom Gears', price: 29.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['2,5cm×54cm','3,5cm×14,5cm','2,5cm×19cm'] },
       { id: 11, name: 'Adesivos refletivos Custom Gears', price: 19.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco','Cinza'], sizes: ['100cm×10cm','60cm×6cm'] },
       { id: 12, name: 'Aromatizante automotivo Custom Gears', price: 8.90, img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['5,4cm×5,4cm','7,7cm×5,4cm'] }
     ];
+
+    // Inicializa estoque por variação (5 unidades)
+    const inventory = {};
+    products.forEach(p => {
+      inventory[p.id] = {};
+      p.colors.forEach(c => p.sizes.forEach(s => inventory[p.id][`${c}|${s}`] = 5));
+    });
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -83,155 +82,72 @@
       const productList = document.getElementById('productList');
       productList.innerHTML = '';
       list.forEach(p => {
-        const colorOptions = p.colors.map(c => `<option>${c}</option>`).join('');
-        const sizeOptions = p.sizes.map(s => `<option>${s}</option>`).join('');
-        const isConsultOnly = p.price === 0;
+        const available = [];
+        p.colors.forEach(c => p.sizes.forEach(s => {
+          if ((inventory[p.id][`${c}|${s}`] || 0) > 0) available.push({ c, s });
+        }));
         const div = document.createElement('div');
-        div.className = 'product';
-        div.innerHTML = `
-          <div class="added-label" id="added-${p.id}">Adicionado</div>
-          <img src="${p.img}" alt="${p.name}"/>
-          <h3>${p.name}</h3>
-          <p>${isConsultOnly ? 'Sob consulta' : `R$${p.price.toFixed(2)}`}</p>
-          ${p.colors.length ? `<label>Cor:<select id="cor-${p.id}">${colorOptions}</select></label><br>` : ''}
-          ${p.sizes.length ? `<label>Tamanho:<select id="tamanho-${p.id}">${sizeOptions}</select></label><br>` : ''}
-          <button onclick="addToCart(${p.id})">${isConsultOnly ? 'Sob consulta' : 'Adicionar ao Carrinho'}</button>
-        `;
+        div.className = 'product'; div.id = `prod-${p.id}`;
+        if (available.length === 0) {
+          div.innerHTML = `
+            <img src="${p.img}" alt="${p.name}"/>
+            <h3>${p.name}</h3>
+            <span class="sold-out-text">Esgotado</span>
+          `;
+        } else {
+          const colors = [...new Set(available.map(v => v.c))];
+          const sizes  = [...new Set(available.map(v => v.s))];
+          div.innerHTML = `
+            <img src="${p.img}" alt="${p.name}"/>
+            <h3>${p.name}</h3>
+            <p>R$${p.price.toFixed(2)}</p>
+            <p class="stock-label">Estoque: ${inventory[p.id][`${colors[0]}|${sizes[0]}`]}</p>
+            <label>Cor:<select id="cor-${p.id}">${colors.map(c => `<option>${c}</option>`).join('')}</select></label><br>
+            <label>Tamanho:<select id="tam-${p.id}">${sizes.map(s => `<option>${s}</option>`).join('')}</select></label><br>
+            <button id="btn-${p.id}" onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
+          `;
+        }
         productList.appendChild(div);
       });
     }
 
-    function addToCart(id) {
-      const product = products.find(p => p.id === id);
-      if (product.price === 0) { showAlert(`${product.name} é sob consulta.`); return; }
-      const cor = document.getElementById(`cor-${id}`)?.value || '';
-      const tamanho = document.getElementById(`tamanho-${id}`)?.value || '';
-      const exists = cart.find(p => p.id === id && p.cor === cor && p.tamanho === tamanho);
-      if (exists) exists.quantity++; else cart.push({ id:product.id, name:product.name, price:product.price, quantity:1, cor, tamanho });
-      saveCart(); updateCartCount(); showAlert(`${product.name} adicionado ao carrinho!`);
-      const label = document.getElementById(`added-${id}`);
-      if (label) { label.style.display='block'; setTimeout(() => label.style.display='none',1500); }
-    }
-
-    function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
-    function updateCartCount() { document.getElementById('cartCount').innerText = cart.reduce((t,i)=>t+i.quantity,0); }
-    function filterProducts() { const term = document.getElementById('searchInput').value.toLowerCase(); renderProducts(products.filter(p => p.name.toLowerCase().includes(term))); }
-    function toggleCartPopup() { let pop = document.querySelector('.cart-popup'); if (!pop) createCartPopup(); pop.style.display='flex'; renderCartItems(); }
-    function createCartPopup() { const pop = document.createElement('div'); pop.className='cart-popup'; pop.innerHTML=`
-      <div class="cart-content">
-        <h3>Seu Carrinho</h3>
-        <div id="cartItems"></div>
-        <p id="cartTotal"></p>
-        <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
-        <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
-      </div>`; document.body.appendChild(pop);
-    }
-    function renderCartItems() {
-      const ci = document.getElementById('cartItems'); ci.innerHTML=''; let total=0;
-      cart.forEach(item=>{
-        total += item.price * item.quantity;
-        ci.innerHTML += `
-          <p>
-            ${item.name} - R$${(item.price*item.quantity).toFixed(2)}${item.cor?` - Cor: ${item.cor}`:''}${item.tamanho?` - Tamanho: ${item.tamanho}`:''}<br>
-            <span>
-              <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tamanho}',-1)">−</span>
-              ${item.quantity}
-              <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tamanho}',1)">＋</span>
-              <button class="remove" onclick="removeFromCart(${item.id},'${item.cor}','${item.tamanho}')">X</button>
-            </span>
-          </p>`;
-      });
-      document.getElementById('cartTotal').innerText = `Total: R$${total.toFixed(2)}`;
-    }
-    function changeQty(id,cor,tam,delta){ const it = cart.find(i=>i.id===id && i.cor===cor && i.tamanho===tam); if(it){ it.quantity+=delta; if(it.quantity<=0) removeFromCart(id,cor,tam); else{ saveCart(); updateCartCount(); renderCartItems(); } } }
-    function removeFromCart(id,cor,tam){ cart = cart.filter(i=>!(i.id===id && i.cor===cor && i.tamanho===tam)); saveCart(); updateCartCount(); renderCartItems(); }
-    function closeCart(){ document.querySelector('.cart-popup').style.display='none'; }
-    function checkout(){
-      if(!cart.length){ alert('Seu carrinho está vazio.'); return; }
-      const lines = cart.map(item=>{
-        const cTxt = item.cor?` - Cor: ${item.cor}`:'';
-        const tTxt = item.tamanho?` - Tamanho: ${item.tamanho}`:'';
-        return `${item.quantity}x ${item.name}${cTxt}${tTxt} - R$${(item.price*item.quantity).toFixed(2)}`;
-      });
-      const total = cart.reduce((s,i)=>s + i.price*i.quantity,0).toFixed(2);
-      lines.push(`Total: R$${total}`);
-      const msg = encodeURIComponent('Olá, gostaria de fazer um pedido:\n' + lines.join('\n'));
-      window.open(`https://wa.me/5541999737694?text=${msg}`,'_blank');
-      cart=[]; saveCart(); updateCartCount(); closeCart();
-    }
-    function showAlert(m){ const el=document.createElement('div'); el.className='custom-alert'; el.innerText=m; document.body.appendChild(el); setTimeout(()=>el.remove(),2000); }
-    function scrollToTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
-    renderProducts(); updateCartCount();
-  </script>
-  <!-- === Início do plugin de estoque === -->
-  <script>
-    // 1) Cria um objeto inventory com estoque = 5 para cada cor×tamanho de cada produto
-    const inventory = products.reduce((acc, p) => {
-      acc[p.id] = [];
-      (p.colors || []).forEach(cor => {
-        (p.sizes || []).forEach(tam => {
-          acc[p.id].push({ cor, tamanho: tam, estoque: 5 });
-        });
-      });
-      return acc;
-    }, {});
-
-    // 2) Atualiza a UI, ocultando options zerados e cards totalmente esgotados
     function updateStockUI() {
-      document.querySelectorAll('.product').forEach(card => {
-        // extrai o id do produto (supondo que cada card tenha id="prod-<id>")
-        const m = card.id.match(/prod-(\d+)/);
-        if (!m) return;
-        const id = +m[1];
-        const inv = inventory[id] || [];
-
-        const corSel = card.querySelector(`#cor-${id}`);
-        const tamSel = card.querySelector(`#tamanho-${id}`);
-        if (!corSel || !tamSel) return;  // sem selects, ignora
-
-        // apenas variações com estoque >0
-        const ativos = inv.filter(v => v.estoque > 0);
-        const coresAtivas = [...new Set(ativos.map(v => v.cor))];
-        const tamsAtivos  = [...new Set(ativos.map(v => v.tamanho))];
-
-        // esconde opções sem estoque
-        Array.from(corSel.options).forEach(o => o.hidden = !coresAtivas.includes(o.value));
-        Array.from(tamSel.options).forEach(o => o.hidden = !tamsAtivos.includes(o.value));
-
-        // se não sobrar nenhuma opção visível, esconde todo o card
-        const temOpcao = corSel.querySelector('option:not([hidden])') 
-                       && tamSel.querySelector('option:not([hidden])');
-        card.style.display = temOpcao ? '' : 'none';
+      products.forEach(p => {
+        const card = document.getElementById(`prod-${p.id}`);
+        if (!card) return;
+        const corSel = card.querySelector(`#cor-${p.id}`);
+        const tamSel = card.querySelector(`#tam-${p.id}`);
+        if (!corSel || !tamSel) return;
+        const keys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
+        const colors = [...new Set(keys.map(k => k.split('|')[0]))];
+        const sizes  = [...new Set(keys.map(k => k.split('|')[1]))];
+        Array.from(corSel.options).forEach(o => o.hidden = !colors.includes(o.value));
+        Array.from(tamSel.options).forEach(o => o.hidden = !sizes.includes(o.value));
+        if (!colors.includes(corSel.value)) corSel.value = colors[0];
+        if (!sizes.includes(tamSel.value)) tamSel.value = sizes[0];
+        const stock = inventory[p.id][`${corSel.value}|${tamSel.value}`] || 0;
+        card.querySelector('.stock-label').textContent = `Estoque: ${stock}`;
+        const btn = card.querySelector('button');
+        if (stock <= 0) btn.textContent = 'Esgotado', btn.disabled = true, btn.classList.add('sold-out-btn');
+        else btn.textContent = 'Adicionar ao Carrinho', btn.disabled = false, btn.classList.remove('sold-out-btn');
       });
     }
 
-    // 3) Monkey-patch em addToCart: decrementar estoque e atualizar UI
-    if (typeof addToCart === 'function') {
-      const originalAdd = window.addToCart;
-      window.addToCart = function(id) {
-        const cor  = document.getElementById(`cor-${id}`)?.value;
-        const tamanho = document.getElementById(`tamanho-${id}`)?.value;
-        const inv = inventory[id] || [];
-        const idx = inv.findIndex(v => v.cor===cor && v.tamanho===tamanho);
-        if (idx < 0 || inv[idx].estoque <= 0) {
-          showAlert('Essa variação está esgotada.');
-          return;
-        }
-        // decrementa estoque
-        inv[idx].estoque--;
-        // chama sua função original
-        originalAdd(id);
-        // reflete mudanças na UI
-        updateStockUI();
-      }
+    function addToCart(id) {
+      const cor = document.getElementById(`cor-${id}`).value;
+      const tam = document.getElementById(`tam-${id}`).value;
+      const key = `${cor}|${tam}`;
+      if (inventory[id][key] <= 0) return;
+      inventory[id][key]--; updateStockUI();
+      const exists = cart.find(i => i.id === id && i.cor === cor && i.tam === tam);
+      if (exists) exists.quantity++;
+      else cart.push({ id, cor, tam, quantity: 1 });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cartCount').textContent = cart.reduce((a, i) => a + i.quantity, 0);
     }
 
-    // 4) Dispara no carregamento inicial
-    document.addEventListener('DOMContentLoaded', () => {
-      // Se seu renderProducts() roda antes, você pode chamar com setTimeout(updateStockUI,0)
-      updateStockUI();
-    });
+    document.addEventListener('change', e => { if (e.target.tagName === 'SELECT') updateStockUI(); });
+    document.addEventListener('DOMContentLoaded', () => { renderProducts(); updateStockUI(); });
   </script>
-  <!-- === Fim do plugin de estoque === -->
 </body>
 </html>
