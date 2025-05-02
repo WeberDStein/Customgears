@@ -1,122 +1,118 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>𝕮𝖚𝖘𝖙𝖔𝖒 𝖌𝖊𝖆𝖗𝖘</title>
-  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
-  <!-- Fontes -->
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <style>
-    body { background: #000; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding-top: 70px; }
-    header { font-family: 'UnifrakturCook', cursive; font-size: 3rem; text-align: center; padding: 1.5rem; border-bottom: 1px solid #333; color: #ccc; position: fixed; width: 100%; top: 0; background: #000; z-index: 1000; }
-    .container { max-width: 1000px; margin: auto; padding: 2rem; padding-top: 100px; }
-    h2 { color: #aa88cc; font-family: 'UnifrakturCook', cursive; border-bottom: 1px solid #444; padding-bottom: 0.5rem; text-align: center; }
-    .products { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin: 2rem 0; }
-    .product { background: #111; border: 1px solid #333; border-radius: 8px; width: 250px; padding: 1rem; text-align: center; transition: transform 0.2s ease; position: relative; }
-    .product:hover { transform: scale(1.05); }
-    .product img { width: 100%; border-radius: 6px; margin-bottom: 0.5rem; }
-    .product h3 { color: #ddd; margin: 0.5rem 0; }
-    .product p { color: #ccc; font-size: 0.9rem; margin-bottom: 0.5rem; }
-    .stock-label { font-size: 0.9rem; color: #ccc; margin-bottom: 0.5rem; }
-    .sold-out-text { color: #c00; font-weight: bold; margin-top: 0.5rem; display: block; }
-    button { background: #800080; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
-    button:hover:not(.sold-out-btn) { background: #a020f0; }
-    .sold-out-btn { background: #555; cursor: not-allowed; opacity: 0.6; }
-    .cart { position: fixed; top: 15px; right: 20px; background: #222; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #444; box-shadow: 0 0 5px #800080; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; min-width: 100px; z-index: 1001; }
-    .cart-count { background: #800080; padding: 2px 8px; border-radius: 50%; margin-left: 6px; font-size: 0.8rem; }
-    .cart-popup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index:1002; }
-    .cart-content { background: #333; padding: 20px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; max-height: 80vh; overflow-y: auto; }
-    .qty-btn { display: inline-block; padding: 0 6px; background: #555; color: #fff; border-radius: 4px; margin: 0 4px; cursor: pointer; }
-    .remove { background: #f44336 !important; font-size: 0.8rem; padding: 0.3rem 0.6rem; margin-left: 8px; }
-    .checkout { background: #4caf50 !important; }
-    .custom-alert { position: fixed; top: 20px; right: 20px; background: #6a0dad; color: white; padding: 10px 20px; border-radius: 8px; z-index:9999; animation: fadein 0.5s, fadeout 0.5s 1.5s; }
-    @keyframes fadein { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeout { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
-    footer { text-align: center; padding: 2rem; background-color: #111; border-top:1px solid #333; }
-    footer h4 { color: #aa88cc; margin-bottom: 0.5rem; }
-    footer p, footer a { color:#ccc; font-size:0.9rem; margin: 0.2rem 0; }
-    footer a { text-decoration: none; }
-    #btnTop { display:none; position:fixed; bottom:30px; right:30px; z-index:999; font-size:1.5rem; outline:none; background-color:#800080; color:white; cursor:pointer; padding:0.5rem 0.8rem; border:none; border-radius:50%; box-shadow:0 0 10px #800080; transition:background-color 0.3s; }
-    #btnTop:hover { background-color:#a020f0; }
-    @media (max-width:768px) { .products { flex-direction:column; align-items:center;} .product { width:80%; } }
-  </style>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>𝕮𝖚𝖘𝖙𝖔𝖒 𝖌𝖊𝖆𝖗𝖘</title>
+  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />  <!-- Fontes -->  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">  <style>
+    body { background: #000; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding-top: 70px; }
+    header { font-family: 'UnifrakturCook', cursive; font-size: 3rem; text-align: center; padding: 1.5rem; border-bottom: 1px solid #333; color: #ccc; position: fixed; width: 100%; top: 0; background: #000; z-index: 1000; }
+    .container { max-width: 1000px; margin: auto; padding: 2rem; padding-top: 100px; }
+    h2 { color: #aa88cc; font-family: 'UnifrakturCook', cursive; border-bottom: 1px solid #444; padding-bottom: 0.5rem; text-align: center; }
+    .products { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin: 2rem 0; }
+    .product { background: #111; border: 1px solid #333; border-radius: 8px; width: 250px; padding: 1rem; text-align: center; transition: transform 0.2s ease; position: relative; }
+    .product:hover { transform: scale(1.05); }
+    .product img { width: 100%; border-radius: 6px; margin-bottom: 0.5rem; }
+    .product h3 { color: #ddd; margin: 0.5rem 0; }
+    .product p { color: #ccc; font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .stock-label { font-size: 0.9rem; color: #ccc; margin-bottom: 0.5rem; }
+    .sold-out-text { color: #c00; font-weight: bold; margin-top: 0.5rem; display: block; }
+    button { background: #800080; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
+    button:hover:not(.sold-out-btn) { background: #a020f0; }
+    .sold-out-btn { background: #555; cursor: not-allowed; opacity: 0.6; }
+    .cart { position: fixed; top: 15px; right: 20px; background: #222; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #444; box-shadow: 0 0 5px #800080; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; min-width: 100px; z-index: 1001; }
+    .cart-count { background: #800080; padding: 2px 8px; border-radius: 50%; margin-left: 6px; font-size: 0.8rem; }
+    .cart-popup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index:1002; }
+    .cart-content { background: #333; padding: 20px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; max-height: 80vh; overflow-y: auto; }
+    .qty-btn { display: inline-block; padding: 0 6px; background: #555; color: #fff; border-radius: 4px; margin: 0 4px; cursor: pointer; }
+    .remove { background: #f44336 !important; font-size: 0.8rem; padding: 0.3rem 0.6rem; margin-left: 8px; }
+    .checkout { background: #4caf50 !important; }
+    .custom-alert { position: fixed; top: 20px; right: 20px; background: #6a0dad; color: white; padding: 10px 20px; border-radius: 8px; z-index:9999; animation: fadein 0.5s, fadeout 0.5s 1.5s; }
+    @keyframes fadein { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeout { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+    footer { text-align: center; padding: 2rem; background-color: #111; border-top:1px solid #333; }
+    footer h4 { color: #aa88cc; margin-bottom: 0.5rem; }
+    footer p, footer a { color:#ccc; font-size:0.9rem; margin: 0.2rem 0; }
+    footer a { text-decoration: none; }
+    #btnTop { display:none; position:fixed; bottom:30px; right:30px; z-index:999; font-size:1.5rem; outline:none; background-color:#800080; color:white; cursor:pointer; padding:0.5rem 0.8rem; border:none; border-radius:50%; box-shadow:0 0 10px #800080; transition:background-color 0.3s; }
+    #btnTop:hover { background-color:#a020f0; }
+    @media (max-width:768px) { .products { flex-direction:column; align-items:center;} .product { width:80%; } }
+  </style></head>
 <body>
-  <!-- Login Overlay -->
-  <div id="loginOverlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:10000;">
-    <div style="background:#222;padding:2rem;border-radius:8px;text-align:center;">
-      <h2 style="color:#aa88cc;font-family:'UnifrakturCook',cursive;">Login Custom Gears</h2>
-      <input id="loginEmail" type="email" placeholder="Email" style="width:100%;margin:0.5rem 0;padding:0.5rem;border-radius:4px;border:none;"/>
-      <input id="loginPassword" type="password" placeholder="Senha" style="width:100%;margin:0.5rem 0;padding:0.5rem;border-radius:4px;border:none;"/>
-      <button onclick="login()" style="width:100%;padding:0.5rem;background:#800080;color:#fff;border:none;border-radius:4px;margin-top:0.5rem;">Entrar</button>
-      <button onclick="signup()" style="width:100%;padding:0.5rem;background:#4caf50;color:#fff;border:none;border-radius:4px;margin-top:0.5rem;">Cadastrar</button>
-      <p id="loginMsg" style="color:#f88;margin-top:0.5rem;"></p>
-    </div>
-  </div>
+  <div class="cart" onclick="toggleCartPopup()">
+    🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
+  </div>
+  <header>Custom Gears</header>
+  <div class="container">
+    <h2>Produtos</h2>
+    <div class="products" id="productList"></div>
+  </div>  <!-- Sobre Nós & Contato -->  <footer>
+    <h4>Sobre Nós</h4>
+    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p><h4>Contato</h4>
+<p>Telefone: (41) 99973-7694</p>
+<p>Email: <a href="mailto:Customgears17@gmail.com">Customgears17@gmail.com</a></p>
 
-  <div class="cart" onclick="toggleCartPopup()">
-    🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
-  </div>
-  <header>Custom Gears</header>
-  <div class="container">
-    <h2>Produtos</h2>
-    <input id="searchInput" type="text" placeholder="Buscar produtos..." oninput="filterProducts()" style="padding:0.5rem;width:100%;max-width:300px;margin:1rem auto;display:block;background:#222;border:1px solid #444;border-radius:4px;color:#fff;"/>
-    <div class="products" id="productList"></div>
-  </div>
-  <footer>
-    <h4>Sobre Nós</h4>
-    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
-    <h4>Contato</h4>
-    <p>Telefone: (41) 99973-7694</p>
-    <p>Email: <a href="mailto:Customgears17@gmail.com">Customgears17@gmail.com</a></p>
-    <h4>Redes Sociais</h4>
-    <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
-    <p>© 2025 Custom Gears. Todos os direitos reservados.</p>
-  </footer>
-  <div class="cart-popup" id="cartPopup">
-    <div class="cart-content">
-      <h3>Seu Carrinho</h3>
-      <div id="cartItems"></div>
-      <p id="cartTotal"></p>
-      <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
-      <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
-    </div>
-  </div>
-  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+<h4>Redes Sociais</h4>
+<p><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">Instagram</a></p>
 
-  <script>
-    // Firebase
-    const firebaseConfig = { apiKey:"SUA_API_KEY",authDomain:"SEU_DOMINIO.firebaseapp.com",projectId:"SEU_PROJECT_ID",storageBucket:"SEU_BUCKET.appspot.com",messagingSenderId:"SENDER_ID",appId:"SEU_APP_ID"};
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    function login(){const e=document.getElementById('loginEmail').value,p=document.getElementById('loginPassword').value;auth.signInWithEmailAndPassword(e,p).then(()=>loginOverlay.style.display='none').catch(err=>loginMsg.innerText=err.message);} 
-    function signup(){const e=document.getElementById('loginEmail').value,p=document.getElementById('loginPassword').value;auth.createUserWithEmailAndPassword(e,p).then(()=>loginMsg.innerText='Cadastro ok! Faça login.').catch(err=>loginMsg.innerText=err.message);} 
-    auth.onAuthStateChanged(u=>loginOverlay.style.display=u?'none':'flex');
-    // Produtos & Carrinho
-    const products=[{id:1,name:'Camiseta oversized Custom Gears',price:119.90,img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg',colors:['Branco','Preto','Cinza','Roxo'],sizes:['P','M','G','GG','XG']},{id:2,name:'Blusa moletom com capuz Custom Gears',price:159.90,img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg',colors:['Branco','Preto','Cinza','Roxo'],sizes:['P','M','G','GG','XG']},/*...até id:12*/];
-    const inventory=products.reduce((a,p)=>{a[p.id]={};p.colors.forEach(c=>p.sizes.forEach(s=>a[p.id][`${c}|${s}`]=5));return a;},{});
-    let cart=JSON.parse(localStorage.getItem('cart'))||[];
-    function renderProducts(list=products){const pl=document.getElementById('productList');pl.innerHTML='';list.forEach(p=>{const keys=Object.keys(inventory[p.id]).filter(k=>inventory[p.id][k]>0);const card=document.createElement('div');card.className='product';card.id='prod-'+p.id;if(!keys.length){card.innerHTML=`<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;}else{const cols=[...new Set(keys.map(k=>k.split('|')[0]))],szs=[...new Set(keys.map(k=>k.split('|')[1]))];card.innerHTML=`<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><p>R$${p.price.toFixed(2)}</p><p class="stock-label">Estoque: ${inventory[p.id][`${cols[0]}|${szs[0]}`]}</p><label>Cor:<select id="cor-${p.id}">${cols.map(c=>`<option>${c}</option>`).join('')}</select></label><br><label>Tamanho:<select id="tam-${p.id}">${szs.map(s=>`<option>${s}</option>`).join('')}</select></label><br><button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;}pl.appendChild(card});}
-    function updateStockUI(){products.forEach(p=>{const card=document.getElementById('prod-'+p.id);if(!card)return;const cs=card.querySelector('#cor-'+p.id),ts=card.querySelector('#tam-'+p.id);if(!cs||!ts)return;const keys=Object.keys(inventory[p.id]).filter(k=>inventory[p.id][k]>0),cols=[...new Set(keys.map(k=>k.split('|')[0]))],szs=[...new Set(keys.map(k=>k.split('|')[1]))];Array.from(cs.options).forEach(o=>o.hidden=!cols.includes(o.value));Array.from(ts.options).forEach(o=>o.hidden=!szs.includes(o.value));if(!cols.includes(cs.value))cs.value=cols[0];if(!szs.includes(ts.value))ts.value=szs[0];const st=inventory[p.id][`${cs.value}|${ts.value}`];card.querySelector('.stock-label').innerText='Estoque: '+st;const btn=card.querySelector('button');if(st<=0)btn.innerText='Esgotado',btn.disabled=true,btn.classList.add('sold-out-btn');else btn.innerText='Adicionar ao Carrinho',btn.disabled=false,btn.classList.remove('sold-out-btn');});}
-    function addToCart(id){const cs=document.getElementById('cor-'+id).value,ts=document.getElementById('tam-'+id).value,key=`${cs}|${ts}`;if(inventory[id][key]<=0)return;inventory[id][key]--,updateStockUI();const e=cart.find(i=>i.id===id&&i.cor===cs&&i.tam===ts);e?e.quantity++:cart.push({id,cor:cs,tam:ts,quantity:1});localStorage.setItem('cart',JSON.stringify(cart));document.getElementById('cartCount').innerText=cart.reduce((a,i)=>a+i.quantity,0);} 
-    function toggleCartPopup(){document.getElementById('cartPopup').style.display='flex';renderCartPopup();}
-    function renderCartPopup(){const ct=document.getElementById('cartItems');ct.innerHTML='';let total=0;cart.forEach(i=>{const p=products.find(x=>x.id===i.id),price=(p.price*i.quantity).toFixed(2);total+=parseFloat(price);ct.innerHTML+=`<p>${i.quantity}× ${p.name} (${i.cor}, ${i.tam}) - R$${price} <span class="qty-btn" onclick="changeQty(${i.id},'${i.cor}','${i.tam}',-1)">−</span> ${i.quantity} <span class="qty-btn" onclick="changeQty(${i.id},'${i.cor}','${i.tam}',1)">＋</span> <button class="remove" onclick="removeFromCart(${i.id},'${i.cor}','${i.tam}')">X</button></p>`;});document.getElementById('cartTotal').innerText=`Total: R$${total.toFixed(2)}`;}
-    function changeQty(id,cor,tam,d){const it=cart.find(i=>i.id===id&&i.cor===cor&&i.tam===tam);if(!it)return;it.quantity+=d;if(it.quantity<=0)removeFromCart(id,cor,tam);else{localStorage.setItem('cart',JSON.stringify(cart));renderCartPopup();document.getElementById('cartCount').innerText=cart.reduce((a,i)=>a+i.quantity,0);}}
-    function removeFromCart(id,cor,tam){cart=cart.filter(i=>!(i.id===id&&i.cor===cor&&i.tam===tam));localStorage.setItem('cart',JSON.stringify(cart));renderCartPopup();document.getElementById('cartCount').innerText=cart.reduce((a,i)=>a+i.quantity,0);}
-    function closeCart(){document.getElementById('cartPopup').style.display='none';}
-    function checkout(){if(!cart.length)return alert('Carrinho vazio');const lines=cart.map(i=>{const p=products.find(x=>x.id===i.id);return`${i.quantity}× ${p.name} (${i.cor}, ${i.tam}) - R$${(p.price*i.quantity).toFixed(2)}`;}),total=cart.reduce((s,i)=>s+products.find(p=>p.id===i.id).price*i.quantity,0).toFixed(2);window.open(`https://wa.me/5541999737694?text=${encodeURIComponent(`Olá, gostaria de fazer um pedido:
-${lines.join('
-')}
-Total: R$${total}`)}`,'_blank');}
-    function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
-    function filterProducts(){const v=document.getElementById('searchInput').value.toLowerCase();renderProducts(products.filter(p=>p.name.toLowerCase().includes(v)));}
-    document.addEventListener('change',e=>{if(e.target.tagName==='SELECT')updateStockUI();});document.addEventListener('DOMContentLoaded',()=>{renderProducts();updateStockUI();document.getElementById('cartCount').innerText=cart.reduce((a,i)=>a+i.quantity,0);});
-  </script>
-</body>
+<p>© 2025 Custom Gears. Todos os direitos reservados.</p>
+
+  </footer>  <div class="cart-popup" id="cartPopup">
+    <div class="cart-content">
+      <h3>Seu Carrinho</h3>
+      <div id="cartItems"></div>
+      <p id="cartTotal"></p>
+      <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
+      <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
+    </div>
+  </div><button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+
+  <script>
+    const products = [
+      { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
+      { id: 2, name: 'Blusa moletom com capuz Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
+      { id: 3, name: 'Blusa moletom Custom Gears', price: 149.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
+      { id: 4, name: 'Calça moletom Custom Gears', price: 139.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
+      { id: 5, name: 'Meias cano alto Custom Gears', price: 29.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['M','G','GG'] },
+      { id: 6, name: 'Manopla câmbio inox Custom Gears', price: 39.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Cinza','Cromado'], sizes: ['4 polegadas'] },
+      { id: 7, name: 'Bandeira Custom Gears', price: 49.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Branco'], sizes: ['90×150cm','122×183cm'] },
+      { id: 8, name: 'Coifa câmbio Custom Gears', price: 24.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['Universal'] },
+      { id: 9, name: 'Copo térmico personalizado Custom Gears', price: 19.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto','Branco','Cinza'], sizes: ['400ml','470ml'] },
+      { id: 10, name: 'Chaveiro cordão Custom Gears', price: 29.90, img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['2,5cm×54cm','3,5cm×14,5cm','2,5cm×19cm'] },
+      { id: 11, name: 'Adesivos refletivos Custom Gears', price: 19.90, img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors: ['Branco','Cinza'], sizes: ['100cm×10cm','60cm×6cm'] },
+      { id: 12, name: 'Aromatizante automotivo Custom Gears', price: 8.90, img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['5,4cm×5,4cm','7,7cm×5,4cm'] }
+    ];
+
+    const inventory = {};
+    products.forEach(p => { inventory[p.id] = {}; p.colors.forEach(c => p.sizes.forEach(s => inventory[p.id][`${c}|${s}`] = 5)); });
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderProducts(list = products) {
+      const productList = document.getElementById('productList'); productList.innerHTML = '';
+      list.forEach(p => {
+        const card = document.createElement('div'); card.className='product'; card.id=`prod-${p.id}`;
+        const keys = Object.keys(inventory[p.id]).filter(k=>inventory[p.id][k]>0);
+        if(keys.length===0){
+          card.innerHTML=`<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
+        } else {
+          const colors=[...new Set(keys.map(k=>k.split('|')[0]))];
+          const sizes=[...new Set(keys.map(k=>k.split('|')[1]))];
+          card.innerHTML=`<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><p>R$${p.price.toFixed(2)}</p><p class="stock-label">Estoque: ${inventory[p.id][`${colors[0]}|${sizes[0]}`]}</p><label>Cor:<select id="cor-${p.id}">${colors.map(c=>`<option>${c}</option>`).join('')}</select></label><br><label>Tamanho:<select id="tam-${p.id}">${sizes.map(s=>`<option>${s}</option>`).join('')}</select></label><br><button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;
+        }
+        productList.appendChild(card);
+      });
+    }
+
+    function updateStockUI(){ products.forEach(p=>{ const card=document.getElementById(`prod-${p.id}`); if(!card)return; const corSel=card.querySelector(`#cor-${p.id}`); const tamSel=card.querySelector(`#tam-${p.id}`); if(!corSel||!tamSel)return; const keys=Object.keys(inventory[p.id]).filter(k=>inventory[p.id][k]>0); const colors=[...new Set(keys.map(k=>k.split('|')[0]))]; const sizes=[...new Set(keys.map(k=>k.split('|')[1]))]; Array.from(corSel.options).forEach(o=>o.hidden=!colors.includes(o.value)); Array.from(tamSel.options).forEach(o=>o.hidden=!sizes.includes(o.value)); if(!colors.includes(corSel.value))corSel.value=colors[0]; if(!sizes.includes(tamSel.value))tamSel.value=sizes[0]; const stock=inventory[p.id][`${corSel.value}|${tamSel.value}`]; card.querySelector('.stock-label').textContent=`Estoque: ${stock}`; const btn=card.querySelector('button'); if(stock<=0)btn.textContent='Esgotado',btn.disabled=true,btn.classList.add('sold-out-btn'); else btn.textContent='Adicionar ao Carrinho',btn.disabled=false,btn.classList.remove('sold-out-btn');}); }
+
+    function addToCart(id){ const cor=document.getElementById(`cor-${id}`).value; const tam=document.getElementById(`tam-${id}`).value; const key=`${cor}|${tam}`; if(inventory[id][key]<=0)return; inventory[id][key]--; updateStockUI(); const exists=cart.find(i=>i.id===id&&i.cor===cor&&i.tam===tam); if(exists)exists.quantity++; else cart.push({id,cor,tam,quantity:1}); localStorage.setItem('cart',JSON.stringify(cart)); document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0); }
+
+    function toggleCartPopup(){document.getElementById('cartPopup').style.display='flex'; renderCartPopup();}
+    function renderCartPopup(){ const container=document.getElementById('cartItems'); container.innerHTML=''; let total=0; cart.forEach(item=>{ const prod=products.find(p=>p.id===item.id); const price=(prod.price*item.quantity).toFixed(2); total+=parseFloat(price); container.innerHTML+=`<p>${item.quantity}× ${prod.name} (${item.cor}, ${item.tam}) - R$${price} <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tam}',-1)">−</span> ${item.quantity} <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tam}',1)">＋</span> <button class="remove" onclick="removeFromCart(${item.id},'${item.cor}','${item.tam}')">X</button></p>`;}); document.getElementById('cartTotal').innerText=`Total: R$${total.toFixed(2)}`; }
+    function changeQty(id,cor,tam,delta){ const item=cart.find(i=>i.id===id&&i.cor===cor&&i.tam===tam); if(!item)return; item.quantity+=delta; if(item.quantity<=0)removeFromCart(id,cor,tam); else {localStorage.setItem('cart',JSON.stringify(cart)); renderCartPopup(); document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0);} }
+    function removeFromCart(id,cor,tam){cart=cart.filter(i=>!(i.id===id&&i.cor===cor&&i.tam===tam)); localStorage.setItem('cart',JSON.stringify(cart)); renderCartPopup(); document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0);}    
+    function closeCart(){document.getElementById('cartPopup').style.display='none';}
+    function checkout(){if(!cart.length)return alert('Carrinho vazio'); const lines=cart.map(i=>`${i.quantity}× ${products.find(p=>p.id===i.id).name} (${i.cor}, ${i.tam}) - R$${(products.find(p=>p.id===i.id).price*i.quantity).toFixed(2)}`); const total=cart.reduce((s,i)=>s+products.find(p=>p.id===i.id).price*i.quantity,0).toFixed(2); const msg=encodeURIComponent(`Olá, gostaria de fazer um pedido:\n${lines.join('\n')}\nTotal: R$${total}`); window.open(`https://wa.me/5541999737694?text=${msg}`, '_blank'); cart=[]; localStorage.setItem('cart',JSON.stringify(cart)); document.getElementById('cartCount').textContent='0'; closeCart(); }
+    document.addEventListener('change',e=>{if(e.target.tagName==='SELECT')updateStockUI();}); document.addEventListener('DOMContentLoaded',()=>{renderProducts(); updateStockUI(); document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0);});
+  </script></body>
 </html>
-
