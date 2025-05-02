@@ -1,13 +1,14 @@
 <!DOCTYPE html><html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>𝕮𝖚𝖘𝖙𝖔𝖒 𝖌𝖊𝖆𝖗𝖘</title>
-  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear.">
+  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
+  <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* CSS permanece igual */
+    /* Seu CSS permanece inalterado */
   </style>
 </head>
 <body>
@@ -19,99 +20,83 @@
     <h2>Produtos</h2>
     <div class="products" id="productList"></div>
   </div>
-  <footer><!-- Sobre e contato --></footer>
-  <div class="cart-popup" id="cartPopup"><!-- Popup carrinho --></div>
+  <footer>
+    <!-- Sobre Nós & Contato -->
+  </footer>
+  <div class="cart-popup" id="cartPopup">
+    <div class="cart-content">
+      <h3>Seu Carrinho</h3>
+      <div id="cartItems"></div>
+      <p id="cartTotal"></p>
+      <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
+      <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
+    </div>
+  </div>
   <button onclick="scrollToTop()" id="btnTop">↑</button>  <script>
     const products = [
-      {
-        id: 1,
-        name: 'Camiseta oversized Custom Gears',
-        basePrice: 119.90,
-        priceAdjust: { P: -10, M: 0, G: 10, GG: 15, XG: 20 },
-        img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg',
-        colors: ['Branco','Preto','Cinza','Roxo'],
-        sizes: ['P','M','G','GG','XG']
-      },
-      {
-        id: 2,
-        name: 'Blusa moletom com capuz Custom Gears',
-        basePrice: 159.90,
-        priceAdjust: { P: -15, M: 0, G: 20, GG: 25, XG: 30 },
-        img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg',
-        colors: ['Branco','Preto','Cinza','Roxo'],
-        sizes: ['P','M','G','GG','XG']
-      },
-      // ... demais produtos com priceAdjust ...
+      { id:1, name:'Camiseta oversized Custom Gears', basePrice:119.90, priceAdjust:{P:-10,M:0,G:10,GG:15,XG:20}, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:2, name:'Blusa moletom com capuz Custom Gears', basePrice:159.90, priceAdjust:{P:-15,M:0,G:20,GG:25,XG:30}, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:3, name:'Blusa moletom Custom Gears', basePrice:149.90, priceAdjust:{P:-5,M:0,G:10,GG:12,XG:18}, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:4, name:'Calça moletom Custom Gears', basePrice:139.90, priceAdjust:{P:-8,M:0,G:12,GG:18,XG:22}, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:5, name:'Meias cano alto Custom Gears', basePrice:29.90, priceAdjust:{M:0,G:5,GG:7}, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['M','G','GG'] },
+      { id:6, name:'Manopla câmbio inox Custom Gears', basePrice:39.90, priceAdjust:{'4 polegadas':0}, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Cinza','Cromado'], sizes:['4 polegadas'] },
+      { id:7, name:'Bandeira Custom Gears', basePrice:49.90, priceAdjust:{'90×150cm':0,'122×183cm':15}, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco'], sizes:['90×150cm','122×183cm'] },
+      { id:8, name:'Coifa câmbio Custom Gears', basePrice:24.90, priceAdjust:{Universal:0}, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['Universal'] },
+      { id:9, name:'Copo térmico personalizado Custom Gears', basePrice:19.90, priceAdjust:{'400ml':0,'470ml':5}, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Cinza'], sizes:['400ml','470ml'] },
+      { id:10, name:'Chaveiro cordão Custom Gears', basePrice:29.90, priceAdjust:{'2,5cm×54cm':0,'3,5cm×14,5cm':0,'2,5cm×19cm':0}, img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['2,5cm×54cm','3,5cm×14,5cm','2,5cm×19cm'] },
+      { id:11, name:'Adesivos refletivos Custom Gears', basePrice:19.90, priceAdjust:{'100cm×10cm':0,'60cm×6cm':0}, img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Cinza'], sizes:['100cm×10cm','60cm×6cm'] },
+      { id:12, name:'Aromatizante automotivo Custom Gears', basePrice:8.90, priceAdjust:{'5,4cm×5,4cm':0,'7,7cm×5,4cm':0}, img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['5,4cm×5,4cm','7,7cm×5,4cm'] }
     ];
 
+    // Persistência simples no localStorage para estoque
     function loadInventory() {
       const saved = localStorage.getItem('inventory');
       if (saved) return JSON.parse(saved);
-      const inv = {};
-      products.forEach(p => {
-        inv[p.id] = {};
-        p.colors.forEach(c => p.sizes.forEach(s => inv[p.id][`${c}|${s}`] = 5));
-      });
-      localStorage.setItem('inventory', JSON.stringify(inv));
-      return inv;
+      const data = {};
+      products.forEach(p => { data[p.id] = {}; p.colors.forEach(c => p.sizes.forEach(s => data[p.id][`${c}|${s}`] = 5)); });
+      localStorage.setItem('inventory', JSON.stringify(data));
+      return data;
     }
-
-    function saveInventory() {
-      localStorage.setItem('inventory', JSON.stringify(inventory));
-    }
+    function saveInventory() { localStorage.setItem('inventory', JSON.stringify(inventory)); }
 
     const inventory = loadInventory();
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function calculatePrice(p, size) {
-      const adjust = p.priceAdjust[size] || 0;
-      return (p.basePrice + adjust).toFixed(2);
+      const adj = p.priceAdjust[size] || 0;
+      return (p.basePrice + adj).toFixed(2);
     }
 
     function renderProducts() {
-      const container = document.getElementById('productList');
-      container.innerHTML = '';
+      const cont = document.getElementById('productList'); cont.innerHTML = '';
       products.forEach(p => {
         const card = document.createElement('div'); card.className='product'; card.id=`prod-${p.id}`;
         const keys = Object.keys(inventory[p.id]).filter(k=>inventory[p.id][k]>0);
-        if (!keys.length) {
-          card.innerHTML = `<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
-        } else {
-          const colors = [...new Set(keys.map(k=>k.split('|')[0]))];
-          const sizes = [...new Set(keys.map(k=>k.split('|')[1]))];
-          const initialSize = sizes[0];
-          const price = calculatePrice(p, initialSize);
-          card.innerHTML = `
-            <img src="${p.img}" alt="${p.name}"/>
-            <h3>${p.name}</h3>
-            <p class="price-label">R$${price}</p>
-            <p class="stock-label">Estoque: ${inventory[p.id][`${colors[0]}|${initialSize}`]}</p>
-            <label>Cor:<select id="cor-${p.id}">${colors.map(c=>`<option>${c}</option>`).join('')}</select></label><br>
-            <label>Tamanho:<select id="tam-${p.id}">${sizes.map(s=>`<option>${s}</option>`).join('')}</select></label><br>
-            <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
-          `;
+        if (!keys.length) card.innerHTML=`<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
+        else {
+          const cols = [...new Set(keys.map(k=>k.split('|')[0]))];
+          const sizs = [...new Set(keys.map(k=>k.split('|')[1]))];
+          const init = sizs[0];
+          const pr = calculatePrice(p, init);
+          card.innerHTML=`<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><p class="price-label">R$${pr}</p><p class="stock-label">Estoque: ${inventory[p.id][`${cols[0]}|${init}`]}</p><label>Cor:<select id="cor-${p.id}">${cols.map(c=>`<option>${c}</option>`).join('')}</select></label><br><label>Tamanho:<select id="tam-${p.id}">${sizs.map(s=>`<option>${s}</option>`).join('')}</select></label><br><button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;
         }
-        container.appendChild(card);
+        cont.appendChild(card);
       });
     }
 
     function updateStockAndPrice() {
       products.forEach(p => {
         const card = document.getElementById(`prod-${p.id}`);
-        const corSel = card.querySelector(`#cor-${p.id}`);
-        const tamSel = card.querySelector(`#tam-${p.id}`);
-        if (!corSel || !tamSel) return;
-        // atualizar estoque
-        const key = `${corSel.value}|${tamSel.value}`;
-        const stock = inventory[p.id][key] || 0;
-        card.querySelector('.stock-label').textContent = `Estoque: ${stock}`;
-        // atualizar botão
+        const cor = card.querySelector(`#cor-${p.id}`)?.value;
+        const tam = card.querySelector(`#tam-${p.id}`)?.value;
+        if (!cor||!tam) return;
+        const key = `${cor}|${tam}`;
+        const stk = inventory[p.id][key]||0;
+        card.querySelector('.stock-label').textContent=`Estoque: ${stk}`;
+        const price = calculatePrice(p,tam);
+        card.querySelector('.price-label').textContent=`R$${price}`;
         const btn = card.querySelector('button');
-        if (stock<=0) { btn.textContent='Esgotado'; btn.disabled=true; }
-        else { btn.textContent='Adicionar ao Carrinho'; btn.disabled=false; }
-        // atualizar preço
-        const newPrice = calculatePrice(p, tamSel.value);
-        card.querySelector('.price-label').textContent = `R$${newPrice}`;
+        btn.textContent= stk>0?'Adicionar ao Carrinho':'Esgotado'; btn.disabled= stk<=0;
       });
     }
 
@@ -119,26 +104,21 @@
       const cor = document.getElementById(`cor-${id}`).value;
       const tam = document.getElementById(`tam-${id}`).value;
       const key = `${cor}|${tam}`;
-      if (inventory[id][key] <= 0) return;
+      if (inventory[id][key] <=0) return;
       inventory[id][key]--;
-      saveInventory();
-      updateStockAndPrice();
-      const exists = cart.find(i=>i.id===id&&i.cor===cor&&i.tam===tam);
-      if (exists) exists.quantity++;
-      else cart.push({id, cor, tam, quantity:1});
-      localStorage.setItem('cart', JSON.stringify(cart));
-      document.getElementById('cartCount').textContent = cart.reduce((a,i)=>a+i.quantity,0);
+      saveInventory(); updateStockAndPrice();
+      const prod = products.find(p=>p.id===id);
+      const price = calculatePrice(prod,tam);
+      const ex = cart.find(i=>i.id===id&&i.cor===cor&&i.tam===tam);
+      if (ex) ex.quantity++;
+      else cart.push({id,cor,tam,quantity:1,price});
+      localStorage.setItem('cart',JSON.stringify(cart));
+      document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0);
     }
 
-    // funções do carrinho (toggleCartPopup, renderCartPopup, changeQty, removeFromCart, closeCart, checkout)...
+    // Funções de carrinho omitidas para brevidade...
 
-    document.addEventListener('change', e=>{
-      if (e.target.tagName==='SELECT') updateStockAndPrice();
-    });
-    document.addEventListener('DOMContentLoaded', ()=>{
-      renderProducts();
-      updateStockAndPrice();
-      document.getElementById('cartCount').textContent = cart.reduce((a,i)=>a+i.quantity,0);
-    });
+    document.addEventListener('change',e=>{ if(e.target.tagName==='SELECT') updateStockAndPrice(); });
+    document.addEventListener('DOMContentLoaded',()=>{ renderProducts(); updateStockAndPrice(); document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0); });
   </script></body>
 </html>
