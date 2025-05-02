@@ -8,7 +8,7 @@
   <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Firebase -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <style>
@@ -62,43 +62,61 @@
   <div class="cart" onclick="toggleCartPopup()">
     🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
   </div>
-  <!-- resto do HTML permanece idêntico -->
-  <!-- ... -->
+  <header>Custom Gears</header>
+  <div class="container">
+    <h2>Produtos</h2>
+    <input id="searchInput" type="text" placeholder="Buscar produtos..." oninput="filterProducts()" style="padding:0.5rem;width:100%;max-width:300px;margin:1rem auto;display:block;background:#222;border:1px solid #444;border-radius:4px;color:#fff;"/>
+    <div class="products" id="productList"></div>
+  </div>
+  <footer>
+    <h4>Sobre Nós</h4>
+    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
+    <h4>Contato</h4>
+    <p>Telefone: (41) 99973-7694</p>
+    <p>Email: <a href="mailto:Customgears17@gmail.com">Customgears17@gmail.com</a></p>
+    <h4>Redes Sociais</h4>
+    <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
+    <p>© 2025 Custom Gears. Todos os direitos reservados.</p>
+  </footer>
+  <div class="cart-popup" id="cartPopup">
+    <div class="cart-content">
+      <h3>Seu Carrinho</h3>
+      <div id="cartItems"></div>
+      <p id="cartTotal"></p>
+      <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
+      <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
+    </div>
+  </div>
+  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
   <script>
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "SUA_API_KEY",
-      authDomain: "SEU_DOMINIO.firebaseapp.com",
-      projectId: "SEU_PROJECT_ID",
-      storageBucket: "SEU_BUCKET.appspot.com",
-      messagingSenderId: "SENDER_ID",
-      appId: "SEU_APP_ID"
-    };
+    // Firebase
+    const firebaseConfig = { apiKey:"SUA_API_KEY",authDomain:"SEU_DOMINIO.firebaseapp.com",projectId:"SEU_PROJECT_ID",storageBucket:"SEU_BUCKET.appspot.com",messagingSenderId:"SENDER_ID",appId:"SEU_APP_ID"};
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-
-    // Login / Signup
-    function login() {
-      const email = document.getElementById('loginEmail').value;
-      const pass = document.getElementById('loginPassword').value;
-      auth.signInWithEmailAndPassword(email,pass)
-        .then(()=>{ document.getElementById('loginOverlay').style.display='none'; })
-        .catch(e=>{ document.getElementById('loginMsg').innerText=e.message; });
-    }
-    function signup() {
-      const email = document.getElementById('loginEmail').value;
-      const pass = document.getElementById('loginPassword').value;
-      auth.createUserWithEmailAndPassword(email,pass)
-        .then(()=>{ document.getElementById('loginMsg').innerText='Cadastro realizado!'; })
-        .catch(e=>{ document.getElementById('loginMsg').innerText=e.message; });
-    }
-
-    auth.onAuthStateChanged(user=>{
-      document.getElementById('loginOverlay').style.display = user ? 'none' : 'flex';
-    });
-
-    // Seu código original de produtos e carrinho aqui (renderProducts, updateStockUI, addToCart, etc.)
+    function login(){const e=document.getElementById('loginEmail').value,p=document.getElementById('loginPassword').value;auth.signInWithEmailAndPassword(e,p).then(()=>loginOverlay.style.display='none').catch(err=>loginMsg.innerText=err.message);} 
+    function signup(){const e=document.getElementById('loginEmail').value,p=document.getElementById('loginPassword').value;auth.createUserWithEmailAndPassword(e,p).then(()=>loginMsg.innerText='Cadastro ok! Faça login.').catch(err=>loginMsg.innerText=err.message);} 
+    auth.onAuthStateChanged(u=>loginOverlay.style.display=u?'none':'flex');
+    // Produtos & Carrinho
+    const products=[{id:1,name:'Camiseta oversized Custom Gears',price:119.90,img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg',colors:['Branco','Preto','Cinza','Roxo'],sizes:['P','M','G','GG','XG']},{id:2,name:'Blusa moletom com capuz Custom Gears',price:159.90,img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg',colors:['Branco','Preto','Cinza','Roxo'],sizes:['P','M','G','GG','XG']},/*...até id:12*/];
+    const inventory=products.reduce((a,p)=>{a[p.id]={};p.colors.forEach(c=>p.sizes.forEach(s=>a[p.id][`${c}|${s}`]=5));return a;},{});
+    let cart=JSON.parse(localStorage.getItem('cart'))||[];
+    function renderProducts(list=products){const pl=document.getElementById('productList');pl.innerHTML='';list.forEach(p=>{const keys=Object.keys(inventory[p.id]).filter(k=>inventory[p.id][k]>0);const card=document.createElement('div');card.className='product';card.id='prod-'+p.id;if(!keys.length){card.innerHTML=`<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;}else{const cols=[...new Set(keys.map(k=>k.split('|')[0]))],szs=[...new Set(keys.map(k=>k.split('|')[1]))];card.innerHTML=`<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><p>R$${p.price.toFixed(2)}</p><p class="stock-label">Estoque: ${inventory[p.id][`${cols[0]}|${szs[0]}`]}</p><label>Cor:<select id="cor-${p.id}">${cols.map(c=>`<option>${c}</option>`).join('')}</select></label><br><label>Tamanho:<select id="tam-${p.id}">${szs.map(s=>`<option>${s}</option>`).join('')}</select></label><br><button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>`;}pl.appendChild(card});}
+    function updateStockUI(){products.forEach(p=>{const card=document.getElementById('prod-'+p.id);if(!card)return;const cs=card.querySelector('#cor-'+p.id),ts=card.querySelector('#tam-'+p.id);if(!cs||!ts)return;const keys=Object.keys(inventory[p.id]).filter(k=>inventory[p.id][k]>0),cols=[...new Set(keys.map(k=>k.split('|')[0]))],szs=[...new Set(keys.map(k=>k.split('|')[1]))];Array.from(cs.options).forEach(o=>o.hidden=!cols.includes(o.value));Array.from(ts.options).forEach(o=>o.hidden=!szs.includes(o.value));if(!cols.includes(cs.value))cs.value=cols[0];if(!szs.includes(ts.value))ts.value=szs[0];const st=inventory[p.id][`${cs.value}|${ts.value}`];card.querySelector('.stock-label').innerText='Estoque: '+st;const btn=card.querySelector('button');if(st<=0)btn.innerText='Esgotado',btn.disabled=true,btn.classList.add('sold-out-btn');else btn.innerText='Adicionar ao Carrinho',btn.disabled=false,btn.classList.remove('sold-out-btn');});}
+    function addToCart(id){const cs=document.getElementById('cor-'+id).value,ts=document.getElementById('tam-'+id).value,key=`${cs}|${ts}`;if(inventory[id][key]<=0)return;inventory[id][key]--,updateStockUI();const e=cart.find(i=>i.id===id&&i.cor===cs&&i.tam===ts);e?e.quantity++:cart.push({id,cor:cs,tam:ts,quantity:1});localStorage.setItem('cart',JSON.stringify(cart));document.getElementById('cartCount').innerText=cart.reduce((a,i)=>a+i.quantity,0);} 
+    function toggleCartPopup(){document.getElementById('cartPopup').style.display='flex';renderCartPopup();}
+    function renderCartPopup(){const ct=document.getElementById('cartItems');ct.innerHTML='';let total=0;cart.forEach(i=>{const p=products.find(x=>x.id===i.id),price=(p.price*i.quantity).toFixed(2);total+=parseFloat(price);ct.innerHTML+=`<p>${i.quantity}× ${p.name} (${i.cor}, ${i.tam}) - R$${price} <span class="qty-btn" onclick="changeQty(${i.id},'${i.cor}','${i.tam}',-1)">−</span> ${i.quantity} <span class="qty-btn" onclick="changeQty(${i.id},'${i.cor}','${i.tam}',1)">＋</span> <button class="remove" onclick="removeFromCart(${i.id},'${i.cor}','${i.tam}')">X</button></p>`;});document.getElementById('cartTotal').innerText=`Total: R$${total.toFixed(2)}`;}
+    function changeQty(id,cor,tam,d){const it=cart.find(i=>i.id===id&&i.cor===cor&&i.tam===tam);if(!it)return;it.quantity+=d;if(it.quantity<=0)removeFromCart(id,cor,tam);else{localStorage.setItem('cart',JSON.stringify(cart));renderCartPopup();document.getElementById('cartCount').innerText=cart.reduce((a,i)=>a+i.quantity,0);}}
+    function removeFromCart(id,cor,tam){cart=cart.filter(i=>!(i.id===id&&i.cor===cor&&i.tam===tam));localStorage.setItem('cart',JSON.stringify(cart));renderCartPopup();document.getElementById('cartCount').innerText=cart.reduce((a,i)=>a+i.quantity,0);}
+    function closeCart(){document.getElementById('cartPopup').style.display='none';}
+    function checkout(){if(!cart.length)return alert('Carrinho vazio');const lines=cart.map(i=>{const p=products.find(x=>x.id===i.id);return`${i.quantity}× ${p.name} (${i.cor}, ${i.tam}) - R$${(p.price*i.quantity).toFixed(2)}`;}),total=cart.reduce((s,i)=>s+products.find(p=>p.id===i.id).price*i.quantity,0).toFixed(2);window.open(`https://wa.me/5541999737694?text=${encodeURIComponent(`Olá, gostaria de fazer um pedido:
+${lines.join('
+')}
+Total: R$${total}`)}`,'_blank');}
+    function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
+    function filterProducts(){const v=document.getElementById('searchInput').value.toLowerCase();renderProducts(products.filter(p=>p.name.toLowerCase().includes(v)));}
+    document.addEventListener('change',e=>{if(e.target.tagName==='SELECT')updateStockUI();});document.addEventListener('DOMContentLoaded',()=>{renderProducts();updateStockUI();document.getElementById('cartCount').innerText=cart.reduce((a,i)=>a+i.quantity,0);});
   </script>
 </body>
 </html>
+
