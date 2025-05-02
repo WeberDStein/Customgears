@@ -3,8 +3,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>𝕮𝖚𝖘𝖙𝖔𝖒 𝖌𝖊𝖆𝖗𝖘</title>
-  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />  <!-- Fontes -->  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">  <style>
+  <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
     body { background: #000; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding-top: 70px; }
     header { font-family: 'UnifrakturCook', cursive; font-size: 3rem; text-align: center; padding: 1.5rem; border-bottom: 1px solid #333; color: #ccc; position: fixed; width: 100%; top: 0; background: #000; z-index: 1000; }
     .container { max-width: 1000px; margin: auto; padding: 2rem; padding-top: 100px; }
@@ -37,7 +40,8 @@
     #btnTop { display:none; position:fixed; bottom:30px; right:30px; z-index:999; font-size:1.5rem; outline:none; background-color:#800080; color:white; cursor:pointer; padding:0.5rem 0.8rem; border:none; border-radius:50%; box-shadow:0 0 10px #800080; transition:background-color 0.3s; }
     #btnTop:hover { background-color:#a020f0; }
     @media (max-width:768px) { .products { flex-direction:column; align-items:center;} .product { width:80%; } }
-  </style></head>
+  </style>
+</head>
 <body>
   <div class="cart" onclick="toggleCartPopup()">
     🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
@@ -46,18 +50,19 @@
   <div class="container">
     <h2>Produtos</h2>
     <div class="products" id="productList"></div>
-  </div>  <!-- Sobre Nós & Contato -->  <footer>
+  </div>
+  <!-- Sobre Nós & Contato -->  
+  <footer>
     <h4>Sobre Nós</h4>
-    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p><h4>Contato</h4>
-<p>Telefone: (41) 99973-7694</p>
-<p>Email: <a href="mailto:Customgears17@gmail.com">Customgears17@gmail.com</a></p>
-
-<h4>Redes Sociais</h4>
-<p><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">Instagram</a></p>
-
-<p>© 2025 Custom Gears. Todos os direitos reservados.</p>
-
-  </footer>  <div class="cart-popup" id="cartPopup">
+    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
+    <h4>Contato</h4>
+    <p>Telefone: (41) 99973-7694</p>
+    <p>Email: <a href="mailto:Customgears17@gmail.com">Customgears17@gmail.com</a></p>
+    <h4>Redes Sociais</h4>
+    <p><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">Instagram</a></p>
+    <p>© 2025 Custom Gears. Todos os direitos reservados.</p>
+  </footer>
+  <div class="cart-popup" id="cartPopup">
     <div class="cart-content">
       <h3>Seu Carrinho</h3>
       <div id="cartItems"></div>
@@ -65,9 +70,8 @@
       <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
       <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
     </div>
-  </div><button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
-
-  <script>
+  </div>
+  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>  <script>
     const products = [
       { id: 1, name: 'Camiseta oversized Custom Gears', price: 119.90, img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
       { id: 2, name: 'Blusa moletom com capuz Custom Gears', price: 159.90, img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco','Preto','Cinza','Roxo'], sizes: ['P','M','G','GG','XG'] },
@@ -108,7 +112,7 @@
     function addToCart(id){ const cor=document.getElementById(`cor-${id}`).value; const tam=document.getElementById(`tam-${id}`).value; const key=`${cor}|${tam}`; if(inventory[id][key]<=0)return; inventory[id][key]--; updateStockUI(); const exists=cart.find(i=>i.id===id&&i.cor===cor&&i.tam===tam); if(exists)exists.quantity++; else cart.push({id,cor,tam,quantity:1}); localStorage.setItem('cart',JSON.stringify(cart)); document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0); }
 
     function toggleCartPopup(){document.getElementById('cartPopup').style.display='flex'; renderCartPopup();}
-    function renderCartPopup(){ const container=document.getElementById('cartItems'); container.innerHTML=''; let total=0; cart.forEach(item=>{ const prod=products.find(p=>p.id===item.id); const price=(prod.price*item.quantity).toFixed(2); total+=parseFloat(price); container.innerHTML+=`<p>${item.quantity}× ${prod.name} (${item.cor}, ${item.tam}) - R$${price} <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tam}',-1)">−</span> ${item.quantity} <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tam}',1)">＋</span> <button class="remove" onclick="removeFromCart(${item.id},'${item.cor}','${item.tam}')">X</button></p>`;}); document.getElementById('cartTotal').innerText=`Total: R$${total.toFixed(2)}`; }
+    function renderCartPopup(){ const container=document.getElementById('cartItems'); container.innerHTML=''; let total=0; cart.forEach(item=>{ const prod=products.find(p=>p.id===item.id); const price=(prod.price*item.quantity).toFixed(2); total+=parseFloat(price); container.innerHTML+=`<p>${item.quantity}× ${prod.name} (${item.cor}, ${item.tam}) - R$${price} <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tam}',-1)">−</span> ${item.quantity} <span class="qty-btn" onclick="changeQty(${item.id},'${item.cor}','${item.tam}',1)">＋</span> <button class="remove" onclick="removeFromCart(${item.id},'${item.cor}','${item.tam}')">X</button></p>`;} ); document.getElementById('cartTotal').innerText=`Total: R$${total.toFixed(2)}`; }
     function changeQty(id,cor,tam,delta){ const item=cart.find(i=>i.id===id&&i.cor===cor&&i.tam===tam); if(!item)return; item.quantity+=delta; if(item.quantity<=0)removeFromCart(id,cor,tam); else {localStorage.setItem('cart',JSON.stringify(cart)); renderCartPopup(); document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0);} }
     function removeFromCart(id,cor,tam){cart=cart.filter(i=>!(i.id===id&&i.cor===cor&&i.tam===tam)); localStorage.setItem('cart',JSON.stringify(cart)); renderCartPopup(); document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0);}    
     function closeCart(){document.getElementById('cartPopup').style.display='none';}
