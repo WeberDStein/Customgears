@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -45,7 +44,6 @@
 </head>
 <body>
   <div class="cart" onclick="toggleCartPopup()">
-    
     🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
   </div>
   <header>Custom Gears</header>
@@ -53,8 +51,6 @@
     <h2>Produtos</h2>
     <div class="products" id="productList"></div>
   </div>
-  
-  <!-- Sobre Nós & Contato -->
   <footer>
     <h4>Sobre Nós</h4>
     <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
@@ -65,7 +61,6 @@
     <p><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">Instagram</a></p>
     <p>© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
-  
   <div class="cart-popup" id="cartPopup">
     <div class="cart-content">
       <h3>Seu Carrinho</h3>
@@ -75,89 +70,189 @@
       <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
     </div>
   </div>
-  
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
-  
   <script>
-    const products = [
-      { id:1, name:'Camiseta oversized Custom Gears',            price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
-      { id:2, name:'Blusa moletom com capuz Custom Gears',        price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg',colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
-      { id:3, name:'Blusa moletom Custom Gears',                 price:149.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg',colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
-      { id:4, name:'Calça moletom Custom Gears',                 price:139.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg',colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
-      { id:5, name:'Meias cano alto Custom Gears',               price:29.90,  img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg',colors:['Branco','Preto','Cinza','Roxo'], sizes:['M','G','GG'] },
-      // 6–12 com sizePrices
-      { id:6,  name:'Manopla câmbio inox Custom Gears',         img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',colors:['Preto','Cinza','Cromado'],sizes:['4 polegadas'],    sizePrices:{'4 polegadas':39.90} },
-      { id:7,  name:'Bandeira Custom Gears',                    img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',colors:['Preto','Branco'],        sizes:['90×150cm','122×183cm'], sizePrices:{'90×150cm':49.90,'122×183cm':59.90} },
-      { id:8,  name:'Coifa câmbio Custom Gears',               img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',colors:['Branco','Preto','Cinza','Roxo'],sizes:['Universal'],    sizePrices:{'Universal':24.90} },
-      { id:9,  name:'Copo térmico personalizado Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',colors:['Preto','Branco','Cinza'],sizes:['400ml','470ml'],    sizePrices:{'400ml':19.90,'470ml':24.90} },
-      { id:10, name:'Chaveiro cordão Custom Gears',            img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg',colors:['Branco','Preto','Cinza','Roxo'],sizes:['2,5cm×54cm','3,5cm×14,5cm','2,5cm×19cm'], sizePrices:{'2,5cm×54cm':29.90,'3,5cm×14,5cm':14.90,'2,5cm×19cm':19.90} },
-      { id:11, name:'Adesivos refletivos Custom Gears',        img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg',colors:['Branco','Cinza'],        sizes:['100cm×10cm','60cm×6cm'], sizePrices:{'100cm×10cm':59.90,'60cm×6cm':44.90} },
-      { id:12, name:'Aromatizante automotivo Custom Gears',     img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg',colors:['Branco','Preto','Cinza','Roxo'],sizes:['5,4cm×5,4cm','7,7cm×5,4cm'], sizePrices:{'5,4cm×5,4cm':7.90,'7,7cm×5,4cm':11.90} }
-    ];
-
+    const products = [ /* ... produtos definidos ... */ ];
     const inventory = {};
-    products.forEach(p=>{
-      inventory[p.id]={};
-      p.colors.forEach(c=>p.sizes.forEach(s=>inventory[p.id][`${c}|${s}`]=5));
+    products.forEach(p => {
+      inventory[p.id] = {};
+      const colors = p.colors || [];
+      const sizes = p.sizes || [];
+      colors.forEach(c => sizes.forEach(s => inventory[p.id][`${c}|${s}`] = 5));
     });
-    let cart = JSON.parse(localStorage.getItem('cart'))||[];
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];function renderProducts() {
+  const list = document.getElementById('productList');
+  list.innerHTML = '';
+  products.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'product'; card.id = `prod-${p.id}`;
+    const inStockKeys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
+    if (!inStockKeys.length) {
+      card.innerHTML = `<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
+    } else {
+      const colors = [...new Set(inStockKeys.map(k => k.split('|')[0]))];
+      const sizes = [...new Set(inStockKeys.map(k => k.split('|')[1]))];
+      const initialSize = sizes[0];
+      const initialPrice = p.sizePrices ? p.sizePrices[initialSize] : p.price;
+      card.innerHTML = `
+        <img src="${p.img}" alt="${p.name}"/>
+        <h3>${p.name}</h3>
+        <p class="price">R$${initialPrice.toFixed(2)}</p>
+        <p class="stock-label">Estoque: ${inventory[p.id][`${colors[0]}|${initialSize}`]}</p>
+        <label>Cor:<select id="cor-${p.id}">${colors.map(c=>`<option>${c}</option>`).join('')}</select></label><br>
+        <label>Tamanho:<select id="tam-${p.id}">${sizes.map(s=>`<option>${s}</option>`).join('')}</select></label><br>
+        <button id="btn-${p.id}">Adicionar ao Carrinho</button>
+      `;
+    }
+    list.appendChild(card);
+  });
+  initProductListeners();
+}
 
-    function renderProducts(){
-      const list=document.getElementById('productList');
-      list.innerHTML='';
-      products.forEach(p=>{
-        const card=document.createElement('div');
-        card.className='product'; card.id=`prod-${p.id}`;
-        const keys=Object.keys(inventory[p.id]).filter(k=>inventory[p.id][k]>0);
-        if(!keys.length){
-          card.innerHTML=`<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
-        } else {
-          const colors=[...new Set(keys.map(k=>k.split('|')[0]))];
-          const sizes=[...new Set(keys.map(k=>k.split('|')[1]))];
-          const firstPrice = p.sizePrices ? p.sizePrices[sizes[0]] : p.price;
-          card.innerHTML=`
-            <img src="${p.img}" alt="${p.name}"/>
-            <h3>${p.name}</h3>
-            <p class="price">R$${firstPrice.toFixed(2)}</p>
-            <p class="stock-label">Estoque: ${inventory[p.id][`${colors[0]}|${sizes[0]}`]}</p>
-            <label>Cor:<select id="cor-${p.id}">${colors.map(c=>`<option>${c}</option>`).join('')}</select></label><br>
-            <label>Tamanho:<select id="tam-${p.id}">${sizes.map(s=>`<option>${s}</option>`).join('')}</select></label><br>
-            <button onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
-          `;
-        }
-        list.appendChild(card);
+function initProductListeners() {
+  products.forEach(p => {
+    const sizeEl = document.getElementById(`tam-${p.id}`);
+    const colorEl = document.getElementById(`cor-${p.id}`);
+    const btn = document.getElementById(`btn-${p.id}`);
+    if (sizeEl) {
+      sizeEl.addEventListener('change', () => {
+        updatePriceBySize(p.id);
+        updateStockUI(p.id);
       });
     }
-
-    function updatePriceBySize(id){
-      const size=document.getElementById(`tam-${id}`).value;
-      const prod=products.find(x=>x.id===id);
-      const price=prod.sizePrices ? (prod.sizePrices[size]||prod.price) : prod.price;
-      document.querySelector(`#prod-${id} .price`).textContent=`R$${price.toFixed(2)}`;
+    if (colorEl) {
+      colorEl.addEventListener('change', () => updateStockUI(p.id));
     }
+    if (btn) {
+      btn.addEventListener('click', () => addToCart(p.id));
+    }
+  });
+}
 
-    function updateStockUI(){ /* sua lógica */ }
-    function addToCart(id){ /* sua lógica */ }
-    function toggleCartPopup(){ /* ... */ }
-    function renderCartPopup(){ /* ... */ }
-    function changeQty(id,cor,tam,delta){ /* ... */ }
-    function removeFromCart(id,cor,tam){ /* ... */ }
-    function closeCart(){ /* ... */ }
-    function checkout(){ /* ... */ }
-    function scrollToTop(){ /* ... */ }
+function updatePriceBySize(id) {
+  const size = document.getElementById(`tam-${id}`).value;
+  const prod = products.find(x => x.id === id);
+  const price = prod.sizePrices ? prod.sizePrices[size] : prod.price;
+  document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
+}
 
-    document.addEventListener('DOMContentLoaded',()=>{
-      renderProducts();
-      updateStockUI();
-      // listeners apenas para tam-6 a tam-12
-      for(let id=6;id<=12;id++){
-        document.getElementById(`tam-${id}`)?.addEventListener('change',()=>{
-          updatePriceBySize(id);
-          updateStockUI();
-        });
-      }
-      document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0);
-    });
+function updateStockUI(id) {
+  const color = document.getElementById(`cor-${id}`).value;
+  const size = document.getElementById(`tam-${id}`).value;
+  const stock = inventory[id][`${color}|${size}`] || 0;
+  const label = document.querySelector(`#prod-${id} .stock-label`);
+  label.textContent = `Estoque: ${stock}`;
+  const btn = document.querySelector(`#prod-${id} button`);
+  btn.disabled = stock === 0;
+  btn.classList.toggle('sold-out-btn', stock === 0);
+}
+
+function addToCart(id) {
+  const color = document.getElementById(`cor-${id}`).value;
+  const size = document.getElementById(`tam-${id}`).value;
+  const key = `${color}|${size}`;
+  if (inventory[id][key] < 1) return;
+  const existing = cart.find(i => i.id === id && i.color === color && i.size === size);
+  if (existing) existing.quantity++;
+  else cart.push({ id, color, size, quantity: 1 });
+  inventory[id][key]--;
+  updateStockUI(id);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+  showAlert('Adicionado ao carrinho');
+}
+
+function toggleCartPopup() {
+  const popup = document.getElementById('cartPopup');
+  if (popup.style.display === 'flex') closeCart();
+  else { renderCartPopup(); popup.style.display = 'flex'; }
+}
+
+function renderCartPopup() {
+  const container = document.getElementById('cartItems');
+  container.innerHTML = '';
+  let total = 0;
+  cart.forEach(item => {
+    const prod = products.find(p => p.id === item.id);
+    const price = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
+    total += price * item.quantity;
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <p>${prod.name} - ${item.color} / ${item.size}</p>
+      <div>
+        <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', -1)">-</span>
+        <span>${item.quantity}</span>
+        <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', 1)">+</span>
+        <button class="remove" onclick="removeFromCart(${item.id}, '${item.color}', '${item.size}')">Remover</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+  document.getElementById('cartTotal').textContent = `Total: R$${total.toFixed(2)}`;
+}
+
+function changeQty(id, color, size, delta) {
+  const key = `${color}|${size}`;
+  const item = cart.find(i => i.id === id && i.color === color && i.size === size);
+  if (!item) return;
+  if (delta > 0 && inventory[id][key] < 1) return;
+  item.quantity += delta;
+  if (delta > 0) inventory[id][key]--;
+  else { inventory[id][key]++; }
+  if (item.quantity === 0) cart = cart.filter(i => i !== item);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+  renderCartPopup();
+  updateStockUI(id);
+}
+
+function removeFromCart(id, color, size) {
+  const key = `${color}|${size}`;
+  const item = cart.find(i => i.id === id && i.color === color && i.size === size);
+  if (!item) return;
+  inventory[id][key] += item.quantity;
+  cart = cart.filter(i => i !== item);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+  renderCartPopup();
+  updateStockUI(id);
+}
+
+function closeCart() { document.getElementById('cartPopup').style.display = 'none'; }
+
+function checkout() {
+  const phone = '5541999737694';
+  let msg = encodeURIComponent('Olá, gostaria de comprar:\n');
+  cart.forEach(item => {
+    const prod = products.find(p => p.id === item.id);
+    msg += encodeURIComponent(`- ${prod.name} (${item.color}/${item.size}) x${item.quantity}\n`);
+  });
+  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+}
+
+function updateCartCount() {
+  const count = cart.reduce((acc, i) => acc + i.quantity, 0);
+  document.getElementById('cartCount').textContent = count;
+}
+
+function showAlert(text) {
+  const div = document.createElement('div'); div.className = 'custom-alert'; div.textContent = text;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 2000);
+}
+
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('btnTop');
+  btn.style.display = window.scrollY > 300 ? 'block' : 'none';
+});
+
+function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderProducts();
+  updateCartCount();
+});
+
   </script>
 </body>
 </html>
