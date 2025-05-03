@@ -9,113 +9,111 @@
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { background: #000; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding-top: 100px; }
-    header {
-      position: fixed; top: 0; width: 100%; background: #000; z-index: 1000;
-      display: flex; flex-direction: column; align-items: center;
-      font-family: 'UnifrakturCook', cursive; font-size: 3rem;
-      color: #ccc; border-bottom: 1px solid #333;
-      padding: 1rem 0 0.5rem;
-    }
-    .cart {
-      background: #222; padding: 0.5rem 1rem; border-radius: 6px;
-      border: 1px solid #444; box-shadow: 0 0 5px #800080;
-      cursor: pointer; font-weight: bold;
-      display: flex; align-items: center; justify-content: center;
-      margin-top: 0.5rem;
-    }
-    .cart-count {
-      background: #800080; padding: 2px 8px; border-radius: 50%; margin-left: 6px;
-      font-size: 0.8rem;
-    }
-    .container { max-width: 1000px; margin: auto; padding: 2rem; }
-    h2 { color: #aa88cc; font-family: 'UnifrakturCook', cursive; border-bottom: 1px solid #444; padding-bottom: 0.5rem; text-align: center; }
-    .products { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin: 2rem 0; }
-    .product { background: #111; border: 1px solid #333; border-radius: 8px; width: 250px; padding: 1rem; text-align: center; transition: transform 0.2s ease; }
-    .product:hover { transform: scale(1.05); }
-    .product img { width: 100%; border-radius: 6px; margin-bottom: 0.5rem; }
-    .product h3 { color: #ddd; margin: 0.5rem 0; }
-    .price, .stock-label { color: #ccc; font-size: 0.9rem; margin-bottom: 0.5rem; }
-    .sold-out-text { color: #c00; font-weight: bold; margin-top: 0.5rem; display: block; }
-    button { background: #800080; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
-    button:hover:not(.sold-out-btn) { background: #a020f0; }
-    .sold-out-btn { background: #555; cursor: not-allowed; opacity: 0.6; }
-    .cart-popup { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index:1002; }
-    .cart-content { background: #333; padding: 20px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; max-height: 80vh; overflow-y: auto; }
-    .qty-btn { display: inline-block; padding: 0 6px; background: #555; color: #fff; border-radius: 4px; margin: 0 4px; cursor: pointer; }
-    .remove { background: #f44336 !important; font-size: 0.8rem; padding: 0.3rem 0.6rem; margin-left: 8px; }
-    .checkout { background: #4caf50 !important; margin-top: 1rem; }
-    .custom-alert { position: fixed; top: 20px; right: 20px; background: #6a0dad; color: white; padding: 10px 20px; border-radius: 8px; animation: fadein 0.5s, fadeout 0.5s 1.5s; }
-    @keyframes fadein { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeout { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
-    footer { text-align: center; padding: 2rem; background-color: #111; border-top:1px solid #333; }
-    footer h4 { color: #aa88cc; margin-bottom: 0.5rem; }
-    footer p, footer a { color:#ccc; font-size:0.9rem; margin: 0.2rem 0; }
-    footer a { text-decoration: none; }
-    #btnTop { display:none; position:fixed; bottom:30px; right:30px; z-index:999; font-size:1.5rem; background-color:#800080; color:white; cursor:pointer; padding:0.5rem; border-radius:50%; box-shadow:0 0 10px #800080; }
-    #btnTop:hover { background-color:#a020f0; }
-    @media (max-width:768px){ .products{flex-direction:column;align-items:center;} .product{width:80%;} }
+    * { margin:0; padding:0; box-sizing: border-box; }
+    body { background: #000; color: #fff; font-family: 'Montserrat', sans-serif; padding-top: 120px; }
+    header { position: fixed; top: 0; width: 100%; background: #000; z-index: 1000; text-align: center; border-bottom:1px solid #333; }
+    header h1 { font-family: 'UnifrakturCook', cursive; font-size: 3rem; color: #ccc; margin: 1rem 0 0.5rem; }
+    .cart { background: #222; display: inline-flex; align-items: center; padding: 0.5rem 1rem; border-radius: 6px; border:1px solid #444; box-shadow:0 0 5px #800080; cursor:pointer; margin-bottom:1rem; }
+    .cart-count { background: #800080; padding:2px 8px; border-radius:50%; margin-left:6px; font-size:0.8rem; }
+    .container { max-width:1000px; margin:auto; padding:2rem; }
+    h2 { color:#aa88cc; font-family:'UnifrakturCook',cursive; border-bottom:1px solid #444; padding-bottom:0.5rem; text-align:center; }
+    .products { display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; margin:2rem 0; }
+    .product { background:#111; border:1px solid #333; border-radius:8px; width:250px; padding:1rem; text-align:center; position:relative; transition:transform 0.2s ease; }
+    .product:hover { transform:scale(1.05); }
+    .product img { width:100%; border-radius:6px; margin-bottom:0.5rem; }
+    .product h3 { color:#ddd; margin:0.5rem 0; }
+    .price, .stock-label { color:#ccc; font-size:0.9rem; margin-bottom:0.5rem; }
+    .sold-out-text { color:#c00; font-weight:bold; margin-top:0.5rem; display:block; }
+    button { background:#800080; color:#fff; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; font-size:1rem; transition:background 0.2s; }
+    button:hover:not(.sold-out-btn) { background:#a020f0; }
+    .sold-out-btn { background:#555; cursor:not-allowed; opacity:0.6; }
+    /* Cart popup */
+    .cart-popup { position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; z-index:1001; }
+    .cart-content { background:#333; border-radius:8px; padding:20px; width:90%; max-width:400px; max-height:80vh; overflow-y:auto; text-align:left; }
+    .cart-content h3 { text-align:center; margin-bottom:1rem; }
+    .cart-item { margin-bottom:1rem; }
+    .cart-item div { display:flex; align-items:center; justify-content:space-between; }
+    .qty-btn { background:#555; color:#fff; border:none; padding:0.2rem 0.6rem; border-radius:4px; cursor:pointer; }
+    .remove { background:#f44336 !important; font-size:0.8rem; padding:0.3rem 0.6rem; margin-left:8px; }
+    .checkout { background:#4caf50; width:100%; padding:0.5rem; border-radius:4px; margin-top:1rem; }
+    .custom-alert { position:fixed; top:20px; right:20px; background:#6a0dad; color:#fff; padding:10px 20px; border-radius:8px; animation:fadein 0.5s, fadeout 0.5s 1.5s; }
+    @keyframes fadein { from { opacity:0; transform:translateY(-20px);} to {opacity:1; transform:translateY(0);} }
+    @keyframes fadeout { from { opacity:1; transform:translateY(0);} to {opacity:0; transform:translateY(-20px);} }
+    footer { background:#111; border-top:1px solid #333; text-align:center; padding:2rem; }
+    footer h4 { color:#aa88cc; margin-bottom:0.5rem; }
+    footer p, footer a { color:#ccc; font-size:0.9rem; margin:0.2rem 0; }
+    #btnTop { position:fixed; bottom:30px; right:30px; background:#800080; color:#fff; border:none; padding:0.5rem; border-radius:50%; font-size:1.5rem; display:none; cursor:pointer; }
+    #btnTop:hover { background:#a020f0; }
+    @media(max-width:768px){ .products { flex-direction:column; align-items:center; } .product { width:80%; } }
   </style>
 </head>
 <body>
   <header>
-    Custom Gears
-    <div class="cart" onclick="toggleCartPopup()">
+    <h1>Custom Gears</h1>
+    <div class="cart" onclick="toggleCartPopup();">
       🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
     </div>
   </header>
+
   <div class="container">
     <h2>Produtos</h2>
     <div class="products" id="productList"></div>
   </div>
+
+  <div class="cart-popup" id="cartPopup">
+    <div class="cart-content">
+      <h3>Seu Carrinho</h3>
+      <div id="cartItems"></div>
+      <p id="cartTotal"></p>
+      <button class="checkout" onclick="checkout();">Chamar no WhatsApp</button>
+      <button onclick="closeCart();" style="margin-top:1rem;">Fechar</button>
+    </div>
+  </div>
+
   <footer>
     <h4>Sobre Nós</h4>
     <p>Na Custom Gears, transformamos paixão automotiva em estilo.</p>
     <h4>Contato</h4>
     <p>(41) 99973-7694 | <a href="mailto:Customgears17@gmail.com">Customgears17@gmail.com</a></p>
     <h4>Redes Sociais</h4>
-    <a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a>
+    <p><a href="https://www.instagram.com/custom_gears17" target="_blank">Instagram</a></p>
     <p>© 2025 Custom Gears.</p>
   </footer>
-  <div class="cart-popup" id="cartPopup">
-    <div class="cart-content">
-      <h3>Seu Carrinho</h3>
-      <div id="cartItems"></div>
-      <p id="cartTotal"></p>
-      <button class="checkout" onclick="checkout()">Chamar no WhatsApp</button>
-      <button onclick="closeCart()">Fechar</button>
-    </div>
-  </div>
-  <button id="btnTop" onclick="scrollToTop()">↑</button>
+
+  <button id="btnTop" onclick="scrollToTop();">↑</button>
+
   <script>
-    const products = [
-      // seu array de produtos completo aqui
-    ];
+    // Dados dos produtos
+    const products = [ /* seu array completo aqui */ ];
     const inventory = {};
-    products.forEach(p => { inventory[p.id] = {}; p.colors.forEach(c => p.sizes.forEach(s => inventory[p.id][`${c}|${s}`]=5)); });
+    products.forEach(p => {
+      inventory[p.id] = {};
+      p.colors.forEach(c => p.sizes.forEach(s => inventory[p.id][`${c}|${s}`] = 5));
+    });
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function renderProducts() {
       const list = document.getElementById('productList'); list.innerHTML = '';
       products.forEach(p => {
-        const keys = Object.keys(inventory[p.id]).filter(k=>inventory[p.id][k]>0);
-        const card = document.createElement('div'); card.className='product'; card.id=`prod-${p.id}`;
+        const keys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
+        const div = document.createElement('div'); div.className = 'product'; div.id = `prod-${p.id}`;
         if (!keys.length) {
-          card.innerHTML = `<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
+          div.innerHTML = `<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
         } else {
-          const cols = [...new Set(keys.map(k=>k.split('|')[0]))];
-          const szs = [...new Set(keys.map(k=>k.split('|')[1]))];
+          const cols = [...new Set(keys.map(k => k.split('|')[0]))];
+          const szs  = [...new Set(keys.map(k => k.split('|')[1]))];
           const init = szs[0]; const price = p.sizePrices? p.sizePrices[init]: p.price;
-          card.innerHTML = `
+          div.innerHTML = `
             <img src="${p.img}" alt="${p.name}"/>
             <h3>${p.name}</h3>
             <p class="price">R$${price.toFixed(2)}</p>
-            <p class="stock-label">Estoque: ${inventory[p.id][cols[0]+'|'+init]}</p>
+            <p class="stock-label">Estoque: ${inventory[p.id][cols[0] + '|' + init]}</p>
             <label>Cor:<select id="cor-${p.id}">${cols.map(c=>`<option>${c}</option>`).join('')}</select></label><br>
             <label>Tam:<select id="tam-${p.id}">${szs.map(s=>`<option>${s}</option>`).join('')}</select></label><br>
-            <button id="btn-${p.id}">Adicionar</button>`;
+            <button id="btn-${p.id}">Adicionar</button>
+          `;
         }
-        list.appendChild(card);
+        list.appendChild(div);
       }); initListeners();
     }
 
@@ -123,86 +121,91 @@
       products.forEach(p => {
         const selC = document.getElementById(`cor-${p.id}`);
         const selS = document.getElementById(`tam-${p.id}`);
-        const btn = document.getElementById(`btn-${p.id}`);
-        if (selC) selC.onchange = ()=> updateStock(p.id);
-        if (selS) selS.onchange = ()=> updatePrice(p.id);
-        if (btn) btn.onclick = ()=> addToCart(p.id);
+        const btn  = document.getElementById(`btn-${p.id}`);
+        if (selC) selC.onchange = () => updateStock(p.id);
+        if (selS) selS.onchange = () => updatePrice(p.id);
+        if (btn) btn.onclick  = () => addToCart(p.id);
       });
     }
 
     function updatePrice(id) {
       const size = document.getElementById(`tam-${id}`).value;
-      const prod = products.find(x=>x.id===id);
-      const pr = prod.sizePrices? prod.sizePrices[size]: prod.price;
-      document.querySelector(`#prod-${id} .price`).textContent = `R$${pr.toFixed(2)}`;
+      const prod = products.find(x => x.id === id);
+      const price = prod.sizePrices? prod.sizePrices[size]: prod.price;
+      document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
     }
 
     function updateStock(id) {
-      const c = document.getElementById(`cor-${id}`).value;
-      const s = document.getElementById(`tam-${id}`).value;
-      const stock = inventory[id][`${c}|${s}`]||0;
-      const lbl = document.querySelector(`#prod-${id} .stock-label`);
-      lbl.textContent = `Estoque: ${stock}`;
+      const color = document.getElementById(`cor-${id}`).value;
+      const size  = document.getElementById(`tam-${id}`).value;
+      const stock = inventory[id][`${color}|${size}`] || 0;
+      document.querySelector(`#prod-${id} .stock-label`).textContent = `Estoque: ${stock}`;
     }
 
     function addToCart(id) {
-      const c = document.getElementById(`cor-${id}`).value;
-      const s = document.getElementById(`tam-${id}`).value;
-      const key = `${c}|${s}`;
-      if (inventory[id][key]<1) return;
-      const it = cart.find(x=>x.id===id&&x.color===c&&x.size===s);
-      if (it) it.quantity++; else cart.push({id, color:c, size:s, quantity:1});
+      const color = document.getElementById(`cor-${id}`).value;
+      const size  = document.getElementById(`tam-${id}`).value;
+      const key   = `${color}|${size}`;
+      if (inventory[id][key] < 1) return;
+      const existing = cart.find(i => i.id===id && i.color===color && i.size===size);
+      if (existing) existing.quantity++;
+      else cart.push({ id, color, size, quantity:1 });
       inventory[id][key]--;
-      localStorage.setItem('cart', JSON.stringify(cart));
-      renderCart();
-      updateCartCount();
+      saveCart(); renderCart(); updateCartCount();
+    }
+
+    function renderCart() {
+      const cont = document.getElementById('cartItems'); cont.innerHTML = '';
+      let total = 0;
+      cart.forEach((item, idx) => {
+        const prod = products.find(p=>p.id===item.id);
+        const price= prod.sizePrices? prod.sizePrices[item.size]: prod.price;
+        total += price * item.quantity;
+        const d = document.createElement('div'); d.className='cart-item';
+        d.innerHTML = `
+          <div>
+            <span>${prod.name} (${item.color}/${item.size}) x${item.quantity}</span>
+            <button class="remove" onclick="removeItem(${idx})">Remover</button>
+          </div>
+        `;
+        cont.appendChild(d);
+      });
+      document.getElementById('cartTotal').textContent = `Total: R$${total.toFixed(2)}`;
     }
 
     function toggleCartPopup() {
       const pop = document.getElementById('cartPopup');
-      if (pop.style.display==='flex') pop.style.display='none';
-      else { renderCart(); pop.style.display='flex'; }
-    }
-
-    function renderCart() {
-      const cont = document.getElementById('cartItems'); cont.innerHTML=''; let tot=0;
-      cart.forEach((i,idx)=>{
-        const p = products.find(x=>x.id===i.id);
-        const price = p.sizePrices? p.sizePrices[i.size]: p.price;
-        tot += price*i.quantity;
-        const d = document.createElement('div');
-        d.innerHTML = `<p>${p.name} (${i.color}/${i.size}) x${i.quantity}</p>
-          <button onclick="removeItem(${idx})">Remover</button><hr>`;
-        cont.appendChild(d);
-      });
-      document.getElementById('cartTotal').textContent = `Total: R$${tot.toFixed(2)}`;
+      pop.style.display = pop.style.display==='flex'? 'none':'flex';
+      if (pop.style.display==='flex') renderCart();
     }
 
     function removeItem(idx) {
-      const i = cart[idx];
-      inventory[i.id][`${i.color}|${i.size}`] += i.quantity;
-      cart.splice(idx,1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      renderCart(); updateCartCount();
+      const item = cart[idx];
+      inventory[item.id][`${item.color}|${item.size}`] += item.quantity;
+      cart.splice(idx,1); saveCart(); renderCart(); updateCartCount();
     }
 
     function checkout() {
       if (!cart.length) return;
-      let msg = 'Olá! Gostaria de comprar:%0A';
+      let msg = 'Olá, gostaria de comprar:%0A';
       cart.forEach(i=> msg += `- ${products.find(p=>p.id===i.id).name} (${i.color}/${i.size}) x${i.quantity}%0A`);
-      window.open(`https://wa.me/5541999737694?text=${msg}`, '_blank');
-      // esvaziar
-      cart=[]; localStorage.removeItem('cart');
-      renderCart(); updateCartCount();
+      window.open(`https://wa.me/5541999737694?text=${msg}`,'_blank');
+      cart=[]; saveCart(); renderCart(); updateCartCount();
     }
 
     function updateCartCount() {
       document.getElementById('cartCount').textContent = cart.reduce((a,i)=>a+i.quantity,0);
     }
 
-    function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function closeCart() { document.getElementById('cartPopup').style.display='none'; }
+
+    function scrollToTop() { window.scrollTo({ top:0, behavior:'smooth' }); }
     window.addEventListener('scroll',()=>{
-      document.getElementById('btnTop').style.display = pageYOffset>300?'block':'none';
+      document.getElementById('btnTop').style.display = window.pageYOffset>300?'block':'none';
     });
 
     document.addEventListener('DOMContentLoaded',()=>{ renderProducts(); updateCartCount(); });
