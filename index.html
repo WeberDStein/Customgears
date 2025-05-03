@@ -27,7 +27,6 @@
     button { background:#800080; color:#fff; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; font-size:1rem; transition:background 0.2s; }
     button:hover:not(.sold-out-btn) { background:#a020f0; }
     .sold-out-btn { background:#555; cursor:not-allowed; opacity:0.6; }
-    /* Cart popup */
     .cart-popup { position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; z-index:1001; }
     .cart-content { background:#333; border-radius:8px; padding:20px; width:90%; max-width:400px; max-height:80vh; overflow-y:auto; text-align:left; }
     .cart-content h3 { text-align:center; margin-bottom:1rem; }
@@ -83,13 +82,22 @@
   <button id="btnTop" onclick="scrollToTop();">↑</button>
 
   <script>
-    // Dados dos produtos
-    const products = [ /* seu array completo aqui */ ];
+    const products = [
+      { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:2, name:'Blusa moletom com capuz Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:3, name:'Blusa moletom Custom Gears', price:149.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:4, name:'Calça moletom Custom Gears', price:139.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:5, name:'Meias cano alto Custom Gears', price:29.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['M','G','GG'] },
+      { id:6, name:'Manopla câmbio inox Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Cinza','Cromado'], sizes:['4 polegadas'], sizePrices:{'4 polegadas':39.90} },
+      { id:7, name:'Bandeira Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco'], sizes:['90×150cm','122×183cm'], sizePrices:{'90×150cm':49.90,'122×183cm':59.90} },
+      { id:8, name:'Coifa câmbio Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['Universal'], sizePrices:{'Universal':24.90} },
+      { id:9, name:'Copo térmico personalizado Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Cinza'], sizes:['400ml','470ml'], sizePrices:{'400ml':19.90,'470ml':24.90} },
+      { id:10, name:'Chaveiro cordão Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['2,5cm×54cm','3,5cm×14,5cm','2,5cm×19cm'], sizePrices:{'2,5cm×54cm':29.90,'3,5cm×14,5cm':14.90,'2,5cm×19cm':19.90} },
+      { id:11, name:'Adesivos refletivos Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Cinza'], sizes:['100cm×10cm','60cm×6cm'], sizePrices:{'100cm×10cm':59.90,'60cm×6cm':44.90} },
+      { id:12, name:'Aromatizante automotivo Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['5,4cm×5,4cm','7,7cm×5,4cm'], sizePrices:{'5,4cm×5,4cm':7.90,'7,7cm×5,4cm':11.90} }
+    ];
     const inventory = {};
-    products.forEach(p => {
-      inventory[p.id] = {};
-      p.colors.forEach(c => p.sizes.forEach(s => inventory[p.id][`${c}|${s}`] = 5));
-    });
+    products.forEach(p => { inventory[p.id] = {}; p.colors.forEach(c => p.sizes.forEach(s => inventory[p.id][`${c}|${s}`]=5)); });
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function renderProducts() {
@@ -107,108 +115,4 @@
             <img src="${p.img}" alt="${p.name}"/>
             <h3>${p.name}</h3>
             <p class="price">R$${price.toFixed(2)}</p>
-            <p class="stock-label">Estoque: ${inventory[p.id][cols[0] + '|' + init]}</p>
-            <label>Cor:<select id="cor-${p.id}">${cols.map(c=>`<option>${c}</option>`).join('')}</select></label><br>
-            <label>Tam:<select id="tam-${p.id}">${szs.map(s=>`<option>${s}</option>`).join('')}</select></label><br>
-            <button id="btn-${p.id}">Adicionar</button>
-          `;
-        }
-        list.appendChild(div);
-      }); initListeners();
-    }
-
-    function initListeners() {
-      products.forEach(p => {
-        const selC = document.getElementById(`cor-${p.id}`);
-        const selS = document.getElementById(`tam-${p.id}`);
-        const btn  = document.getElementById(`btn-${p.id}`);
-        if (selC) selC.onchange = () => updateStock(p.id);
-        if (selS) selS.onchange = () => updatePrice(p.id);
-        if (btn) btn.onclick  = () => addToCart(p.id);
-      });
-    }
-
-    function updatePrice(id) {
-      const size = document.getElementById(`tam-${id}`).value;
-      const prod = products.find(x => x.id === id);
-      const price = prod.sizePrices? prod.sizePrices[size]: prod.price;
-      document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
-    }
-
-    function updateStock(id) {
-      const color = document.getElementById(`cor-${id}`).value;
-      const size  = document.getElementById(`tam-${id}`).value;
-      const stock = inventory[id][`${color}|${size}`] || 0;
-      document.querySelector(`#prod-${id} .stock-label`).textContent = `Estoque: ${stock}`;
-    }
-
-    function addToCart(id) {
-      const color = document.getElementById(`cor-${id}`).value;
-      const size  = document.getElementById(`tam-${id}`).value;
-      const key   = `${color}|${size}`;
-      if (inventory[id][key] < 1) return;
-      const existing = cart.find(i => i.id===id && i.color===color && i.size===size);
-      if (existing) existing.quantity++;
-      else cart.push({ id, color, size, quantity:1 });
-      inventory[id][key]--;
-      saveCart(); renderCart(); updateCartCount();
-    }
-
-    function renderCart() {
-      const cont = document.getElementById('cartItems'); cont.innerHTML = '';
-      let total = 0;
-      cart.forEach((item, idx) => {
-        const prod = products.find(p=>p.id===item.id);
-        const price= prod.sizePrices? prod.sizePrices[item.size]: prod.price;
-        total += price * item.quantity;
-        const d = document.createElement('div'); d.className='cart-item';
-        d.innerHTML = `
-          <div>
-            <span>${prod.name} (${item.color}/${item.size}) x${item.quantity}</span>
-            <button class="remove" onclick="removeItem(${idx})">Remover</button>
-          </div>
-        `;
-        cont.appendChild(d);
-      });
-      document.getElementById('cartTotal').textContent = `Total: R$${total.toFixed(2)}`;
-    }
-
-    function toggleCartPopup() {
-      const pop = document.getElementById('cartPopup');
-      pop.style.display = pop.style.display==='flex'? 'none':'flex';
-      if (pop.style.display==='flex') renderCart();
-    }
-
-    function removeItem(idx) {
-      const item = cart[idx];
-      inventory[item.id][`${item.color}|${item.size}`] += item.quantity;
-      cart.splice(idx,1); saveCart(); renderCart(); updateCartCount();
-    }
-
-    function checkout() {
-      if (!cart.length) return;
-      let msg = 'Olá, gostaria de comprar:%0A';
-      cart.forEach(i=> msg += `- ${products.find(p=>p.id===i.id).name} (${i.color}/${i.size}) x${i.quantity}%0A`);
-      window.open(`https://wa.me/5541999737694?text=${msg}`,'_blank');
-      cart=[]; saveCart(); renderCart(); updateCartCount();
-    }
-
-    function updateCartCount() {
-      document.getElementById('cartCount').textContent = cart.reduce((a,i)=>a+i.quantity,0);
-    }
-
-    function saveCart() {
-      localStorage.setItem('cart', JSON.stringify(cart));
-    }
-
-    function closeCart() { document.getElementById('cartPopup').style.display='none'; }
-
-    function scrollToTop() { window.scrollTo({ top:0, behavior:'smooth' }); }
-    window.addEventListener('scroll',()=>{
-      document.getElementById('btnTop').style.display = window.pageYOffset>300?'block':'none';
-    });
-
-    document.addEventListener('DOMContentLoaded',()=>{ renderProducts(); updateCartCount(); });
-  </script>
-</body>
-</html>
+            <p class="stock
