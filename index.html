@@ -23,7 +23,7 @@
     button { background: #800080; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
     button:hover:not(.sold-out-btn) { background: #a020f0; }
     .sold-out-btn { background: #555; cursor: not-allowed; opacity: 0.6; }
-    .cart { position: fixed; top: 15px; right: 20px; background: #222; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #444; box-shadow: 0 0 5px #800080; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; min-width: 100px; z-index: 1001; }
+    .cart { position: fixed; top: 72px; right: 20px; background: #222; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #444; box-shadow: 0 0 5px #800080; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; min-width: 100px; z-index: 1001; }
     .cart-count { background: #800080; padding: 2px 8px; border-radius: 50%; margin-left: 6px; font-size: 0.8rem; }
     .cart-popup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index:1002; }
     .cart-content { background: #333; padding: 20px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; max-height: 80vh; overflow-y: auto; }
@@ -73,18 +73,18 @@
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
   <script>
     const products = [
-      { id:1, name:'Camiseta oversized Custom Gears',            price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
-      { id:2, name:'Blusa moletom com capuz Custom Gears',        price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
-      { id:3, name:'Blusa moletom Custom Gears',                 price:149.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
-      { id:4, name:'Calça moletom Custom Gears',                 price:139.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
-      { id:5, name:'Meias cano alto Custom Gears',               price:29.90,  img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['M','G','GG'] },
-      { id:6,  name:'Manopla câmbio inox Custom Gears',         img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Cinza','Cromado'], sizes:['4 polegadas'],    sizePrices:{'4 polegadas':39.90} },
-      { id:7,  name:'Bandeira Custom Gears',                    img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco'],        sizes:['90×150cm','122×183cm'], sizePrices:{'90×150cm':49.90,'122×183cm':59.90} },
-      { id:8,  name:'Coifa câmbio Custom Gears',               img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['Universal'],    sizePrices:{'Universal':24.90} },
-      { id:9,  name:'Copo térmico personalizado Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Cinza'], sizes:['400ml','470ml'],    sizePrices:{'400ml':19.90,'470ml':24.90} },
-      { id:10, name:'Chaveiro cordão Custom Gears',            img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['2,5cm×54cm','3,5cm×14,5cm','2,5cm×19cm'], sizePrices:{'2,5cm×54cm':29.90,'3,5cm×14,5cm':14.90,'2,5cm×19cm':19.90} },
-      { id:11, name:'Adesivos refletivos Custom Gears',        img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Cinza'],        sizes:['100cm×10cm','60cm×6cm'], sizePrices:{'100cm×10cm':59.90,'60cm×6cm':44.90} },
-      { id:12, name:'Aromatizante automotivo Custom Gears',     img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['5,4cm×5,4cm','7,7cm×5,4cm'], sizePrices:{'5,4cm×5,4cm':7.90,'7,7cm×5,4cm':11.90} }
+      { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:2, name:'Blusa moletom com capuz Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:3, name:'Blusa moletom Custom Gears', price:149.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:4, name:'Calça moletom Custom Gears', price:139.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:5, name:'Meias cano alto Custom Gears', price:29.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['M','G','GG'] },
+      { id:6, name:'Manopla câmbio inox Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Cinza','Cromado'], sizes:['4 polegadas'], sizePrices:{'4 polegadas':39.90} },
+      { id:7, name:'Bandeira Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco'], sizes:['90×150cm','122×183cm'], sizePrices:{'90×150cm':49.90,'122×183cm':59.90} },
+      { id:8, name:'Coifa câmbio Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['Universal'], sizePrices:{'Universal':24.90} },
+      { id:9, name:'Copo térmico personalizado Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Cinza'], sizes:['400ml','470ml'], sizePrices:{'400ml':19.90,'470ml':24.90} },
+      { id:10, name:'Chaveiro cordão Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['2,5cm×54cm','3,5cm×14,5cm','2,5cm×19cm'], sizePrices:{'2,5cm×54cm':29.90,'3,5cm×14,5cm':14.90,'2,5cm×19cm':19.90} },
+      { id:11, name:'Adesivos refletivos Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Cinza'], sizes:['100cm×10cm','60cm×6cm'], sizePrices:{'100cm×10cm':59.90,'60cm×6cm':44.90} },
+      { id:12, name:'Aromatizante automotivo Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['5,4cm×5,4cm','7,7cm×5,4cm'], sizePrices:{'5,4cm×5,4cm':7.90,'7,7cm×5,4cm':11.90} }
     ];
     const inventory = {};
     products.forEach(p => {
@@ -235,12 +235,22 @@ function closeCart() { document.getElementById('cartPopup').style.display = 'non
 
 function checkout() {
   const phone = '5541999737694';
-  let msg = encodeURIComponent('Olá, gostaria de comprar:\n');
+  let msg = 'Olá, gostaria de comprar:\n';
   cart.forEach(item => {
     const prod = products.find(p => p.id === item.id);
-    msg += encodeURIComponent(`- ${prod.name} (${item.color}/${item.size}) x${item.quantity}\n`);
+    msg += `- ${prod.name} (${item.color}/${item.size}) x${item.quantity}\n`;
   });
-  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+  window.open(
+    `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
+    '_blank'
+  );
+
+  // Limpar o carrinho após finalizar a compra
+  cart = [];
+  localStorage.removeItem('cart');
+  updateCartCount();
+  renderCartPopup();
+  closeCart();
 }
 
 function updateCartCount() {
