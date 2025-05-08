@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -89,193 +90,133 @@
     const inventory = {};
     products.forEach(p => {
       inventory[p.id] = {};
-      const colors = p.colors || [];
-      const sizes = p.sizes || [];
-      colors.forEach(c => sizes.forEach(s => inventory[p.id][`${c}|${s}`] = 5));
+      const cols = p.colors || [];
+      const szs = p.sizes || [];
+      cols.forEach(c => szs.forEach(s => inventory[p.id][`${c}|${s}`] = 5));
     });
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];function renderProducts() {
-  const list = document.getElementById('productList');
-  list.innerHTML = '';
-  products.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'product'; card.id = `prod-${p.id}`;
-    const inStockKeys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
-    if (!inStockKeys.length) {
-      card.innerHTML = `<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
-    } else {
-      const colors = [...new Set(inStockKeys.map(k => k.split('|')[0]))];
-      const sizes = [...new Set(inStockKeys.map(k => k.split('|')[1]))];
-      const initialSize = sizes[0];
-      const initialPrice = p.sizePrices ? p.sizePrices[initialSize] : p.price;
-      card.innerHTML = `
-        <img src="${p.img}" alt="${p.name}"/>
-        <h3>${p.name}</h3>
-        <p class="price">R$${initialPrice.toFixed(2)}</p>
-        <p class="stock-label">Estoque: ${inventory[p.id][`${colors[0]}|${initialSize}`]}</p>
-        <label>Cor:<select id="cor-${p.id}">${colors.map(c=>`<option>${c}</option>`).join('')}</select></label><br>
-        <label>Tamanho:<select id="tam-${p.id}">${sizes.map(s=>`<option>${s}</option>`).join('')}</select></label><br>
-        <button id="btn-${p.id}">Adicionar ao Carrinho</button>
-      `;
-    }
-    list.appendChild(card);
-  });
-  initProductListeners();
-}
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-function initProductListeners() {
-  products.forEach(p => {
-    const sizeEl = document.getElementById(`tam-${p.id}`);
-    const colorEl = document.getElementById(`cor-${p.id}`);
-    const btn = document.getElementById(`btn-${p.id}`);
-    if (sizeEl) {
-      sizeEl.addEventListener('change', () => {
-        updatePriceBySize(p.id);
-        updateStockUI(p.id);
+    function renderProducts() {
+      const list = document.getElementById('productList'); list.innerHTML = '';
+      products.forEach(p => {
+        const card = document.createElement('div'); card.className='product'; card.id=`prod-${p.id}`;
+        const available = Object.entries(inventory[p.id]).filter(([_,q])=>q>0);
+        if (!available.length) {
+          card.innerHTML = `<img src="${p.img}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
+        } else {
+          const cols = [...new Set(available.map(([k])=>k.split('|')[0]))];
+          const szs = [...new Set(available.map(([k])=>k.split('|')[1]))];
+          const defC = cols[0], defS = szs[0];
+          const defPrice = p.sizePrices? p.sizePrices[defS]: p.price;
+          card.innerHTML = `
+            <img src="${p.img}" alt="${p.name}"/>
+            <h3>${p.name}</h3>
+            <p class="price">R$${defPrice.toFixed(2)}</p>
+            <p class="stock-label">Estoque: ${inventory[p.id][`${defC}|${defS}`]}</p>
+            <label>Cor:<select id="cor-${p.id}">${cols.map(c=>`<option${c===defC? ' selected':''}>${c}</option>`).join('')}</select></label><br>
+            <label>Tamanho:<select id="tam-${p.id}">${szs.map(s=>`<option${s===defS? ' selected':''}>${s}</option>`).join('')}</select></label><br>
+            <button id="btn-${p.id}">Adicionar ao Carrinho</button>
+          `;
+        }
+        list.appendChild(card);
+      });
+      initProductListeners();
+    }
+    function initProductListeners() {
+      products.forEach(p=>{
+        const card=document.getElementById(`prod-${p.id}`);
+        const colEl=card.querySelector(`#cor-${p.id}`);
+        const szEl=card.querySelector(`#tam-${p.id}`);
+        if(colEl)colEl.addEventListener('change',()=>refreshOptions(p.id));
+        if(szEl)szEl.addEventListener('change',()=>refreshOptions(p.id));
+        const btn=card.querySelector('button');
+        if(btn)btn.addEventListener('click',()=>addToCart(p.id));
       });
     }
-    if (colorEl) {
-      colorEl.addEventListener('change', () => updateStockUI(p.id));
+    function refreshOptions(id){
+      const card=document.getElementById(`prod-${id}`);
+      const colEl=card.querySelector(`#cor-${id}`);
+      const szEl=card.querySelector(`#tam-${id}`);
+      const selC=colEl.value, selS=szEl.value;
+      const avail=Object.entries(inventory[id]).filter(([_,q])=>q>0);
+      const cols=[...new Set(avail.map(([k])=>k.split('|')[0]))];
+      const szs=[...new Set(avail.map(([k])=>k.split('|')[1]))];
+      colEl.innerHTML=cols.map(c=>`<option${c===selC?' selected':''}>${c}</option>`).join('');
+      szEl.innerHTML=szs.map(s=>`<option${s===selS?' selected':''}>${s}</option>`).join('');
+      const prod=products.find(x=>x.id===id);
+      const price=prod.sizePrices? prod.sizePrices[szEl.value]: prod.price;
+      card.querySelector('.price').textContent=`R$${price.toFixed(2)}`;
+      const stock=inventory[id][`${colEl.value}|${szEl.value}`]||0;
+      card.querySelector('.stock-label').textContent=`Estoque: ${stock}`;
+      const btn=card.querySelector('button');
+      if(stock===0){btn.disabled=true;btn.classList.add('sold-out-btn');}
+      else{btn.disabled=false;btn.classList.remove('sold-out-btn');}
     }
-    if (btn) {
-      btn.addEventListener('click', () => addToCart(p.id));
+    function addToCart(id){
+      const card=document.getElementById(`prod-${id}`);
+      const col=card.querySelector(`#cor-${id}`).value;
+      const sz=card.querySelector(`#tam-${id}`).value;
+      const key=`${col}|${sz}`;
+      if(inventory[id][key]<1)return;
+      const exist=cart.find(i=>i.id===id&&i.color===col&&i.size===sz);
+      exist?exist.quantity++:cart.push({id, color:col, size:sz, quantity:1});
+      inventory[id][key]--;
+      refreshOptions(id);
+      localStorage.setItem('cart',JSON.stringify(cart));
+      updateCartCount();showAlert('Adicionado ao carrinho');
     }
-  });
-}
-
-function updatePriceBySize(id) {
-  const size = document.getElementById(`tam-${id}`).value;
-  const prod = products.find(x => x.id === id);
-  const price = prod.sizePrices ? prod.sizePrices[size] : prod.price;
-  document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
-}
-
-function updateStockUI(id) {
-  const color = document.getElementById(`cor-${id}`).value;
-  const size = document.getElementById(`tam-${id}`).value;
-  const stock = inventory[id][`${color}|${size}`] || 0;
-  const label = document.querySelector(`#prod-${id} .stock-label`);
-  label.textContent = `Estoque: ${stock}`;
-  const btn = document.querySelector(`#prod-${id} button`);
-  btn.disabled = stock === 0;
-  btn.classList.toggle('sold-out-btn', stock === 0);
-}
-
-function addToCart(id) {
-  const color = document.getElementById(`cor-${id}`).value;
-  const size = document.getElementById(`tam-${id}`).value;
-  const key = `${color}|${size}`;
-  if (inventory[id][key] < 1) return;
-  const existing = cart.find(i => i.id === id && i.color === color && i.size === size);
-  if (existing) existing.quantity++;
-  else cart.push({ id, color, size, quantity: 1 });
-  inventory[id][key]--;
-  updateStockUI(id);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount();
-  showAlert('Adicionado ao carrinho');
-}
-
-function toggleCartPopup() {
-  const popup = document.getElementById('cartPopup');
-  if (popup.style.display === 'flex') closeCart();
-  else { renderCartPopup(); popup.style.display = 'flex'; }
-}
-
-function renderCartPopup() {
-  const container = document.getElementById('cartItems');
-  container.innerHTML = '';
-  let total = 0;
-  cart.forEach(item => {
-    const prod = products.find(p => p.id === item.id);
-    const price = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
-    total += price * item.quantity;
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <p>${prod.name} - ${item.color} / ${item.size}</p>
-      <div>
-        <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', -1)">-</span>
-        <span>${item.quantity}</span>
-        <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', 1)">+</span>
-        <button class="remove" onclick="removeFromCart(${item.id}, '${item.color}', '${item.size}')">Remover</button>
-      </div>
-    `;
-    container.appendChild(div);
-  });
-  document.getElementById('cartTotal').textContent = `Total: R$${total.toFixed(2)}`;
-}
-
-function changeQty(id, color, size, delta) {
-  const key = `${color}|${size}`;
-  const item = cart.find(i => i.id === id && i.color === color && i.size === size);
-  if (!item) return;
-  if (delta > 0 && inventory[id][key] < 1) return;
-  item.quantity += delta;
-  if (delta > 0) inventory[id][key]--;
-  else { inventory[id][key]++; }
-  if (item.quantity === 0) cart = cart.filter(i => i !== item);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount();
-  renderCartPopup();
-  updateStockUI(id);
-}
-
-function removeFromCart(id, color, size) {
-  const key = `${color}|${size}`;
-  const item = cart.find(i => i.id === id && i.color === color && i.size === size);
-  if (!item) return;
-  inventory[id][key] += item.quantity;
-  cart = cart.filter(i => i !== item);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount();
-  renderCartPopup();
-  updateStockUI(id);
-}
-
-function closeCart() { document.getElementById('cartPopup').style.display = 'none'; }
-
-function checkout() {
-  const phone = '5541999737694';
-  let msg = 'Olá, gostaria de comprar:\n';
-  cart.forEach(item => {
-    const prod = products.find(p => p.id === item.id);
-    msg += `- ${prod.name} (${item.color}/${item.size}) x${item.quantity}\n`;
-  });
-  window.open(
-    `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
-    '_blank'
-  );
-
-  // Limpar o carrinho após finalizar a compra
-  cart = [];
-  localStorage.removeItem('cart');
-  updateCartCount();
-  renderCartPopup();
-  closeCart();
-}
-
-function updateCartCount() {
-  const count = cart.reduce((acc, i) => acc + i.quantity, 0);
-  document.getElementById('cartCount').textContent = count;
-}
-
-function showAlert(text) {
-  const div = document.createElement('div'); div.className = 'custom-alert'; div.textContent = text;
-  document.body.appendChild(div);
-  setTimeout(() => div.remove(), 2000);
-}
-
-window.addEventListener('scroll', () => {
-  const btn = document.getElementById('btnTop');
-  btn.style.display = window.scrollY > 300 ? 'block' : 'none';
-});
-
-function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-
-document.addEventListener('DOMContentLoaded', () => {
-  renderProducts();
-  updateCartCount();
-});
-
+    function toggleCartPopup(){renderCartPopup();document.getElementById('cartPopup').style.display='flex';}
+    function renderCartPopup(){
+      const cont=document.getElementById('cartItems');cont.innerHTML='';let total=0;
+      cart.forEach(item=>{
+        const prod=products.find(p=>p.id===item.id);
+        const price=prod.sizePrices?prod.sizePrices[item.size]:prod.price;
+        const sub=price*item.quantity;total+=sub;
+        const div=document.createElement('div');
+        div.innerHTML=`<p>${prod.name} (${item.color}/${item.size}) x${item.quantity} = R$${sub.toFixed(2)}</p>`+
+                      `<div><span class="qty-btn" onclick="changeQty(${item.id},'${item.color}','${item.size}',-1)">-</span>`+
+                      `<span>${item.quantity}</span>`+
+                      `<span class="qty-btn" onclick="changeQty(${item.id},'${item.color}','${item.size}',1)">+</span>`+
+                      `<button class="remove" onclick="removeFromCart(${item.id},'${item.color}','${item.size}')">Remover</button></div>`;
+        cont.appendChild(div);
+      });
+      document.getElementById('cartTotal').textContent=`Total: R$${total.toFixed(2)}`;
+    }
+    function changeQty(id,color,size,delta){
+      const key=`${color}|${size}`;
+      const item=cart.find(i=>i.id===id&&i.color===color&&i.size===size);
+      if(!item)return;
+      if(delta>0&&inventory[id][key]<1)return;
+      item.quantity+=delta;
+      inventory[id][key]+=delta<0?-1:1;
+      if(item.quantity===0)cart=cart.filter(i=>i!==item);
+      localStorage.setItem('cart',JSON.stringify(cart));updateCartCount();renderCartPopup();refreshOptions(id);
+    }
+    function removeFromCart(id,color,size){
+      const key=`${color}|${size}`;
+      const item=cart.find(i=>i.id===id&&i.color===color&&i.size===size);
+      if(!item)return;
+      inventory[id][key]+=item.quantity;
+      cart=cart.filter(i=>i!==item);
+      localStorage.setItem('cart',JSON.stringify(cart));updateCartCount();renderCartPopup();refreshOptions(id);
+    }
+    function closeCart(){document.getElementById('cartPopup').style.display='none';}
+    function checkout(){
+      const phone='5541999737694';let msg='Olá, gostaria de comprar:\n';let total=0;
+      cart.forEach(item=>{
+        const prod=products.find(p=>p.id===item.id);
+        const price=prod.sizePrices?prod.sizePrices[item.size]:prod.price;
+        const sub=price*item.quantity;total+=sub;
+        msg+=`- ${prod.name} (${item.color}/${item.size}) x${item.quantity} a R$${price.toFixed(2)} cada = R$${sub.toFixed(2)}\n`;
+      });
+      msg+=`\n*Total final: R$${total.toFixed(2)}*`;
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,'_blank');
+      cart=[];localStorage.removeItem('cart');updateCartCount();renderCartPopup();closeCart();
+    }
+    function updateCartCount(){document.getElementById('cartCount').textContent=cart.reduce((a,i)=>a+i.quantity,0);}
+    function showAlert(text){const d=document.createElement('div');d.className='custom-alert';d.textContent=text;document.body.appendChild(d);setTimeout(()=>d.remove(),2000);}
+    function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}window.addEventListener('scroll',()=>{document.getElementById('btnTop').style.display=window.scrollY>300?'block':'none';});
+    document.addEventListener('DOMContentLoaded',()=>{renderProducts();updateCartCount();});
   </script>
 </body>
 </html>
