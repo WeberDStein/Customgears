@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* ... estilos existentes ... */
+    /* ... todos os seus estilos existentes ... */
   </style>
 </head>
 <body>
@@ -21,7 +22,7 @@
     <div class="products" id="productList"></div>
   </div>
   <footer>
-    <!-- ... footer ... -->
+    <!-- ... seu footer existente ... -->
   </footer>
   <div class="cart-popup" id="cartPopup">
     <div class="cart-content">
@@ -33,174 +34,90 @@
     </div>
   </div>
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
+
   <script>
-    // Definição dos produtos
-    const products = [ /* ... array de produtos ... */ ];// Inicializa ou carrega o inventário no localStorage
-function initInventory() {
-  const inv = {};
-  products.forEach(p => {
-    inv[p.id] = {};
-    const cols = p.colors || [];
-    const szs = p.sizes || [];
-    cols.forEach(c => szs.forEach(s => inv[p.id][`${c}|${s}`] = 5));
-  });
-  return inv;
-}
-let inventory = JSON.parse(localStorage.getItem('inventory')) || initInventory();
-function saveInventory() {
-  localStorage.setItem('inventory', JSON.stringify(inventory));
-}
+    const products = [
+      { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:2, name:'Blusa moletom com capuz Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:3, name:'Blusa moletom Custom Gears', price:149.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:4, name:'Calça moletom Custom Gears', price:139.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:5, name:'Meias cano alto Custom Gears', price:29.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['M','G','GG'] },
+      { id:6, name:'Manopla câmbio inox Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Cinza','Cromado'], sizes:['4 polegadas'], sizePrices:{'4 polegadas':39.90} },
+      { id:7, name:'Bandeira Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco'], sizes:['90×150cm','122×183cm'], sizePrices:{'90×150cm':49.90,'122×183cm':59.90} },
+      { id:8, name:'Coifa câmbio Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['Universal'], sizePrices:{'Universal':24.90} },
+      { id:9, name:'Copo térmico personalizado Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Cinza'], sizes:['400ml','470ml'], sizePrices:{'400ml':19.90,'470ml':24.90} },
+      { id:10, name:'Chaveiro cordão Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['2,5cm×54cm','3,5cm×14,5cm','2,5cm×19cm'], sizePrices:{'2,5cm×54cm':29.90,'3,5cm×14,5cm':14.90,'2,5cm×19cm':19.90} },
+      { id:11, name:'Adesivos refletivos Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Cinza'], sizes:['100cm×10cm','60cm×6cm'], sizePrices:{'100cm×10cm':59.90,'60cm×6cm':44.90} },
+      { id:12, name:'Aromatizante automotivo Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['5,4cm×5,4cm','7,7cm×5,4cm'], sizePrices:{'5,4cm×5,4cm':7.90,'7,7cm×5,4cm':11.90} }
+    ];
+    const inventory = {};
+    products.forEach(p => {
+      inventory[p.id] = {};
+      p.colors.forEach(c => p.sizes.forEach(s => inventory[p.id][`${c}|${s}`] = 5));
+    });
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// Carrega ou inicia carrinho
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-// Renderiza produtos na página
-function renderProducts() {
-  const list = document.getElementById('productList'); list.innerHTML = '';
-  products.forEach(p => {
-    const card = document.createElement('div'); card.className = 'product'; card.id = `prod-${p.id}`;
-    const available = Object.entries(inventory[p.id]).filter(([_, q]) => q > 0);
-    if (available.length === 0) {
-      card.innerHTML = `<img src="${p.img}" alt="${p.name}"/><h3>${p.name}</h3><span class="sold-out-text">Esgotado</span>`;
-    } else {
-      const cols = [...new Set(available.map(([k]) => k.split('|')[0]))];
-      const szs = [...new Set(available.map(([k]) => k.split('|')[1]))];
-      const defC = cols[0], defS = szs[0];
-      const price = p.sizePrices? p.sizePrices[defS] : p.price;
-      card.innerHTML = `
-        <img src="${p.img}" alt="${p.name}" />
-        <h3>${p.name}</h3>
-        <p class="price">R$${price.toFixed(2)}</p>
-        <p class="stock-label">Estoque: ${inventory[p.id][`${defC}|${defS}`]}</p>
-        <label>Cor: <select id="cor-${p.id}">${cols.map(c=>`<option${c===defC?' selected':''}>${c}</option>`).join('')}</select></label><br>
-        <label>Tamanho: <select id="tam-${p.id}">${szs.map(s=>`<option${s===defS?' selected':''}>${s}</option>`).join('')}</select></label><br>
-        <button id="btn-${p.id}">Adicionar ao Carrinho</button>
-      `;
+    function renderProducts() { /* ... seu renderProducts original ... */ }
+    function initProductListeners() { /* ... seu initProductListeners original ... */ }
+    function updatePriceBySize(id) { /* ... */ }
+    function updateStockUI(id) { /* ... */ }
+    function addToCart(id) { /* ... */ }
+    function toggleCartPopup() { /* ... */ }
+    function renderCartPopup() { /* ... */ }
+    function changeQty(id,color,size,delta) { /* ... */ }
+    function removeFromCart(id,color,size) { /* ... */ }
+    function closeCart() { /* ... */ }
+    
+    // === 1. Filtra opções de cor/tamanho zeradas ===
+    function refreshOptions(id) {
+      const card = document.getElementById(`prod-${id}`);
+      const colorSel = card.querySelector(`#cor-${id}`);
+      const sizeSel  = card.querySelector(`#tam-${id}`);
+      const keys = Object.keys(inventory[id]).filter(k => inventory[id][k] > 0);
+      const cores = [...new Set(keys.map(k => k.split('|')[0]))];
+      const tam  = [...new Set(keys.map(k => k.split('|')[1]))];
+      const selC = colorSel.value;
+      colorSel.innerHTML = cores.map(c => `<option${c===selC?' selected':''}>${c}</option>`).join('');
+      const selS = sizeSel.value;
+      sizeSel.innerHTML = tam.map(s => `<option${s===selS?' selected':''}>${s}</option>`).join('');
+      const prod = products.find(p=>p.id===id);
+      const price = prod.sizePrices?.[sizeSel.value] ?? prod.price;
+      card.querySelector('.price').textContent = `R$${price.toFixed(2)}`;
+      const stock = inventory[id][`${colorSel.value}|${sizeSel.value}`] || 0;
+      card.querySelector('.stock-label').textContent = `Estoque: ${stock}`;
+      const btn = card.querySelector('button');
+      btn.disabled = stock === 0;
+      btn.classList.toggle('sold-out-btn', stock === 0);
     }
-    list.appendChild(card);
-  });
-  initProductListeners();
-}
+    products.forEach(p => {
+      document.getElementById(`cor-${p.id}`).addEventListener('change', ()=>refreshOptions(p.id));
+      document.getElementById(`tam-${p.id}`).addEventListener('change', ()=>refreshOptions(p.id));
+    });
 
-function initProductListeners() {
-  products.forEach(p => {
-    const card = document.getElementById(`prod-${p.id}`);
-    const colEl = card.querySelector(`#cor-${p.id}`);
-    const szEl = card.querySelector(`#tam-${p.id}`);
-    if (colEl) colEl.addEventListener('change', () => refreshOptions(p.id));
-    if (szEl) szEl.addEventListener('change', () => refreshOptions(p.id));
-    const btn = card.querySelector('button');
-    if (btn) btn.addEventListener('click', () => addToCart(p.id));
-  });
-}
+    // === 2. WhatsApp com preços detalhados ===
+    function checkout() {
+      const phone = '5541999737694';
+      const linhas = cart.map(item => {
+        const p = products.find(x=>x.id===item.id);
+        const unit = p.sizePrices?.[item.size] ?? p.price;
+        const sub  = unit * item.quantity;
+        return `- ${p.name} (${item.color}/${item.size}) x${item.quantity} = R$${sub.toFixed(2)}`;
+      });
+      const total = cart.reduce((sum,item) => {
+        const p    = products.find(x=>x.id===item.id);
+        const unit = p.sizePrices?.[item.size] ?? p.price;
+        return sum + unit*item.quantity;
+      }, 0);
+      linhas.push(`*Total final: R$${total.toFixed(2)}*`);
+      const msg = encodeURIComponent(linhas.join('\n'));
+      window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+      cart = []; localStorage.removeItem('cart'); updateCartCount(); renderCartPopup(); closeCart();
+    }
 
-function refreshOptions(id) {
-  const card = document.getElementById(`prod-${id}`);
-  const colEl = card.querySelector(`#cor-${id}`);
-  const szEl = card.querySelector(`#tam-${id}`);
-  const selC = colEl.value, selS = szEl.value;
-  const avail = Object.entries(inventory[id]).filter(([_,q])=>q>0);
-  const cols = [...new Set(avail.map(([k])=>k.split('|')[0]))];
-  const szs = [...new Set(avail.map(([k])=>k.split('|')[1]))];
-  colEl.innerHTML = cols.map(c=>`<option${c===selC?' selected':''}>${c}</option>`).join('');
-  szEl.innerHTML = szs.map(s=>`<option${s===selS?' selected':''}>${s}</option>`).join('');
-  const prod = products.find(x=>x.id===id);
-  const price = prod.sizePrices? prod.sizePrices[szEl.value] : prod.price;
-  card.querySelector('.price').textContent = `R$${price.toFixed(2)}`;
-  const stock = inventory[id][`${colEl.value}|${szEl.value}`] || 0;
-  card.querySelector('.stock-label').textContent = `Estoque: ${stock}`;
-  const btn = card.querySelector('button');
-  btn.disabled = stock < 1;
-  btn.classList.toggle('sold-out-btn', stock < 1);
-}
-
-function addToCart(id) {
-  const card = document.getElementById(`prod-${id}`);
-  const col = card.querySelector(`#cor-${id}`).value;
-  const sz = card.querySelector(`#tam-${id}`).value;
-  const key = `${col}|${sz}`;
-  if (inventory[id][key] < 1) return;
-  const exist = cart.find(i=>i.id===id && i.color===col && i.size===sz);
-  if (exist) exist.quantity++;
-  else cart.push({id, color:col, size:sz, quantity:1});
-  inventory[id][key]--;
-  saveInventory();
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount(); showAlert('Adicionado ao carrinho');
-  refreshOptions(id);
-}
-
-function renderCartPopup() {
-  const cont = document.getElementById('cartItems'); cont.innerHTML = '';
-  let total = 0;
-  cart.forEach(item => {
-    const prod = products.find(p=>p.id===item.id);
-    const price = prod.sizePrices? prod.sizePrices[item.size] : prod.price;
-    const sub = price * item.quantity;
-    total += sub;
-    const div = document.createElement('div');
-    div.innerHTML = `
-      <p>${prod.name} (${item.color}/${item.size}) x${item.quantity} = R$${sub.toFixed(2)}</p>
-      <div>
-        <span class="qty-btn" onclick="changeQty(${item.id},'${item.color}','${item.size}',-1)">-</span>
-        <span>${item.quantity}</span>
-        <span class="qty-btn" onclick="changeQty(${item.id},'${item.color}','${item.size}',1)">+</span>
-        <button class="remove" onclick="removeFromCart(${item.id},'${item.color}','${item.size}')">Remover</button>
-      </div>
-    `;
-    cont.appendChild(div);
-  });
-  document.getElementById('cartTotal').textContent = `Total: R$${total.toFixed(2)}`;
-}
-
-function changeQty(id, color, size, delta) {
-  const key = `${color}|${size}`;
-  const item = cart.find(i=>i.id===id && i.color===color && i.size===size);
-  if (!item || delta > 0 && inventory[id][key] < 1) return;
-  item.quantity += delta;
-  inventory[id][key] -= delta;
-  if (item.quantity <= 0) cart = cart.filter(i=>i!==item);
-  saveInventory();
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount(); renderCartPopup(); refreshOptions(id);
-}
-
-function removeFromCart(id, color, size) {
-  const key = `${color}|${size}`;
-  const item = cart.find(i=>i.id===id && i.color===color && i.size===size);
-  if (!item) return;
-  inventory[id][key] += item.quantity; saveInventory();
-  cart = cart.filter(i=>i!==item);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount(); renderCartPopup(); refreshOptions(id);
-}
-
-function checkout() {
-  if (!cart.length) { showAlert('Carrinho vazio'); return; }
-  const phone = '5541999737694';
-  let msg = '';
-  let total = 0;
-  cart.forEach(item => {
-    const prod = products.find(p=>p.id===item.id);
-    const price = prod.sizePrices? prod.sizePrices[item.size] : prod.price;
-    const sub = price * item.quantity;
-    total += sub;
-    msg += `- ${prod.name} (${item.color}/${item.size}) x${item.quantity} = R$${sub.toFixed(2)}%0A`;
-  });
-  msg = `Olá, gostaria de comprar:%0A${msg}%0A*Total final: R$${total.toFixed(2)}*`;
-  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-  cart = []; localStorage.removeItem('cart');
-  updateCartCount(); renderCartPopup(); closeCart();
-}
-
-function toggleCartPopup() { renderCartPopup(); document.getElementById('cartPopup').style.display = 'flex'; }
-function closeCart() { document.getElementById('cartPopup').style.display = 'none'; }
-function updateCartCount() { document.getElementById('cartCount').textContent = cart.reduce((a,i)=>a+i.quantity,0); }
-function showAlert(text) { const d = document.createElement('div'); d.className='custom-alert'; d.textContent=text; document.body.appendChild(d); setTimeout(()=>d.remove(),2000); }
-function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
-window.addEventListener('scroll', ()=>{ document.getElementById('btnTop').style.display = window.scrollY>300 ? 'block' : 'none'; });
-document.addEventListener('DOMContentLoaded', ()=>{ renderProducts(); updateCartCount(); });
-
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      updateCartCount();
+    });
   </script>
 </body>
 </html>
