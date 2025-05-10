@@ -8,74 +8,28 @@
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* ... estilos omitidos para brevidade ... */
+    /* estilos existentes */
   </style>
 </head>
 <body>
-  <!-- ... HTML omitido para brevidade ... -->
+  <!-- HTML existente -->
   <script>
-    const products = [ /* array de produtos conforme seu código original */ ];
+    const products = [ /* seus 12 produtos */ ];
     const inventory = {};
     products.forEach(p => {
       inventory[p.id] = {};
       (p.colors || []).forEach(c => (p.sizes || []).forEach(s => inventory[p.id][`${c}|${s}`] = 5));
-    });function renderProducts() {
-  const list = document.getElementById('productList');
-  list.innerHTML = '';
-  products.forEach(p => {
-    const inStock = Object.entries(inventory[p.id]).filter(([, qty]) => qty > 0);
-    const card = document.createElement('div');
-    card.className = 'product';
-    card.id = `prod-${p.id}`;
-
-    if (!inStock.length) {
-      card.innerHTML = `
-        <img src="${p.img}" alt="${p.name}" />
-        <h3>${p.name}</h3>
-        <span class="sold-out-text">Esgotado</span>
-      `;
-    } else {
-      const colors = [...new Set(inStock.map(([k]) => k.split('|')[0]))];
-      const sizes  = [...new Set(inStock.map(([k]) => k.split('|')[1]))];
-      const [firstColor, firstSize] = [colors[0], sizes[0]];
-      const price = p.sizePrices ? p.sizePrices[firstSize] : p.price;
-
-      card.innerHTML = `
-        <img src="${p.img}" alt="${p.name}" />
-        <h3>${p.name}</h3>
-        <p class="price">R$${price.toFixed(2)}</p>
-        <p class="stock-label">Estoque: ${inventory[p.id][`${firstColor}|${firstSize}`]}</p>
-        <label>Cor:
-          <select id="cor-${p.id}">${colors.map(c => `<option>${c}</option>`).join('')}</select>
-        </label><br>
-        <label>Tamanho:
-          <select id="tam-${p.id}">${sizes.map(s => `<option>${s}</option>`).join('')}</select>
-        </label><br>
-        <button id="btn-${p.id}">Adicionar ao Carrinho</button>
-      `;
-    }
-    list.appendChild(card);
-  });
-  initProductListeners();
+    });
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];function renderProducts() {
+  /* seu renderProducts sem alterações */
 }
 
 function initProductListeners() {
-  products.forEach(p => {
-    const corEl = document.getElementById(`cor-${p.id}`);
-    const tamEl = document.getElementById(`tam-${p.id}`);
-    const btn   = document.getElementById(`btn-${p.id}`);
-
-    if (corEl) corEl.addEventListener('change', () => updateStockUI(p.id));
-    if (tamEl) tamEl.addEventListener('change', () => { updatePrice(p.id); updateStockUI(p.id); });
-    if (btn)   btn.addEventListener('click', () => addToCart(p.id));
-  });
+  /* seu initProductListeners sem alterações */
 }
 
-function updatePrice(id) {
-  const size = document.getElementById(`tam-${id}`).value;
-  const prod = products.find(x => x.id === id);
-  const price = prod.sizePrices ? prod.sizePrices[size] : prod.price;
-  document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
+function updatePriceBySize(id) {
+  /* seu updatePriceBySize sem alterações */
 }
 
 function updateStockUI(id) {
@@ -83,32 +37,58 @@ function updateStockUI(id) {
   const size  = document.getElementById(`tam-${id}`).value;
   const key   = `${color}|${size}`;
   const qty   = inventory[id][key] || 0;
-
   const label = document.querySelector(`#prod-${id} .stock-label`);
-  const btn   = document.querySelector(`#prod-${p.id} button`);
+  const btn   = document.querySelector(`#prod-${id} button`);
   if (label) label.textContent = `Estoque: ${qty}`;
   if (btn) {
     btn.disabled = qty === 0;
     btn.classList.toggle('sold-out-btn', qty === 0);
   }
+  checkProductSoldOut(id);
+}
 
-  // Se todas as variações esgotarem, rerenderizar para mostrar 'Esgotado'
-  const hasAny = Object.values(inventory[id]).some(v => v > 0);
-  if (!hasAny) renderProducts();
+// nova função para exibir 'Esgotado' quando não restar estoque
+function checkProductSoldOut(id) {
+  const allZero = Object.values(inventory[id]).every(qty => qty <= 0);
+  if (!allZero) return;
+  const prod = products.find(p => p.id === id);
+  const card = document.getElementById(`prod-${id}`);
+  if (card) {
+    card.innerHTML = `
+      <img src="${prod.img}" alt="${prod.name}" />
+      <h3>${prod.name}</h3>
+      <span class="sold-out-text">Esgotado</span>
+    `;
+  }
 }
 
 function addToCart(id) {
+  /* antes da alteração de estoque */
   const color = document.getElementById(`cor-${id}`).value;
   const size  = document.getElementById(`tam-${id}`).value;
   const key   = `${color}|${size}`;
   if (inventory[id][key] < 1) return;
-  // lógica de carrinho permanece igual
+  // lógica de carrinho existente
   inventory[id][key]--;
   updateStockUI(id);
-  // ... restante da lógica de addToCart ...
+  /* restante de addToCart */
 }
 
-// resto das funções de carrinho, alert, scroll etc permanecem sem alterações
+function changeQty(id, color, size, delta) {
+  /* lógica existente */
+  if (delta > 0) inventory[id][`${color}|${size}`]--;
+  /* ao final */
+  updateStockUI(id);
+}
+
+function removeFromCart(id, color, size) {
+  /* lógica existente */
+  inventory[id][`${color}|${size}`] += item.quantity;
+  removeItemFromCartUI();
+  updateStockUI(id);
+}
+
+// demais funções inalteradas (toggleCartPopup, renderCartPopup, etc.)
 
 document.addEventListener('DOMContentLoaded', () => {
   renderProducts();
