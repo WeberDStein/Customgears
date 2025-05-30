@@ -31,6 +31,10 @@
     .qty-btn { display: inline-block; padding: 0 6px; background: #555; color: #fff; border-radius: 4px; margin: 0 4px; cursor: pointer; }
     .remove { background: #f44336 !important; font-size: 0.8rem; padding: 0.3rem 0.6rem; margin-left: 8px; }
     .checkout { background: #4caf50 !important; }
+    .coupon-section { margin: 1rem 0; }
+    .coupon-input { width: 60%; padding: 0.4rem; border-radius: 4px; border: 1px solid #555; background: #111; color: #fff; }
+    .coupon-btn { margin-left: 0.5rem; }
+    .coupon-message { font-size: 0.9rem; margin-top: 0.5rem; color: #ccc; }
     .custom-alert { position: fixed; top: 20px; right: 20px; background: #6a0dad; color: white; padding: 10px 20px; border-radius: 8px; z-index:9999; animation: fadein 0.5s, fadeout 0.5s 1.5s; }
     @keyframes fadein { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeout { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
@@ -66,8 +70,20 @@
   <div class="cart-popup" id="cartPopup">
     <div class="cart-content">
       <h3>Seu Carrinho</h3>
+      <!-- Itens do carrinho -->
       <div id="cartItems"></div>
+
+      <!-- Seção de cupom de desconto -->
+      <div class="coupon-section">
+        <input type="text" id="couponCode" class="coupon-input" placeholder="Digite seu cupom">
+        <button class="coupon-btn" onclick="applyCoupon()">Aplicar Cupom</button>
+        <div id="couponMessage" class="coupon-message"></div>
+      </div>
+
+      <!-- Total (original e com desconto, se houver) -->
       <p id="cartTotal"></p>
+      <p id="discountedTotal" style="color:#aa88cc; font-weight:bold;"></p>
+
       <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
       <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
     </div>
@@ -76,6 +92,7 @@
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
   <script>
+    // 1) Definição dos produtos:
     const products = [
       { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
       { id:2, name:'Blusa moletom com capuz Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
@@ -91,6 +108,7 @@
       { id:12, name:'Aromatizante automotivo Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['5,4cm×5,4cm','7,7cm×5,4cm'], sizePrices:{'5,4cm×5,4cm':7.90,'7,7cm×5,4cm':11.90} }
     ];
 
+    // 2) Inventário inicial (5 unidades para cada combinação cor|tamanho)
     const inventory = {};
     products.forEach(p => {
       inventory[p.id] = {};
@@ -101,16 +119,27 @@
       }));
     });
 
+    // 3) Objeto de cupons válidos (código → percentual de desconto)
+    const coupons = {
+      'CUSTOM10': 10,   // 10% de desconto
+      'CUSTOM20': 20,   // 20% de desconto
+      'FRETEGRATIS': 5  // 5% de desconto (por exemplo)
+    };
+    let appliedCoupon = null; // guardará o código aplicado, se válido
+
+    // 4) Carrega o carrinho salvo no localStorage (ou um array vazio)
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // Descontar do inventário o que já está no cart (localStorage)
+    // 5) Descontar do inventário o que já está dentro do cart
     if (cart.length) {
       cart.forEach(item => {
         const key = `${item.color}|${item.size}`;
+        // Garante que não fique negativo
         inventory[item.id][key] = Math.max((inventory[item.id][key] || 0) - item.quantity, 0);
       });
     }
 
+    // Renderiza todos os cards de produtos
     function renderProducts() {
       const list = document.getElementById('productList');
       list.innerHTML = '';
@@ -120,9 +149,11 @@
         card.className = 'product';
         card.id = `prod-${p.id}`;
 
+        // Chave → cor|tamanho com estoque > 0
         const inStockKeys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
 
         if (!inStockKeys.length) {
+          // Produto totalmente esgotado
           card.innerHTML = `
             <img src="${p.img}" alt="${p.name}"/>
             <h3>${p.name}</h3>
@@ -155,14 +186,16 @@
 
         list.appendChild(card);
       });
+
       initProductListeners();
 
-      // Atualiza UI de estoque para cada produto após renderizar (para desabilitar botões, se necessário)
+      // Atualiza UI de estoque para cada produto (desabilita botões conforme necessário)
       products.forEach(p => {
         updateStockUI(p.id);
       });
     }
 
+    // Configura listeners de selects e botões de cada produto
     function initProductListeners() {
       products.forEach(p => {
         const sizeEl = document.getElementById(`tam-${p.id}`);
@@ -184,6 +217,7 @@
       });
     }
 
+    // Atualiza o preço exibido conforme o tamanho selecionado
     function updatePriceBySize(id) {
       const size = document.getElementById(`tam-${id}`).value;
       const prod = products.find(x => x.id === id);
@@ -191,6 +225,7 @@
       document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
     }
 
+    // Atualiza a label de estoque e habilita/desabilita o botão
     function updateStockUI(id) {
       const colorSelect = document.getElementById(`cor-${id}`);
       const sizeSelect = document.getElementById(`tam-${id}`);
@@ -207,6 +242,7 @@
       btn.classList.toggle('sold-out-btn', stock === 0);
     }
 
+    // Adiciona produto ao carrinho, desconta do inventário e atualiza UI
     function addToCart(id) {
       const color = document.getElementById(`cor-${id}`).value;
       const size = document.getElementById(`tam-${id}`).value;
@@ -225,6 +261,7 @@
       showAlert('Adicionado ao carrinho');
     }
 
+    // Abre/fecha popup do carrinho
     function toggleCartPopup() {
       const popup = document.getElementById('cartPopup');
       if (popup.style.display === 'flex') closeCart();
@@ -234,6 +271,7 @@
       }
     }
 
+    // Renderiza itens do carrinho + seção de cupom + totais
     function renderCartPopup() {
       const container = document.getElementById('cartItems');
       container.innerHTML = '';
@@ -241,6 +279,9 @@
       if (!cart.length) {
         container.innerHTML = `<p style="color:#ccc; margin:1rem 0;">Seu carrinho está vazio.</p>`;
         document.getElementById('cartTotal').textContent = '';
+        document.getElementById('discountedTotal').textContent = '';
+        document.getElementById('couponMessage').textContent = '';
+        appliedCoupon = null; // limpa qualquer cupom ativo
         return;
       }
 
@@ -263,14 +304,28 @@
         container.appendChild(div);
       });
 
+      // Exibe total original
       document.getElementById('cartTotal').textContent = `Total: R$${total.toFixed(2)}`;
+
+      // Se já houver um cupom aplicado, exibe total com desconto
+      if (appliedCoupon) {
+        const discountPercent = coupons[appliedCoupon];
+        const discountedValue = total * (1 - discountPercent / 100);
+        document.getElementById('discountedTotal').textContent =
+          `Total com "${appliedCoupon}": R$${discountedValue.toFixed(2)} (${discountPercent}% off)`;
+      } else {
+        document.getElementById('discountedTotal').textContent = '';
+      }
+      document.getElementById('couponMessage').textContent = '';
     }
 
+    // Incrementa/decrementa quantidade no carrinho, ajusta inventário e UI
     function changeQty(id, color, size, delta) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
       if (!item) return;
 
+      // Se tentar aumentar mas não há estoque extra, sai
       if (delta > 0 && inventory[id][key] < 1) return;
       item.quantity += delta;
 
@@ -287,6 +342,7 @@
       updateStockUI(id);
     }
 
+    // Remove item por completo do carrinho, devolvendo estoque
     function removeFromCart(id, color, size) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
@@ -305,41 +361,76 @@
       document.getElementById('cartPopup').style.display = 'none';
     }
 
+    // Aplica o cupom digitado pelo usuário
+    function applyCoupon() {
+      const code = document.getElementById('couponCode').value.trim().toUpperCase();
+      const msgEl = document.getElementById('couponMessage');
+
+      if (!code) {
+        msgEl.textContent = 'Digite um cupom.';
+        return;
+      }
+      if (!cart.length) {
+        msgEl.textContent = 'Seu carrinho está vazio.';
+        return;
+      }
+      if (coupons[code]) {
+        appliedCoupon = code;
+        msgEl.textContent = `Cupom "${code}" aplicado: ${coupons[code]}% de desconto!`;
+      } else {
+        appliedCoupon = null;
+        msgEl.textContent = `"${code}" não é um cupom válido.`;
+      }
+      renderCartPopup(); // atualiza totais com/sem desconto
+    }
+
+    // Redireciona para o WhatsApp com a lista (incluindo preços e total com desconto)
     function checkout() {
       const phone = '5541999737694';
       let msg = 'Olá, gostaria de comprar:\n';
 
+      // Se não houver itens, não prossegui
+      if (!cart.length) return;
+
+      let total = 0;
       cart.forEach(item => {
         const prod = products.find(p => p.id === item.id);
         const unitPrice = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
         const lineTotal = unitPrice * item.quantity;
+        total += lineTotal;
         msg += `- ${prod.name} (${item.color}/${item.size}) x${item.quantity} – R$${lineTotal.toFixed(2)}\n`;
       });
 
-      const totalGeral = cart.reduce((sum, item) => {
-        const prod = products.find(p => p.id === item.id);
-        const unitPrice = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
-        return sum + unitPrice * item.quantity;
-      }, 0);
-      msg += `\nTotal: R$${totalGeral.toFixed(2)}`;
+      // Se houver cupom válido, aplica desconto ao total
+      if (appliedCoupon && coupons[appliedCoupon]) {
+        const discountPercent = coupons[appliedCoupon];
+        const discountedValue = total * (1 - discountPercent / 100);
+        msg += `\nTotal com "${appliedCoupon}": R$${discountedValue.toFixed(2)} (${discountPercent}% off)`;
+      } else {
+        msg += `\nTotal: R$${total.toFixed(2)}`;
+      }
 
       window.open(
         `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
         '_blank'
       );
 
+      // Após finalizar, limpa carrinho e cupom
       cart = [];
       localStorage.removeItem('cart');
+      appliedCoupon = null;
       updateCartCount();
       renderCartPopup();
       closeCart();
     }
 
+    // Atualiza contador do carrinho (ícone)
     function updateCartCount() {
       const count = cart.reduce((acc, i) => acc + i.quantity, 0);
       document.getElementById('cartCount').textContent = count;
     }
 
+    // Mostra alerta customizado
     function showAlert(text) {
       const div = document.createElement('div');
       div.className = 'custom-alert';
@@ -348,6 +439,7 @@
       setTimeout(() => div.remove(), 2000);
     }
 
+    // Botão “voltar ao topo”
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('btnTop');
       btn.style.display = window.scrollY > 300 ? 'block' : 'none';
