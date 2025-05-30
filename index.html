@@ -76,7 +76,6 @@
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
   <script>
-    // 1) Definição dos produtos:
     const products = [
       { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
       { id:2, name:'Blusa moletom com capuz Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
@@ -92,7 +91,6 @@
       { id:12, name:'Aromatizante automotivo Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['5,4cm×5,4cm','7,7cm×5,4cm'], sizePrices:{'5,4cm×5,4cm':7.90,'7,7cm×5,4cm':11.90} }
     ];
 
-    // 2) Inicialização do inventário (5 unidades para cada combinação cor|tamanho)
     const inventory = {};
     products.forEach(p => {
       inventory[p.id] = {};
@@ -103,20 +101,16 @@
       }));
     });
 
-    // 3) Carrega cart do localStorage (ou array vazio)
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // 4) **AJUSTE PRINCIPAL**: descontar do inventário tudo o que já existe no carrinho
+    // Descontar do inventário o que já está no cart (localStorage)
     if (cart.length) {
       cart.forEach(item => {
         const key = `${item.color}|${item.size}`;
-        // Caso o usuário tenha atualizado manualmente o localStorage para algo inconsistente,
-        // evitamos virar negativo:
         inventory[item.id][key] = Math.max((inventory[item.id][key] || 0) - item.quantity, 0);
       });
     }
 
-    // Função para renderizar todos os cards de produtos
     function renderProducts() {
       const list = document.getElementById('productList');
       list.innerHTML = '';
@@ -126,25 +120,20 @@
         card.className = 'product';
         card.id = `prod-${p.id}`;
 
-        // Pega apenas combinações cor|tamanho com estoque > 0
         const inStockKeys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
 
         if (!inStockKeys.length) {
-          // Produto totalmente esgotado
           card.innerHTML = `
             <img src="${p.img}" alt="${p.name}"/>
             <h3>${p.name}</h3>
             <span class="sold-out-text">Esgotado</span>
           `;
         } else {
-          // Obter listas únicas de cores e tamanhos que ainda têm estoque
           const colors = [...new Set(inStockKeys.map(k => k.split('|')[0]))];
           const sizes = [...new Set(inStockKeys.map(k => k.split('|')[1]))];
           const initialSize = sizes[0];
-          // Se existir sizePrices, usar; senão, usar p.price
           const initialPrice = p.sizePrices ? p.sizePrices[initialSize] : p.price;
 
-          // HTML do card, mantendo selects e label de estoque
           card.innerHTML = `
             <img src="${p.img}" alt="${p.name}"/>
             <h3>${p.name}</h3>
@@ -167,13 +156,13 @@
         list.appendChild(card);
       });
       initProductListeners();
-      // Após criar todos os cards, atualizar o stock UI inicial (para desabilitar botões se necessário)
+
+      // Atualiza UI de estoque para cada produto após renderizar (para desabilitar botões, se necessário)
       products.forEach(p => {
         updateStockUI(p.id);
       });
     }
 
-    // Configura listeners de cada produto (selects e botão)
     function initProductListeners() {
       products.forEach(p => {
         const sizeEl = document.getElementById(`tam-${p.id}`);
@@ -195,7 +184,6 @@
       });
     }
 
-    // Atualiza o preço exibido conforme tamanho selecionado
     function updatePriceBySize(id) {
       const size = document.getElementById(`tam-${id}`).value;
       const prod = products.find(x => x.id === id);
@@ -203,11 +191,10 @@
       document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
     }
 
-    // Atualiza a label de estoque e habilita/desabilita o botão "Adicionar ao Carrinho"
     function updateStockUI(id) {
       const colorSelect = document.getElementById(`cor-${id}`);
       const sizeSelect = document.getElementById(`tam-${id}`);
-      if (!colorSelect || !sizeSelect) return; // se estiver esgotado, não há select nem botão
+      if (!colorSelect || !sizeSelect) return;
 
       const color = colorSelect.value;
       const size = sizeSelect.value;
@@ -220,7 +207,6 @@
       btn.classList.toggle('sold-out-btn', stock === 0);
     }
 
-    // Adiciona item ao carrinho, desconta inventário, atualiza localStorage e UI
     function addToCart(id) {
       const color = document.getElementById(`cor-${id}`).value;
       const size = document.getElementById(`tam-${id}`).value;
@@ -239,7 +225,6 @@
       showAlert('Adicionado ao carrinho');
     }
 
-    // Alterna exibição do popup do carrinho
     function toggleCartPopup() {
       const popup = document.getElementById('cartPopup');
       if (popup.style.display === 'flex') closeCart();
@@ -249,13 +234,11 @@
       }
     }
 
-    // Renderiza itens dentro do popup do carrinho
     function renderCartPopup() {
       const container = document.getElementById('cartItems');
       container.innerHTML = '';
 
       if (!cart.length) {
-        // Se não há itens, mostra mensagem no carrinho
         container.innerHTML = `<p style="color:#ccc; margin:1rem 0;">Seu carrinho está vazio.</p>`;
         document.getElementById('cartTotal').textContent = '';
         return;
@@ -283,23 +266,18 @@
       document.getElementById('cartTotal').textContent = `Total: R$${total.toFixed(2)}`;
     }
 
-    // Altera quantidade no carrinho (incrementa ou decrementa), ajusta inventário e atualiza UI
     function changeQty(id, color, size, delta) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
       if (!item) return;
 
-      if (delta > 0 && inventory[id][key] < 1) return; // sem estoque extra
+      if (delta > 0 && inventory[id][key] < 1) return;
       item.quantity += delta;
 
-      if (delta > 0) {
-        inventory[id][key]--;
-      } else {
-        inventory[id][key]++;
-      }
+      if (delta > 0) inventory[id][key]--;
+      else inventory[id][key]++;
 
       if (item.quantity === 0) {
-        // remove completamente do array
         cart = cart.filter(i => !(i.id === id && i.color === color && i.size === size));
       }
 
@@ -309,7 +287,6 @@
       updateStockUI(id);
     }
 
-    // Remove item completo do carrinho, devolvendo tudo ao inventário
     function removeFromCart(id, color, size) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
@@ -328,20 +305,29 @@
       document.getElementById('cartPopup').style.display = 'none';
     }
 
-    // Redireciona para o WhatsApp com a lista de itens do carrinho e, em seguida, limpa tudo
     function checkout() {
       const phone = '5541999737694';
       let msg = 'Olá, gostaria de comprar:\n';
+
       cart.forEach(item => {
         const prod = products.find(p => p.id === item.id);
-        msg += `- ${prod.name} (${item.color}/${item.size}) x${item.quantity}\n`;
+        const unitPrice = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
+        const lineTotal = unitPrice * item.quantity;
+        msg += `- ${prod.name} (${item.color}/${item.size}) x${item.quantity} – R$${lineTotal.toFixed(2)}\n`;
       });
+
+      const totalGeral = cart.reduce((sum, item) => {
+        const prod = products.find(p => p.id === item.id);
+        const unitPrice = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
+        return sum + unitPrice * item.quantity;
+      }, 0);
+      msg += `\nTotal: R$${totalGeral.toFixed(2)}`;
+
       window.open(
         `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
         '_blank'
       );
 
-      // Limpar o carrinho após finalizar a compra
       cart = [];
       localStorage.removeItem('cart');
       updateCartCount();
@@ -349,13 +335,11 @@
       closeCart();
     }
 
-    // Atualiza o contador “🛒 Carrinho (n itens)”
     function updateCartCount() {
       const count = cart.reduce((acc, i) => acc + i.quantity, 0);
       document.getElementById('cartCount').textContent = count;
     }
 
-    // Exibe um alerta customizado temporário
     function showAlert(text) {
       const div = document.createElement('div');
       div.className = 'custom-alert';
@@ -364,14 +348,12 @@
       setTimeout(() => div.remove(), 2000);
     }
 
-    // Botão “voltar ao topo”
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('btnTop');
       btn.style.display = window.scrollY > 300 ? 'block' : 'none';
     });
     function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
-    // Quando o DOM estiver pronto, renderiza produtos e atualiza contador
     document.addEventListener('DOMContentLoaded', () => {
       renderProducts();
       updateCartCount();
