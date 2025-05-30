@@ -11,9 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    /* =======================================================
+    /* ===========================
        RESET & ESTILIZAÇÕES GERAIS
-     ======================================================= */
+       =========================== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #000;
@@ -65,9 +65,9 @@
       opacity: 0.6;
     }
 
-    /* =======================================================
+    /* ===========================
        PRODUTOS E CARRINHO
-     ======================================================= */
+       =========================== */
     .products {
       display: flex;
       flex-wrap: wrap;
@@ -277,16 +277,14 @@
       .product { width: 80%; }
     }
 
-
     /* =======================================================
-       OVERLAY DE LOGIN / REGISTRO (exibido somente quando
-       o usuário precisa logar para finalizar compra)
-     ======================================================= */
+       OVERLAY DE LOGIN / REGISTRO (invisível até necessário)
+       ======================================================= */
     #loginOverlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0, 0, 0, 0.95);
-      display: none;
+      display: none;              /* começa invisível */
       align-items: center;
       justify-content: center;
       z-index: 2000;
@@ -328,7 +326,6 @@
     }
   </style>
 </head>
-
 
 <body>
   <!-- Ícone do Carrinho -->
@@ -380,7 +377,7 @@
     </div>
   </div>
 
-  <!-- Overaly de LOGIN/REGISTRO (invisível até o usuário precisar logar) -->
+  <!-- Overlay de LOGIN/REGISTRO (aparece apenas quando for preciso) -->
   <div id="loginOverlay">
     <div id="loginBox">
       <h3>Custom Gears</h3>
@@ -501,7 +498,7 @@
       // Adiciona novo usuário
       users.push({ email, password });
       setUsers(users);
-      msgEl.style.color = '#6a0'; 
+      msgEl.style.color = '#6a0';
       msgEl.textContent = 'Registrado com sucesso! Faça login.';
       // Troca para tela de login após 1,5s
       setTimeout(showLogin, 1500);
@@ -541,7 +538,7 @@
     }
 
     /* =====================================================
-       FUNÇÕES DE RENDERIZAÇÃO E INTERAÇÃO (APÓS CARREGAR A PÁGINA)
+       FUNÇÕES DE RENDERIZAÇÃO E INTERAÇÃO
     ===================================================== */
 
     // Ajusta o estoque subtraindo o que já está no carrinho
