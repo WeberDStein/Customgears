@@ -5,26 +5,156 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>𝕮𝖚𝖘𝖙𝖔𝖒 𝖌𝖊𝖆𝖗𝖘</title>
   <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
+
   <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    body { background: #000; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; padding-top: 70px; }
-    header { font-family: 'UnifrakturCook', cursive; font-size: 3rem; text-align: center; padding: 1.5rem; border-bottom: 1px solid #333; color: #ccc; position: fixed; width: 100%; top: 0; background: #000; z-index: 1000; }
+    /* =======================
+       RESET & ESTILIZAÇÕES GERAIS
+       ======================= */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding-top: 70px;
+    }
+    header {
+      font-family: 'UnifrakturCook', cursive;
+      font-size: 3rem;
+      text-align: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid #333;
+      color: #ccc;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background: #000;
+      z-index: 1000;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem;
+      padding-top: 100px;
+    }
+    h2 {
+      color: #aa88cc;
+      font-family: 'UnifrakturCook', cursive;
+      border-bottom: 1px solid #444;
+      padding-bottom: 0.5rem;
+      text-align: center;
+    }
+    button {
+      background: #800080;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    button:hover:not(.sold-out-btn) { background: #a020f0; }
+    .sold-out-btn {
+      background: #555;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
 
-    .container { max-width: 1000px; margin: auto; padding: 2rem; padding-top: 100px; }
-    h2 { color: #aa88cc; font-family: 'UnifrakturCook', cursive; border-bottom: 1px solid #444; padding-bottom: 0.5rem; text-align: center; }
+    /* =======================
+       OVERLAY DE LOGIN
+       ======================= */
+    #loginOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    #loginBox {
+      background: #111;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
+    }
+    #loginBox h3 {
+      margin-bottom: 1rem;
+      color: #aa88cc;
+      font-family: 'UnifrakturCook', cursive;
+    }
+    #loginBox input {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background: #222;
+      color: #fff;
+      font-size: 1rem;
+    }
+    #loginBox .small-link {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #ccc;
+      text-decoration: underline;
+      cursor: pointer;
+    }
 
-    .products { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin: 2rem 0; }
-    .product { background: #111; border: 1px solid #333; border-radius: 8px; width: 250px; padding: 1rem; text-align: center; transition: transform 0.2s ease; position: relative; }
+    /* =======================
+       ESTILO DOS PRODUTOS E CARRINHO
+       ======================= */
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .product {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      width: 250px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s ease;
+      position: relative;
+    }
     .product:hover { transform: scale(1.05); }
-    .product img { width: 100%; border-radius: 6px; margin-bottom: 0.5rem; }
-    .product h3 { color: #ddd; margin: 0.5rem 0; }
-    .product .price { color: #ccc; font-size: 0.9rem; margin-bottom: 0.5rem; }
-    .stock-label { font-size: 0.9rem; color: #ccc; margin-bottom: 0.5rem; }
-    .sold-out-text { color: #c00; font-weight: bold; margin-top: 0.5rem; display: block; }
-
-    /* Placeholder que substitui a imagem quando o produto estiver 100% esgotado */
+    .product img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+    .product h3 {
+      color: #ddd;
+      margin: 0.5rem 0;
+    }
+    .product .price {
+      color: #ccc;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .stock-label {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 0.5rem;
+    }
+    .sold-out-text {
+      color: #c00;
+      font-weight: bold;
+      margin-top: 0.5rem;
+      display: block;
+    }
+    /* Placeholder para produto totalmente esgotado */
     .sold-out-placeholder {
       width: 100%;
       height: 180px;
@@ -39,49 +169,199 @@
       font-weight: bold;
     }
 
-    button { background: #800080; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s; }
-    button:hover:not(.sold-out-btn) { background: #a020f0; }
-    .sold-out-btn { background: #555; cursor: not-allowed; opacity: 0.6; }
+    /* Ícone do carrinho fixo */
+    .cart {
+      position: fixed;
+      top: 72px;
+      right: 20px;
+      background: #222;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid #444;
+      box-shadow: 0 0 5px #800080;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 100px;
+      z-index: 1001;
+    }
+    .cart-count {
+      background: #800080;
+      padding: 2px 8px;
+      border-radius: 50%;
+      margin-left: 6px;
+      font-size: 0.8rem;
+    }
 
-    .cart { position: fixed; top: 72px; right: 20px; background: #222; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid #444; box-shadow: 0 0 5px #800080; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; min-width: 100px; z-index: 1001; }
-    .cart-count { background: #800080; padding: 2px 8px; border-radius: 50%; margin-left: 6px; font-size: 0.8rem; }
+    /* POPUP DO CARRINHO */
+    .cart-popup {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1002;
+    }
+    .cart-content {
+      background: #333;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .qty-btn {
+      display: inline-block;
+      padding: 0 6px;
+      background: #555;
+      color: #fff;
+      border-radius: 4px;
+      margin: 0 4px;
+      cursor: pointer;
+    }
+    .remove {
+      background: #f44336 !important;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.6rem;
+      margin-left: 8px;
+    }
+    .checkout {
+      background: #4caf50 !important;
+    }
 
-    .cart-popup { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index:1002; }
-    .cart-content { background: #333; padding: 20px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; max-height: 80vh; overflow-y: auto; }
-    .qty-btn { display: inline-block; padding: 0 6px; background: #555; color: #fff; border-radius: 4px; margin: 0 4px; cursor: pointer; }
-    .remove { background: #f44336 !important; font-size: 0.8rem; padding: 0.3rem 0.6rem; margin-left: 8px; }
-    .checkout { background: #4caf50 !important; }
+    /* CUPOM DE DESCONTO */
+    .coupon-section {
+      margin: 1rem 0;
+    }
+    .coupon-input {
+      width: 60%;
+      padding: 0.4rem;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background: #111;
+      color: #fff;
+    }
+    .coupon-btn {
+      margin-left: 0.5rem;
+    }
+    .coupon-message {
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      color: #ccc;
+    }
 
-    .coupon-section { margin: 1rem 0; }
-    .coupon-input { width: 60%; padding: 0.4rem; border-radius: 4px; border: 1px solid #555; background: #111; color: #fff; }
-    .coupon-btn { margin-left: 0.5rem; }
-    .coupon-message { font-size: 0.9rem; margin-top: 0.5rem; color: #ccc; }
+    /* ALERTA CUSTOMIZADO */
+    .custom-alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #6a0dad;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      z-index: 9999;
+      animation: fadein 0.5s, fadeout 0.5s 1.5s;
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeout {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-20px); }
+    }
 
-    .custom-alert { position: fixed; top: 20px; right: 20px; background: #6a0dad; color: white; padding: 10px 20px; border-radius: 8px; z-index:9999; animation: fadein 0.5s, fadeout 0.5s 1.5s; }
-    @keyframes fadein { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeout { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #111;
+      border-top:1px solid #333;
+    }
+    footer h4 {
+      color: #aa88cc;
+      margin-bottom: 0.5rem;
+    }
+    footer p, footer a {
+      color:#ccc;
+      font-size:0.9rem;
+      margin: 0.2rem 0;
+    }
+    footer a {
+      text-decoration: none;
+    }
 
-    footer { text-align: center; padding: 2rem; background-color: #111; border-top:1px solid #333; }
-    footer h4 { color: #aa88cc; margin-bottom: 0.5rem; }
-    footer p, footer a { color:#ccc; font-size:0.9rem; margin: 0.2rem 0; }
-    footer a { text-decoration: none; }
-
-    #btnTop { display:none; position:fixed; bottom:30px; right:30px; z-index:999; font-size:1.5rem; outline:none; background-color:#800080; color:white; cursor:pointer; padding:0.5rem 0.8rem; border:none; border-radius:50%; box-shadow:0 0 10px #800080; transition:background-color 0.3s; }
-    #btnTop:hover { background-color:#a020f0; }
-
-    @media (max-width:768px){ .products{flex-direction:column;align-items:center;} .product{width:80%;} }
+    /* BOTÃO VOLTAR AO TOPO */
+    #btnTop {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      font-size: 1.5rem;
+      outline: none;
+      background-color: #800080;
+      color: white;
+      cursor: pointer;
+      padding: 0.5rem 0.8rem;
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #800080;
+      transition: background-color 0.3s;
+    }
+    #btnTop:hover { background-color: #a020f0; }
+    @media (max-width:768px) {
+      .products { flex-direction: column; align-items: center; }
+      .product { width: 80%; }
+    }
   </style>
 </head>
+
 <body>
-  <div class="cart" onclick="toggleCartPopup()">
+  <!-- =======================
+       OVERLAY DE LOGIN / REGISTRO
+       ======================= -->
+  <div id="loginOverlay">
+    <div id="loginBox">
+      <h3>Custom Gears</h3>
+      <div id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Usuário" autocomplete="username" />
+        <input type="password" id="loginPassword" placeholder="Senha" autocomplete="current-password" />
+        <button onclick="loginUser()">Entrar</button>
+        <div id="loginMessage" style="margin-top:0.5rem; color:#f55; font-size:0.9rem;"></div>
+        <div class="small-link" onclick="showRegister()">Não tem conta? Cadastre-se</div>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <input type="text" id="regUsername" placeholder="Novo usuário" autocomplete="username" />
+        <input type="password" id="regPassword" placeholder="Nova senha" autocomplete="new-password" />
+        <button onclick="registerUser()">Registrar</button>
+        <div id="registerMessage" style="margin-top:0.5rem; color:#f55; font-size:0.9rem;"></div>
+        <div class="small-link" onclick="showLogin()">Já tem conta? Entrar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ícone do Carrinho (só aparece após login) -->
+  <div class="cart" onclick="toggleCartPopup()" style="display:none;">
     🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
   </div>
+
+  <!-- HEADER fixo -->
   <header>Custom Gears</header>
-  <div class="container">
+
+  <!-- CONTAINER DE PRODUTOS (aparece após login) -->
+  <div class="container" id="mainContent" style="display:none;">
     <h2>Produtos</h2>
     <div class="products" id="productList"></div>
   </div>
-  <footer>
+
+  <!-- FOOTER -->
+  <footer style="display:none;" id="mainFooter">
     <h4>Sobre Nós</h4>
     <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
     <h4>Contato</h4>
@@ -92,20 +372,20 @@
     <p>© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
 
+  <!-- POPUP DO CARRINHO -->
   <div class="cart-popup" id="cartPopup">
     <div class="cart-content">
       <h3>Seu Carrinho</h3>
-      <!-- Itens do carrinho -->
       <div id="cartItems"></div>
 
-      <!-- Seção de cupom de desconto -->
+      <!-- Seção do cupom de desconto -->
       <div class="coupon-section">
         <input type="text" id="couponCode" class="coupon-input" placeholder="Digite seu cupom">
         <button class="coupon-btn" onclick="applyCoupon()">Aplicar Cupom</button>
         <div id="couponMessage" class="coupon-message"></div>
       </div>
 
-      <!-- Total (original e com desconto, se houver) -->
+      <!-- Totais -->
       <p id="cartTotal"></p>
       <p id="discountedTotal" style="color:#aa88cc; font-weight:bold;"></p>
 
@@ -114,10 +394,15 @@
     </div>
   </div>
 
+  <!-- Botão de voltar ao topo -->
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
+
   <script>
-    // 1) Definição dos produtos:
+    /* =====================================================
+       VARIÁVEIS GLOBAIS E DADOS INICIAIS
+       ===================================================== */
+    // 1) Lista de produtos:
     const products = [
       { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
       { id:2, name:'Blusa moletom com capuz Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
@@ -133,7 +418,7 @@
       { id:12, name:'Aromatizante automotivo Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['5,4cm×5,4cm','7,7cm×5,4cm'], sizePrices:{'5,4cm×5,4cm':7.90,'7,7cm×5,4cm':11.90} }
     ];
 
-    // 2) Inventário inicial (5 unidades para cada combinação cor|tamanho)
+    // 2) Estoque inicial (5 unidades para cada combinação cor|tamanho)
     const inventory = {};
     products.forEach(p => {
       inventory[p.id] = {};
@@ -144,27 +429,123 @@
       }));
     });
 
-    // 3) Objeto de cupons válidos (código → percentual de desconto)
+    // 3) Cupons de desconto (código → percentual)
     const coupons = {
       'CUSTOM10': 10,
       'CUSTOM20': 20,
       'FRETEGRATIS': 5
     };
-    let appliedCoupon = null;
+    let appliedCoupon = null; // guarda código de cupom se for válido
 
-    // 4) Carrega o carrinho salvo no localStorage (ou um array vazio)
+    // 4) Carrinho (array de itens). Cada item: { id, color, size, quantity }
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // 5) Descontar do inventário o que já está dentro do cart
-    if (cart.length) {
+    // 5) LÓGICA DE USUÁRIO (LOGIN / REGISTRO)
+    function getUsers() {
+      // Retorna array de usuários salvos (username + senha em plaintext)
+      return JSON.parse(localStorage.getItem('users') || '[]');
+    }
+    function setUsers(arr) {
+      localStorage.setItem('users', JSON.stringify(arr));
+    }
+
+    function showLogin() {
+      document.getElementById('registerForm').style.display = 'none';
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('loginMessage').textContent = '';
+      document.getElementById('registerMessage').textContent = '';
+    }
+    function showRegister() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('registerForm').style.display = 'block';
+      document.getElementById('loginMessage').textContent = '';
+      document.getElementById('registerMessage').textContent = '';
+    }
+
+    function registerUser() {
+      const username = document.getElementById('regUsername').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      const msgEl = document.getElementById('registerMessage');
+
+      if (!username || !password) {
+        msgEl.textContent = 'Preencha usuário e senha.';
+        return;
+      }
+      const users = getUsers();
+      if (users.find(u => u.username === username)) {
+        msgEl.textContent = 'Usuário já existe.';
+        return;
+      }
+      // Adiciona novo usuário
+      users.push({ username, password });
+      setUsers(users);
+      msgEl.style.color = '#6a0'; 
+      msgEl.textContent = 'Registrado com sucesso! Faça login.';
+      // Troca para tela de login após 1,5s
+      setTimeout(showLogin, 1500);
+    }
+
+    function loginUser() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const msgEl = document.getElementById('loginMessage');
+
+      if (!username || !password) {
+        msgEl.textContent = 'Preencha usuário e senha.';
+        return;
+      }
+      const users = getUsers();
+      const found = users.find(u => u.username === username && u.password === password);
+      if (!found) {
+        msgEl.textContent = 'Credenciais inválidas.';
+        return;
+      }
+      // Salva usuário logado e esconde overlay
+      localStorage.setItem('currentUser', username);
+      initializeApp(); 
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('currentUser');
+      location.reload();
+    }
+
+    /* =====================================================
+       FUNÇÕES DE RENDERIZAÇÃO E INTERAÇÃO (APÓS LOGIN)
+       ===================================================== */
+
+    function initializeApp() {
+      // Se não houver usuário logado, exibo overlay. Caso contrário, exibo conteúdo.
+      const current = localStorage.getItem('currentUser');
+      if (!current) {
+        document.getElementById('loginOverlay').style.display = 'flex';
+        document.getElementById('mainContent').style.display = 'none';
+        document.getElementById('mainFooter').style.display = 'none';
+        document.querySelector('.cart').style.display = 'none';
+      } else {
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        document.getElementById('mainFooter').style.display = 'block';
+        document.querySelector('.cart').style.display = 'flex';
+        renderProducts();
+        updateCartCount();
+      }
+    }
+
+    // 6) Ao carregar a página, ajusta produtos conforme carrinho salvo
+    //    e desconta do inventory tudo o que já foi adicionado ao cart
+    function reconcileCartWithInventory() {
+      if (!cart.length) return;
       cart.forEach(item => {
         const key = `${item.color}|${item.size}`;
-        inventory[item.id][key] = Math.max((inventory[item.id][key] || 0) - item.quantity, 0);
+        if (!inventory[item.id][key]) return;
+        inventory[item.id][key] = Math.max(inventory[item.id][key] - item.quantity, 0);
       });
     }
 
-    // 6) Função que re-renderiza todos os cards, usando o estado atual do inventory:
+    // 7) RENDERIZAÇÃO DOS CARDS DE PRODUTOS
     function renderProducts() {
+      reconcileCartWithInventory();
       const list = document.getElementById('productList');
       list.innerHTML = '';
 
@@ -173,17 +554,17 @@
         card.className = 'product';
         card.id = `prod-${p.id}`;
 
-        // Pega todas as combinações cor|tamanho com estoque > 0
+        // Filtra combinações cor|tamanho com estoque > 0
         const inStockKeys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
 
         if (inStockKeys.length === 0) {
-          // Se não há nenhuma combinação com estoque → mostra placeholder “ESGOTADO”
+          // Produto 100% ESGOTADO
           card.innerHTML = `
             <div class="sold-out-placeholder">ESGOTADO</div>
             <h3>${p.name}</h3>
           `;
         } else {
-          // Extrai listas únicas de cores e tamanhos disponíveis
+          // Extrai lista única de cores e tamanhos disponíveis
           const colors = [...new Set(inStockKeys.map(k => k.split('|')[0]))];
           const sizes = [...new Set(inStockKeys.map(k => k.split('|')[1]))];
           const initialSize = sizes[0];
@@ -211,12 +592,10 @@
         list.appendChild(card);
       });
 
-      // Depois que inserimos todos os cards, configuramos os listeners
       initProductListeners();
-      updateCartCount();
     }
 
-    // 7) Configura listeners para cada select e botão de cada produto
+    // 8) CONFIGURA EVENTOS (change em selects, click em botões)
     function initProductListeners() {
       products.forEach(p => {
         const sizeEl = document.getElementById(`tam-${p.id}`);
@@ -238,7 +617,7 @@
       });
     }
 
-    // 8) Atualiza o preço quando muda o tamanho
+    // 9) ATUALIZA PREÇO AO MUDAR TAMANHO
     function updatePriceBySize(id) {
       const size = document.getElementById(`tam-${id}`).value;
       const prod = products.find(x => x.id === id);
@@ -246,7 +625,7 @@
       document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
     }
 
-    // 9) Atualiza somente o rótulo de “Estoque: X” baseado nos selects atuais
+    // 10) ATUALIZA RÓTULO DE “ESTOQUE: X”
     function updateStockLabel(id) {
       const colorSelect = document.getElementById(`cor-${id}`);
       const sizeSelect = document.getElementById(`tam-${id}`);
@@ -259,28 +638,28 @@
       label.textContent = `Estoque: ${stock}`;
     }
 
-    // 10) Adiciona ao carrinho: desconta do inventory, atualiza localStorage e re-renderiza produtos
+    // 11) ADICIONA AO CARRINHO: desconta do inventory, salva em localStorage e re-renderiza
     function addToCart(id) {
       const color = document.getElementById(`cor-${id}`).value;
       const size = document.getElementById(`tam-${id}`).value;
       const key = `${color}|${size}`;
-      if (inventory[id][key] < 1) return; // sem estoque
+      if (inventory[id][key] < 1) return;
 
-      // Atualiza o array cart
+      // Adiciona ou incrementa no array cart
       const existing = cart.find(i => i.id === id && i.color === color && i.size === size);
       if (existing) existing.quantity++;
       else cart.push({ id, color, size, quantity: 1 });
 
-      // Desconta no inventário
+      // Desconta no inventory
       inventory[id][key]--;
       localStorage.setItem('cart', JSON.stringify(cart));
 
-      // Re-renderiza todos os cards (para remover opções ou trocar para “ESGOTADO”)
       renderProducts();
+      updateCartCount();
       showAlert('Adicionado ao carrinho');
     }
 
-    // 11) Alterna a visibilidade do popup do carrinho
+    // 12) ABRE / FECHA POPUP DO CARRINHO
     function toggleCartPopup() {
       const popup = document.getElementById('cartPopup');
       if (popup.style.display === 'flex') closeCart();
@@ -290,7 +669,7 @@
       }
     }
 
-    // 12) Renderiza os itens do carrinho, seção de cupom e totais
+    // 13) RENDERIZA ITENS DO CARRINHO + CUPOM + TOTAL
     function renderCartPopup() {
       const container = document.getElementById('cartItems');
       container.innerHTML = '';
@@ -336,13 +715,13 @@
       document.getElementById('couponMessage').textContent = '';
     }
 
-    // 13) Altera quantidade no carrinho (incrementa/decrementa), ajusta inventário e re-renderiza
+    // 14) ALTERA QUANTIDADE NO CARRINHO, AJUSTA INVENTÁRIO E RE-RENDERIZA
     function changeQty(id, color, size, delta) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
       if (!item) return;
 
-      if (delta > 0 && inventory[id][key] < 1) return; // sem estoque extra
+      if (delta > 0 && inventory[id][key] < 1) return;
       item.quantity += delta;
       if (delta > 0) inventory[id][key]--;
       else inventory[id][key]++;
@@ -350,13 +729,14 @@
       if (item.quantity === 0) {
         cart = cart.filter(i => !(i.id === id && i.color === color && i.size === size));
       }
-
       localStorage.setItem('cart', JSON.stringify(cart));
-      renderProducts();      // re-renderiza cards para atualizar selects/“ESGOTADO”
-      renderCartPopup();     // mantém o popup aberto, com valores atualizados
+
+      renderProducts();
+      renderCartPopup();
+      updateCartCount();
     }
 
-    // 14) Remove item do carrinho, restaura estoque e re-renderiza
+    // 15) REMOVE ITEM DO CARRINHO, RESTAURA ESTOQUE E RE-RENDERIZA
     function removeFromCart(id, color, size) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
@@ -368,13 +748,14 @@
 
       renderProducts();
       renderCartPopup();
+      updateCartCount();
     }
 
     function closeCart() {
       document.getElementById('cartPopup').style.display = 'none';
     }
 
-    // 15) Aplica cupom digitado
+    // 16) APLICA CUPOM DE DESCONTO
     function applyCoupon() {
       const code = document.getElementById('couponCode').value.trim().toUpperCase();
       const msgEl = document.getElementById('couponMessage');
@@ -389,21 +770,23 @@
       }
       if (coupons[code]) {
         appliedCoupon = code;
+        msgEl.style.color = '#6a0';
         msgEl.textContent = `Cupom "${code}" aplicado: ${coupons[code]}% de desconto!`;
       } else {
         appliedCoupon = null;
+        msgEl.style.color = '#f55';
         msgEl.textContent = `"${code}" não é um cupom válido.`;
       }
       renderCartPopup();
     }
 
-    // 16) Redireciona para o WhatsApp com cada item (incluindo preços e total com desconto)
+    // 17) FINALIZA COMPRA: abre WhatsApp + SALVA HISTÓRICO DE COMPRAS
     function checkout() {
-      const phone = '5541999737694';
+      const currentUser = localStorage.getItem('currentUser');
+      if (!cart.length || !currentUser) return;
+
+      // Monta mensagem do WhatsApp
       let msg = 'Olá, gostaria de comprar:\n';
-
-      if (!cart.length) return;
-
       let total = 0;
       cart.forEach(item => {
         const prod = products.find(p => p.id === item.id);
@@ -412,7 +795,6 @@
         total += lineTotal;
         msg += `- ${prod.name} (${item.color}/${item.size}) x${item.quantity} – R$${lineTotal.toFixed(2)}\n`;
       });
-
       if (appliedCoupon && coupons[appliedCoupon]) {
         const discountPercent = coupons[appliedCoupon];
         const discountedValue = total * (1 - discountPercent / 100);
@@ -421,27 +803,48 @@
         msg += `\nTotal: R$${total.toFixed(2)}`;
       }
 
-      window.open(
-        `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
-        '_blank'
-      );
+      // SALVA NO HISTÓRICO do usuário:
+      const historyKey = `history_${currentUser}`;
+      const previousHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
+      const purchaseRecord = {
+        date: new Date().toLocaleString('pt-BR'),
+        items: cart.map(item => ({
+          id: item.id,
+          name: products.find(p => p.id === item.id).name,
+          color: item.color,
+          size: item.size,
+          quantity: item.quantity,
+          unitPrice: (products.find(p => p.id === item.id).sizePrices || { })[item.size] || products.find(p => p.id === item.id).price
+        })),
+        coupon: appliedCoupon || null,
+        total: appliedCoupon
+          ? Number((total * (1 - coupons[appliedCoupon] / 100)).toFixed(2))
+          : Number(total.toFixed(2))
+      };
+      previousHistory.push(purchaseRecord);
+      localStorage.setItem(historyKey, JSON.stringify(previousHistory));
 
+      // Abre WhatsApp
+      const phone = '5541999737694';
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+
+      // Limpa carrinho e dados relacionados
       cart = [];
       localStorage.removeItem('cart');
       appliedCoupon = null;
-      renderProducts();
       updateCartCount();
+      renderProducts();
       renderCartPopup();
       closeCart();
     }
 
-    // 17) Atualiza contador no ícone do carrinho
+    // 18) ATUALIZA CONTADOR NO ÍCONE DO CARRINHO
     function updateCartCount() {
       const count = cart.reduce((acc, i) => acc + i.quantity, 0);
       document.getElementById('cartCount').textContent = count;
     }
 
-    // 18) Alerta customizado
+    // 19) ALERTA CUSTOMIZADO (pequena caixa no canto superior direito)
     function showAlert(text) {
       const div = document.createElement('div');
       div.className = 'custom-alert';
@@ -450,16 +853,18 @@
       setTimeout(() => div.remove(), 2000);
     }
 
-    // 19) Botão “voltar ao topo”
+    // 20) BOTÃO “VOLTAR AO TOPO”
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('btnTop');
       btn.style.display = window.scrollY > 300 ? 'block' : 'none';
     });
-    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
+    // Ao carregar a página, inicializa o app (mostra overlay ou conteúdo)
     document.addEventListener('DOMContentLoaded', () => {
-      renderProducts();
-      updateCartCount();
+      initializeApp();
     });
   </script>
 </body>
