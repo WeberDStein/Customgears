@@ -48,15 +48,17 @@
       padding-bottom: 0.5rem;
       text-align: center;
     }
+    /* Botões gerais, menores para evitar sobreposição */
     button {
       background: #800080;
       color: white;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.4rem 0.8rem;   /* reduzido */
       border-radius: 4px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 0.9rem;      /* reduzido */
       transition: background 0.2s;
+      margin-top: 0.4rem;     /* adiciona um pequeno espaçamento acima */
     }
     button:hover:not(.sold-out-btn) { background: #a020f0; }
     .sold-out-btn {
@@ -194,22 +196,29 @@
     /* CUPOM DE DESCONTO */
     .coupon-section {
       margin: 1rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
     }
     .coupon-input {
-      width: 60%;
+      width: 55%;           /* ligeiramente menor */
       padding: 0.4rem;
       border-radius: 4px;
       border: 1px solid #555;
       background: #111;
       color: #fff;
+      font-size: 0.9rem;    /* ajustado */
     }
     .coupon-btn {
-      margin-left: 0.5rem;
+      padding: 0.4rem 0.8rem;  /* ajustado */
+      font-size: 0.9rem;
     }
     .coupon-message {
       font-size: 0.9rem;
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;   /* espaçamento para não sobrepor as letras */
       color: #ccc;
+      text-align: center;
     }
 
     /* ALERTA CUSTOMIZADO */
@@ -364,8 +373,8 @@
       <div class="coupon-section">
         <input type="text" id="couponCode" class="coupon-input" placeholder="Digite seu cupom">
         <button class="coupon-btn" onclick="applyCoupon()">Aplicar Cupom</button>
-        <div id="couponMessage" class="coupon-message"></div>
       </div>
+      <div id="couponMessage" class="coupon-message"></div>
 
       <!-- Totais -->
       <p id="cartTotal"></p>
@@ -373,7 +382,7 @@
 
       <!-- Botão de checkout: chama checkout() -->
       <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
-      <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
+      <button onclick="closeCart()" style="margin-top:0.4rem;">Fechar</button>
     </div>
   </div>
 
@@ -404,7 +413,6 @@
 
   <!-- Botão de voltar ao topo -->
   <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
-
 
   <script>
     /* =====================================================
@@ -450,7 +458,6 @@
 
     // 5) LÓGICA DE USUÁRIO (LOGIN / REGISTRO) — AGORA USANDO E-MAIL
 
-    // Pega array de usuários salvos em localStorage (formato: [{ email, password }, ...])
     function getUsers() {
       return JSON.parse(localStorage.getItem('users') || '[]');
     }
@@ -471,7 +478,6 @@
       document.getElementById('registerMessage').textContent = '';
     }
 
-    // Registra um novo usuário com e-mail + senha
     function registerUser() {
       const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value.trim();
@@ -482,7 +488,6 @@
         msgEl.textContent = 'Preencha e-mail e senha.';
         return;
       }
-      // Validação simples de e-mail
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         msgEl.style.color = '#f55';
@@ -495,16 +500,13 @@
         msgEl.textContent = 'E-mail já cadastrado.';
         return;
       }
-      // Adiciona novo usuário
       users.push({ email, password });
       setUsers(users);
       msgEl.style.color = '#6a0';
       msgEl.textContent = 'Registrado com sucesso! Faça login.';
-      // Troca para tela de login após 1,5s
       setTimeout(showLogin, 1500);
     }
 
-    // Tenta fazer login com e-mail + senha
     function loginUser() {
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value.trim();
@@ -522,10 +524,8 @@
         msgEl.textContent = 'Credenciais inválidas.';
         return;
       }
-      // Salva usuário logado e fecha overlay de login
       localStorage.setItem('currentUser', email);
       document.getElementById('loginOverlay').style.display = 'none';
-      // Após logar, continua o fluxo que chamou o modal (isto é: chama checkout se necessário)
       if (typeof pendingCheckout === 'function') {
         pendingCheckout();
         pendingCheckout = null;
@@ -540,8 +540,6 @@
     /* =====================================================
        FUNÇÕES DE RENDERIZAÇÃO E INTERAÇÃO
     ===================================================== */
-
-    // Ajusta o estoque subtraindo o que já está no carrinho
     function reconcileCartWithInventory() {
       if (!cart.length) return;
       cart.forEach(item => {
@@ -551,7 +549,6 @@
       });
     }
 
-    // Renderiza todos os cards de produtos
     function renderProducts() {
       reconcileCartWithInventory();
       const list = document.getElementById('productList');
@@ -562,17 +559,14 @@
         card.className = 'product';
         card.id = `prod-${p.id}`;
 
-        // Filtra combinações cor|tamanho com estoque > 0
         const inStockKeys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
 
         if (inStockKeys.length === 0) {
-          // Produto 100% ESGOTADO
           card.innerHTML = `
             <div class="sold-out-placeholder">ESGOTADO</div>
             <h3>${p.name}</h3>
           `;
         } else {
-          // Extrai listas únicas de cores e tamanhos disponíveis
           const colors = [...new Set(inStockKeys.map(k => k.split('|')[0]))];
           const sizes = [...new Set(inStockKeys.map(k => k.split('|')[1]))];
           const initialSize = sizes[0];
@@ -604,7 +598,6 @@
       updateCartCount();
     }
 
-    // Configura listeners para selects e botões de cada produto
     function initProductListeners() {
       products.forEach(p => {
         const sizeEl = document.getElementById(`tam-${p.id}`);
@@ -626,7 +619,6 @@
       });
     }
 
-    // Atualiza o preço quando muda o tamanho
     function updatePriceBySize(id) {
       const size = document.getElementById(`tam-${id}`).value;
       const prod = products.find(x => x.id === id);
@@ -634,7 +626,6 @@
       document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
     }
 
-    // Atualiza a label de “Estoque: X”
     function updateStockLabel(id) {
       const colorSelect = document.getElementById(`cor-${id}`);
       const sizeSelect = document.getElementById(`tam-${id}`);
@@ -647,19 +638,16 @@
       label.textContent = `Estoque: ${stock}`;
     }
 
-    // Adiciona ao carrinho: desconta do estoque, salva em localStorage e re-renderiza
     function addToCart(id) {
       const color = document.getElementById(`cor-${id}`).value;
       const size = document.getElementById(`tam-${id}`).value;
       const key = `${color}|${size}`;
       if (inventory[id][key] < 1) return;
 
-      // Adiciona ou incrementa no array cart
       const existing = cart.find(i => i.id === id && i.color === color && i.size === size);
       if (existing) existing.quantity++;
       else cart.push({ id, color, size, quantity: 1 });
 
-      // Desconta no estoque
       inventory[id][key]--;
       localStorage.setItem('cart', JSON.stringify(cart));
 
@@ -668,7 +656,6 @@
       showAlert('Adicionado ao carrinho');
     }
 
-    // Alterna a visibilidade do popup do carrinho
     function toggleCartPopup() {
       const popup = document.getElementById('cartPopup');
       if (popup.style.display === 'flex') closeCart();
@@ -678,7 +665,6 @@
       }
     }
 
-    // Renderiza itens do carrinho, seção de cupom e totais
     function renderCartPopup() {
       const container = document.getElementById('cartItems');
       container.innerHTML = '';
@@ -724,7 +710,6 @@
       document.getElementById('couponMessage').textContent = '';
     }
 
-    // Altera quantidade no carrinho, ajusta estoque e re-renderiza
     function changeQty(id, color, size, delta) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
@@ -745,7 +730,6 @@
       updateCartCount();
     }
 
-    // Remove item do carrinho, restaura estoque e re-renderiza
     function removeFromCart(id, color, size) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
@@ -764,7 +748,6 @@
       document.getElementById('cartPopup').style.display = 'none';
     }
 
-    // Aplica cupom de desconto
     function applyCoupon() {
       const code = document.getElementById('couponCode').value.trim().toUpperCase();
       const msgEl = document.getElementById('couponMessage');
@@ -791,24 +774,19 @@
       renderCartPopup();
     }
 
-    // variável que guarda a função de “continuar checkout” após o usuário logar
     let pendingCheckout = null;
 
-    // FINALIZA COMPRA: se não tiver login, abre modal; caso contrário, prossegue para WhatsApp
     function checkout() {
       const currentUser = localStorage.getItem('currentUser');
       if (!cart.length) return;
 
       if (!currentUser) {
-        // Guarda que, ao logar, deve chamar checkout() de novo
         pendingCheckout = checkout;
-        // Exibe modal de login/registro
         document.getElementById('loginOverlay').style.display = 'flex';
         showLogin();
         return;
       }
 
-      // Se o usuário já estiver logado, monta a mensagem e salva histórico
       let msg = 'Olá, gostaria de comprar:\n';
       let total = 0;
       cart.forEach(item => {
@@ -826,7 +804,6 @@
         msg += `\nTotal: R$${total.toFixed(2)}`;
       }
 
-      // SALVA NO HISTÓRICO do usuário logado (por e-mail)
       const historyKey = `history_${currentUser}`;
       const previousHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
       const purchaseRecord = {
@@ -847,11 +824,9 @@
       previousHistory.push(purchaseRecord);
       localStorage.setItem(historyKey, JSON.stringify(previousHistory));
 
-      // Abre WhatsApp
       const phone = '5541999737694';
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
 
-      // Limpa carrinho e dados relacionados
       cart = [];
       localStorage.removeItem('cart');
       appliedCoupon = null;
@@ -861,13 +836,11 @@
       closeCart();
     }
 
-    // Atualiza contador no ícone do carrinho
     function updateCartCount() {
       const count = cart.reduce((acc, i) => acc + i.quantity, 0);
       document.getElementById('cartCount').textContent = count;
     }
 
-    // Alerta customizado
     function showAlert(text) {
       const div = document.createElement('div');
       div.className = 'custom-alert';
@@ -876,7 +849,6 @@
       setTimeout(() => div.remove(), 2000);
     }
 
-    // Botão “voltar ao topo”
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('btnTop');
       btn.style.display = window.scrollY > 300 ? 'block' : 'none';
@@ -885,7 +857,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Ao carregar a página, renderiza produtos e contador
     document.addEventListener('DOMContentLoaded', () => {
       renderProducts();
       updateCartCount();
