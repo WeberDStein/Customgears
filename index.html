@@ -11,9 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    /* =======================
+    /* =======================================================
        RESET & ESTILIZAÇÕES GERAIS
-       ======================= */
+     ======================================================= */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #000;
@@ -65,52 +65,9 @@
       opacity: 0.6;
     }
 
-    /* =======================
-       OVERLAY DE LOGIN
-       ======================= */
-    #loginOverlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-    #loginBox {
-      background: #111;
-      padding: 2rem;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 350px;
-      text-align: center;
-    }
-    #loginBox h3 {
-      margin-bottom: 1rem;
-      color: #aa88cc;
-      font-family: 'UnifrakturCook', cursive;
-    }
-    #loginBox input {
-      width: 100%;
-      padding: 0.5rem;
-      margin: 0.5rem 0;
-      border: 1px solid #444;
-      border-radius: 4px;
-      background: #222;
-      color: #fff;
-      font-size: 1rem;
-    }
-    #loginBox .small-link {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: #ccc;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    /* =======================
-       ESTILO DOS PRODUTOS E CARRINHO
-       ======================= */
+    /* =======================================================
+       PRODUTOS E CARRINHO
+     ======================================================= */
     .products {
       display: flex;
       flex-wrap: wrap;
@@ -319,49 +276,77 @@
       .products { flex-direction: column; align-items: center; }
       .product { width: 80%; }
     }
+
+
+    /* =======================================================
+       OVERLAY DE LOGIN / REGISTRO (exibido somente quando
+       o usuário precisa logar para finalizar compra)
+     ======================================================= */
+    #loginOverlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    #loginBox {
+      background: #111;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
+    }
+    #loginBox h3 {
+      margin-bottom: 1rem;
+      color: #aa88cc;
+      font-family: 'UnifrakturCook', cursive;
+    }
+    #loginBox input {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 1px solid #444;
+      border-radius: 4px;
+      background: #222;
+      color: #fff;
+      font-size: 1rem;
+    }
+    #loginBox .small-link {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #ccc;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    #loginMessage, #registerMessage {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #f55;
+    }
   </style>
 </head>
 
-<body>
-  <!-- =======================
-       OVERLAY DE LOGIN / REGISTRO
-       ======================= -->
-  <div id="loginOverlay">
-    <div id="loginBox">
-      <h3>Custom Gears</h3>
-      <div id="loginForm">
-        <input type="text" id="loginUsername" placeholder="Usuário" autocomplete="username" />
-        <input type="password" id="loginPassword" placeholder="Senha" autocomplete="current-password" />
-        <button onclick="loginUser()">Entrar</button>
-        <div id="loginMessage" style="margin-top:0.5rem; color:#f55; font-size:0.9rem;"></div>
-        <div class="small-link" onclick="showRegister()">Não tem conta? Cadastre-se</div>
-      </div>
-      <div id="registerForm" style="display:none;">
-        <input type="text" id="regUsername" placeholder="Novo usuário" autocomplete="username" />
-        <input type="password" id="regPassword" placeholder="Nova senha" autocomplete="new-password" />
-        <button onclick="registerUser()">Registrar</button>
-        <div id="registerMessage" style="margin-top:0.5rem; color:#f55; font-size:0.9rem;"></div>
-        <div class="small-link" onclick="showLogin()">Já tem conta? Entrar</div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Ícone do Carrinho (só aparece após login) -->
-  <div class="cart" onclick="toggleCartPopup()" style="display:none;">
+<body>
+  <!-- Ícone do Carrinho -->
+  <div class="cart" onclick="toggleCartPopup()">
     🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
   </div>
 
   <!-- HEADER fixo -->
   <header>Custom Gears</header>
 
-  <!-- CONTAINER DE PRODUTOS (aparece após login) -->
-  <div class="container" id="mainContent" style="display:none;">
+  <!-- CONTAINER DE PRODUTOS (sempre visível) -->
+  <div class="container" id="mainContent">
     <h2>Produtos</h2>
     <div class="products" id="productList"></div>
   </div>
 
-  <!-- FOOTER -->
-  <footer style="display:none;" id="mainFooter">
+  <!-- FOOTER sempre visível -->
+  <footer id="mainFooter">
     <h4>Sobre Nós</h4>
     <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
     <h4>Contato</h4>
@@ -389,8 +374,34 @@
       <p id="cartTotal"></p>
       <p id="discountedTotal" style="color:#aa88cc; font-weight:bold;"></p>
 
+      <!-- Botão de checkout: chama checkout() -->
       <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
       <button onclick="closeCart()" style="margin-top:1rem;">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Overaly de LOGIN/REGISTRO (invisível até o usuário precisar logar) -->
+  <div id="loginOverlay">
+    <div id="loginBox">
+      <h3>Custom Gears</h3>
+
+      <!-- FORMULÁRIO DE LOGIN -->
+      <div id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" autocomplete="username" />
+        <input type="password" id="loginPassword" placeholder="Senha" autocomplete="current-password" />
+        <button onclick="loginUser()">Entrar</button>
+        <div id="loginMessage"></div>
+        <div class="small-link" onclick="showRegister()">Não tem conta? Cadastre-se</div>
+      </div>
+
+      <!-- FORMULÁRIO DE REGISTRO -->
+      <div id="registerForm" style="display:none;">
+        <input type="email" id="regEmail" placeholder="Seu email" autocomplete="username" />
+        <input type="password" id="regPassword" placeholder="Sua senha" autocomplete="new-password" />
+        <button onclick="registerUser()">Registrar</button>
+        <div id="registerMessage"></div>
+        <div class="small-link" onclick="showLogin()">Já tem conta? Entrar</div>
+      </div>
     </div>
   </div>
 
@@ -401,7 +412,7 @@
   <script>
     /* =====================================================
        VARIÁVEIS GLOBAIS E DADOS INICIAIS
-       ===================================================== */
+    ===================================================== */
     // 1) Lista de produtos:
     const products = [
       { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
@@ -440,9 +451,10 @@
     // 4) Carrinho (array de itens). Cada item: { id, color, size, quantity }
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // 5) LÓGICA DE USUÁRIO (LOGIN / REGISTRO)
+    // 5) LÓGICA DE USUÁRIO (LOGIN / REGISTRO) — AGORA USANDO E-MAIL
+
+    // Pega array de usuários salvos em localStorage (formato: [{ email, password }, ...])
     function getUsers() {
-      // Retorna array de usuários salvos (username + senha em plaintext)
       return JSON.parse(localStorage.getItem('users') || '[]');
     }
     function setUsers(arr) {
@@ -450,8 +462,8 @@
     }
 
     function showLogin() {
-      document.getElementById('registerForm').style.display = 'none';
       document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('registerForm').style.display = 'none';
       document.getElementById('loginMessage').textContent = '';
       document.getElementById('registerMessage').textContent = '';
     }
@@ -462,22 +474,32 @@
       document.getElementById('registerMessage').textContent = '';
     }
 
+    // Registra um novo usuário com e-mail + senha
     function registerUser() {
-      const username = document.getElementById('regUsername').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value.trim();
       const msgEl = document.getElementById('registerMessage');
 
-      if (!username || !password) {
-        msgEl.textContent = 'Preencha usuário e senha.';
+      if (!email || !password) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'Preencha e-mail e senha.';
+        return;
+      }
+      // Validação simples de e-mail
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'E-mail inválido.';
         return;
       }
       const users = getUsers();
-      if (users.find(u => u.username === username)) {
-        msgEl.textContent = 'Usuário já existe.';
+      if (users.find(u => u.email === email)) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'E-mail já cadastrado.';
         return;
       }
       // Adiciona novo usuário
-      users.push({ username, password });
+      users.push({ email, password });
       setUsers(users);
       msgEl.style.color = '#6a0'; 
       msgEl.textContent = 'Registrado com sucesso! Faça login.';
@@ -485,24 +507,32 @@
       setTimeout(showLogin, 1500);
     }
 
+    // Tenta fazer login com e-mail + senha
     function loginUser() {
-      const username = document.getElementById('loginUsername').value.trim();
+      const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value.trim();
       const msgEl = document.getElementById('loginMessage');
 
-      if (!username || !password) {
-        msgEl.textContent = 'Preencha usuário e senha.';
+      if (!email || !password) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'Preencha e-mail e senha.';
         return;
       }
       const users = getUsers();
-      const found = users.find(u => u.username === username && u.password === password);
+      const found = users.find(u => u.email === email && u.password === password);
       if (!found) {
+        msgEl.style.color = '#f55';
         msgEl.textContent = 'Credenciais inválidas.';
         return;
       }
-      // Salva usuário logado e esconde overlay
-      localStorage.setItem('currentUser', username);
-      initializeApp(); 
+      // Salva usuário logado e fecha overlay de login
+      localStorage.setItem('currentUser', email);
+      document.getElementById('loginOverlay').style.display = 'none';
+      // Após logar, continua o fluxo que chamou o modal (isto é: chama checkout se necessário)
+      if (typeof pendingCheckout === 'function') {
+        pendingCheckout();
+        pendingCheckout = null;
+      }
     }
 
     function logoutUser() {
@@ -511,29 +541,10 @@
     }
 
     /* =====================================================
-       FUNÇÕES DE RENDERIZAÇÃO E INTERAÇÃO (APÓS LOGIN)
-       ===================================================== */
+       FUNÇÕES DE RENDERIZAÇÃO E INTERAÇÃO (APÓS CARREGAR A PÁGINA)
+    ===================================================== */
 
-    function initializeApp() {
-      // Se não houver usuário logado, exibo overlay. Caso contrário, exibo conteúdo.
-      const current = localStorage.getItem('currentUser');
-      if (!current) {
-        document.getElementById('loginOverlay').style.display = 'flex';
-        document.getElementById('mainContent').style.display = 'none';
-        document.getElementById('mainFooter').style.display = 'none';
-        document.querySelector('.cart').style.display = 'none';
-      } else {
-        document.getElementById('loginOverlay').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
-        document.getElementById('mainFooter').style.display = 'block';
-        document.querySelector('.cart').style.display = 'flex';
-        renderProducts();
-        updateCartCount();
-      }
-    }
-
-    // 6) Ao carregar a página, ajusta produtos conforme carrinho salvo
-    //    e desconta do inventory tudo o que já foi adicionado ao cart
+    // Ajusta o estoque subtraindo o que já está no carrinho
     function reconcileCartWithInventory() {
       if (!cart.length) return;
       cart.forEach(item => {
@@ -543,7 +554,7 @@
       });
     }
 
-    // 7) RENDERIZAÇÃO DOS CARDS DE PRODUTOS
+    // Renderiza todos os cards de produtos
     function renderProducts() {
       reconcileCartWithInventory();
       const list = document.getElementById('productList');
@@ -564,7 +575,7 @@
             <h3>${p.name}</h3>
           `;
         } else {
-          // Extrai lista única de cores e tamanhos disponíveis
+          // Extrai listas únicas de cores e tamanhos disponíveis
           const colors = [...new Set(inStockKeys.map(k => k.split('|')[0]))];
           const sizes = [...new Set(inStockKeys.map(k => k.split('|')[1]))];
           const initialSize = sizes[0];
@@ -593,9 +604,10 @@
       });
 
       initProductListeners();
+      updateCartCount();
     }
 
-    // 8) CONFIGURA EVENTOS (change em selects, click em botões)
+    // Configura listeners para selects e botões de cada produto
     function initProductListeners() {
       products.forEach(p => {
         const sizeEl = document.getElementById(`tam-${p.id}`);
@@ -617,7 +629,7 @@
       });
     }
 
-    // 9) ATUALIZA PREÇO AO MUDAR TAMANHO
+    // Atualiza o preço quando muda o tamanho
     function updatePriceBySize(id) {
       const size = document.getElementById(`tam-${id}`).value;
       const prod = products.find(x => x.id === id);
@@ -625,7 +637,7 @@
       document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
     }
 
-    // 10) ATUALIZA RÓTULO DE “ESTOQUE: X”
+    // Atualiza a label de “Estoque: X”
     function updateStockLabel(id) {
       const colorSelect = document.getElementById(`cor-${id}`);
       const sizeSelect = document.getElementById(`tam-${id}`);
@@ -638,7 +650,7 @@
       label.textContent = `Estoque: ${stock}`;
     }
 
-    // 11) ADICIONA AO CARRINHO: desconta do inventory, salva em localStorage e re-renderiza
+    // Adiciona ao carrinho: desconta do estoque, salva em localStorage e re-renderiza
     function addToCart(id) {
       const color = document.getElementById(`cor-${id}`).value;
       const size = document.getElementById(`tam-${id}`).value;
@@ -650,7 +662,7 @@
       if (existing) existing.quantity++;
       else cart.push({ id, color, size, quantity: 1 });
 
-      // Desconta no inventory
+      // Desconta no estoque
       inventory[id][key]--;
       localStorage.setItem('cart', JSON.stringify(cart));
 
@@ -659,7 +671,7 @@
       showAlert('Adicionado ao carrinho');
     }
 
-    // 12) ABRE / FECHA POPUP DO CARRINHO
+    // Alterna a visibilidade do popup do carrinho
     function toggleCartPopup() {
       const popup = document.getElementById('cartPopup');
       if (popup.style.display === 'flex') closeCart();
@@ -669,7 +681,7 @@
       }
     }
 
-    // 13) RENDERIZA ITENS DO CARRINHO + CUPOM + TOTAL
+    // Renderiza itens do carrinho, seção de cupom e totais
     function renderCartPopup() {
       const container = document.getElementById('cartItems');
       container.innerHTML = '';
@@ -715,7 +727,7 @@
       document.getElementById('couponMessage').textContent = '';
     }
 
-    // 14) ALTERA QUANTIDADE NO CARRINHO, AJUSTA INVENTÁRIO E RE-RENDERIZA
+    // Altera quantidade no carrinho, ajusta estoque e re-renderiza
     function changeQty(id, color, size, delta) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
@@ -736,7 +748,7 @@
       updateCartCount();
     }
 
-    // 15) REMOVE ITEM DO CARRINHO, RESTAURA ESTOQUE E RE-RENDERIZA
+    // Remove item do carrinho, restaura estoque e re-renderiza
     function removeFromCart(id, color, size) {
       const key = `${color}|${size}`;
       const item = cart.find(i => i.id === id && i.color === color && i.size === size);
@@ -755,16 +767,18 @@
       document.getElementById('cartPopup').style.display = 'none';
     }
 
-    // 16) APLICA CUPOM DE DESCONTO
+    // Aplica cupom de desconto
     function applyCoupon() {
       const code = document.getElementById('couponCode').value.trim().toUpperCase();
       const msgEl = document.getElementById('couponMessage');
 
       if (!code) {
+        msgEl.style.color = '#f55';
         msgEl.textContent = 'Digite um cupom.';
         return;
       }
       if (!cart.length) {
+        msgEl.style.color = '#f55';
         msgEl.textContent = 'Seu carrinho está vazio.';
         return;
       }
@@ -780,12 +794,24 @@
       renderCartPopup();
     }
 
-    // 17) FINALIZA COMPRA: abre WhatsApp + SALVA HISTÓRICO DE COMPRAS
+    // variável que guarda a função de “continuar checkout” após o usuário logar
+    let pendingCheckout = null;
+
+    // FINALIZA COMPRA: se não tiver login, abre modal; caso contrário, prossegue para WhatsApp
     function checkout() {
       const currentUser = localStorage.getItem('currentUser');
-      if (!cart.length || !currentUser) return;
+      if (!cart.length) return;
 
-      // Monta mensagem do WhatsApp
+      if (!currentUser) {
+        // Guarda que, ao logar, deve chamar checkout() de novo
+        pendingCheckout = checkout;
+        // Exibe modal de login/registro
+        document.getElementById('loginOverlay').style.display = 'flex';
+        showLogin();
+        return;
+      }
+
+      // Se o usuário já estiver logado, monta a mensagem e salva histórico
       let msg = 'Olá, gostaria de comprar:\n';
       let total = 0;
       cart.forEach(item => {
@@ -803,7 +829,7 @@
         msg += `\nTotal: R$${total.toFixed(2)}`;
       }
 
-      // SALVA NO HISTÓRICO do usuário:
+      // SALVA NO HISTÓRICO do usuário logado (por e-mail)
       const historyKey = `history_${currentUser}`;
       const previousHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
       const purchaseRecord = {
@@ -814,7 +840,7 @@
           color: item.color,
           size: item.size,
           quantity: item.quantity,
-          unitPrice: (products.find(p => p.id === item.id).sizePrices || { })[item.size] || products.find(p => p.id === item.id).price
+          unitPrice: (products.find(p => p.id === item.id).sizePrices || {})[item.size] || products.find(p => p.id === item.id).price
         })),
         coupon: appliedCoupon || null,
         total: appliedCoupon
@@ -838,13 +864,13 @@
       closeCart();
     }
 
-    // 18) ATUALIZA CONTADOR NO ÍCONE DO CARRINHO
+    // Atualiza contador no ícone do carrinho
     function updateCartCount() {
       const count = cart.reduce((acc, i) => acc + i.quantity, 0);
       document.getElementById('cartCount').textContent = count;
     }
 
-    // 19) ALERTA CUSTOMIZADO (pequena caixa no canto superior direito)
+    // Alerta customizado
     function showAlert(text) {
       const div = document.createElement('div');
       div.className = 'custom-alert';
@@ -853,7 +879,7 @@
       setTimeout(() => div.remove(), 2000);
     }
 
-    // 20) BOTÃO “VOLTAR AO TOPO”
+    // Botão “voltar ao topo”
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('btnTop');
       btn.style.display = window.scrollY > 300 ? 'block' : 'none';
@@ -862,9 +888,10 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Ao carregar a página, inicializa o app (mostra overlay ou conteúdo)
+    // Ao carregar a página, renderiza produtos e contador
     document.addEventListener('DOMContentLoaded', () => {
-      initializeApp();
+      renderProducts();
+      updateCartCount();
     });
   </script>
 </body>
