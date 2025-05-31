@@ -270,6 +270,7 @@
       border-radius: 8px;
       z-index: 9999;
       animation: fadein 0.5s, fadeout 0.5s 1.5s;
+      role: alert;
     }
     @keyframes fadein {
       from { opacity: 0; transform: translateY(-20px); }
@@ -521,7 +522,7 @@
         );
       });
 
-      const coupons = { 'CUSTOM10': 10, 'CUSTOM20': 20, 'DESCONTO5': 5 };
+      const coupons = { 'CUSTOM10': 10, 'CUSTOM20': 20, 'FRETEGRATIS': 5 };
       let appliedCoupon = null;
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       let pendingCheckout = null;
@@ -601,7 +602,7 @@
               </select><br>
 
               <label for="tam-${p.id}">Tamanho:</label>
-              <select id="tam-${p.id}">
+              <select id="tam-${p.id}"> 
                 ${sizes.map(s => `<option>${s}</option>`).join('')}
               </select><br>
 
