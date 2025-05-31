@@ -14,49 +14,32 @@
     /* ===========================
        RESET & ESTILIZAÇÕES GERAIS
        =========================== */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #000;
       color: #fff;
       font-family: 'Montserrat', sans-serif;
       margin: 0;
-      padding-top: 70px; /* espaço para o header fixo */
+      padding-top: 70px;
     }
-
-    /* HEADER */
     header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 70px;
-      background: #000;
-      border-bottom: 1px solid #333;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
-    }
-    header .logo {
       font-family: 'UnifrakturCook', cursive;
-      font-size: 2.5rem;
+      font-size: 3rem;
+      text-align: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid #333;
       color: #ccc;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background: #000;
+      z-index: 1000;
     }
-    header #userSection {
-      color: #ccc;
-      font-size: 0.9rem;
-    }
-
     .container {
       max-width: 1000px;
       margin: auto;
       padding: 2rem;
-      padding-top: 100px; /* considerando header fixo */
+      padding-top: 100px;
     }
     h2 {
       color: #aa88cc;
@@ -64,32 +47,88 @@
       border-bottom: 1px solid #444;
       padding-bottom: 0.5rem;
       text-align: center;
-      margin-bottom: 1rem;
     }
-
-    /* BOTÕES GERAIS */
+    /* Botões gerais, menores para evitar sobreposição */
     button {
       background: #800080;
       color: white;
       border: none;
-      padding: 0.4rem 0.8rem;
+      padding: 0.4rem 0.8rem;   /* reduzido */
       border-radius: 4px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.9rem;      /* reduzido */
       transition: background 0.2s;
-      margin-top: 0.4rem;
+      margin-top: 0.4rem;     /* adiciona um pequeno espaçamento acima */
     }
-    button:hover:not(.sold-out-btn) {
-      background: #a020f0;
-    }
-    button:disabled,
-    button.sold-out-btn {
+    button:hover:not(.sold-out-btn) { background: #a020f0; }
+    .sold-out-btn {
       background: #555;
       cursor: not-allowed;
       opacity: 0.6;
     }
 
-    /* Ícone do carrinho */
+    /* ===========================
+       PRODUTOS E CARRINHO
+       =========================== */
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .product {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      width: 250px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.2s ease;
+      position: relative;
+    }
+    .product:hover { transform: scale(1.05); }
+    .product img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+    .product h3 {
+      color: #ddd;
+      margin: 0.5rem 0;
+    }
+    .product .price {
+      color: #ccc;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .stock-label {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 0.5rem;
+    }
+    .sold-out-text {
+      color: #c00;
+      font-weight: bold;
+      margin-top: 0.5rem;
+      display: block;
+    }
+    /* Placeholder para produto totalmente esgotado */
+    .sold-out-placeholder {
+      width: 100%;
+      height: 180px;
+      background: #222;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c00;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    /* Ícone do carrinho fixo */
     .cart {
       position: fixed;
       top: 72px;
@@ -115,80 +154,17 @@
       font-size: 0.8rem;
     }
 
-    /* PRODUTOS */
-    .products {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-    .product {
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      width: 250px;
-      padding: 1rem;
-      text-align: center;
-      transition: transform 0.2s;
-      position: relative;
-    }
-    .product:hover {
-      transform: scale(1.05);
-    }
-    .product img {
-      width: 100%;
-      border-radius: 6px;
-      margin-bottom: 0.5rem;
-      display: block;
-      loading: lazy;
-    }
-    .product h3 {
-      color: #ddd;
-      margin: 0.5rem 0;
-    }
-    .product .price {
-      color: #ccc;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-    .stock-label {
-      font-size: 0.9rem;
-      color: #ccc;
-      margin-bottom: 0.5rem;
-    }
-    .sold-out-placeholder {
-      width: 100%;
-      height: 180px;
-      background: #222;
-      border-radius: 6px;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #c00;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-
     /* POPUP DO CARRINHO */
     .cart-popup {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.8);
       display: none;
       justify-content: center;
       align-items: center;
       z-index: 1002;
     }
-    .cart-popup.active {
-      display: flex;
-    }
     .cart-content {
-      position: relative;
       background: #333;
       padding: 20px;
       border-radius: 8px;
@@ -197,15 +173,6 @@
       text-align: center;
       max-height: 80vh;
       overflow-y: auto;
-      color: #fff;
-    }
-    .cart-content .close-popup {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: transparent;
-      font-size: 1.2rem;
-      color: #fff;
     }
     .qty-btn {
       display: inline-block;
@@ -222,9 +189,8 @@
       padding: 0.3rem 0.6rem;
       margin-left: 8px;
     }
-    .checkout-btn {
+    .checkout {
       background: #4caf50 !important;
-      margin-top: 1rem;
     }
 
     /* CUPOM DE DESCONTO */
@@ -236,27 +202,23 @@
       gap: 0.5rem;
     }
     .coupon-input {
-      width: 55%;
+      width: 55%;           /* ligeiramente menor */
       padding: 0.4rem;
       border-radius: 4px;
       border: 1px solid #555;
       background: #111;
       color: #fff;
-      font-size: 0.9rem;
+      font-size: 0.9rem;    /* ajustado */
     }
     .coupon-btn {
-      padding: 0.4rem 0.8rem;
+      padding: 0.4rem 0.8rem;  /* ajustado */
       font-size: 0.9rem;
     }
     .coupon-message {
       font-size: 0.9rem;
-      margin-top: 0.4rem;
+      margin-top: 0.4rem;   /* espaçamento para não sobrepor as letras */
       color: #ccc;
       text-align: center;
-    }
-    .discounted-total {
-      color: #aa88cc;
-      font-weight: bold;
     }
 
     /* ALERTA CUSTOMIZADO */
@@ -270,7 +232,6 @@
       border-radius: 8px;
       z-index: 9999;
       animation: fadein 0.5s, fadeout 0.5s 1.5s;
-      role: alert;
     }
     @keyframes fadein {
       from { opacity: 0; transform: translateY(-20px); }
@@ -281,24 +242,63 @@
       to { opacity: 0; transform: translateY(-20px); }
     }
 
-    /* OVERLAY DE LOGIN / REGISTRO */
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #111;
+      border-top:1px solid #333;
+    }
+    footer h4 {
+      color: #aa88cc;
+      margin-bottom: 0.5rem;
+    }
+    footer p, footer a {
+      color:#ccc;
+      font-size:0.9rem;
+      margin: 0.2rem 0;
+    }
+    footer a {
+      text-decoration: none;
+    }
+
+    /* BOTÃO VOLTAR AO TOPO */
+    #btnTop {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      font-size: 1.5rem;
+      outline: none;
+      background-color: #800080;
+      color: white;
+      cursor: pointer;
+      padding: 0.5rem 0.8rem;
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #800080;
+      transition: background-color 0.3s;
+    }
+    #btnTop:hover { background-color: #a020f0; }
+    @media (max-width:768px) {
+      .products { flex-direction: column; align-items: center; }
+      .product { width: 80%; }
+    }
+
+    /* =======================================================
+       OVERLAY DE LOGIN / REGISTRO (invisível até necessário)
+       ======================================================= */
     #loginOverlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0, 0, 0, 0.95);
-      display: none;
+      display: none;              /* começa invisível */
       align-items: center;
       justify-content: center;
       z-index: 2000;
     }
-    #loginOverlay.active {
-      display: flex;
-    }
     #loginBox {
-      position: relative;
       background: #111;
       padding: 2rem;
       border-radius: 8px;
@@ -306,25 +306,10 @@
       max-width: 350px;
       text-align: center;
     }
-    #loginBox .close-popup {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: transparent;
-      font-size: 1.2rem;
-      color: #fff;
-    }
     #loginBox h3 {
       margin-bottom: 1rem;
       color: #aa88cc;
       font-family: 'UnifrakturCook', cursive;
-    }
-    #loginBox label {
-      display: block;
-      text-align: left;
-      margin-top: 0.5rem;
-      color: #ccc;
-      font-size: 0.9rem;
     }
     #loginBox input {
       width: 100%;
@@ -336,744 +321,546 @@
       color: #fff;
       font-size: 1rem;
     }
-    .small-link {
+    #loginBox .small-link {
       margin-top: 0.5rem;
       font-size: 0.9rem;
       color: #ccc;
       text-decoration: underline;
       cursor: pointer;
     }
-    .form-message {
+    #loginMessage, #registerMessage {
       margin-top: 0.5rem;
       font-size: 0.9rem;
       color: #f55;
-    }
-    .form-error {
-      color: #f55;
-      font-size: 0.8rem;
-    }
-    .hidden {
-      display: none;
-    }
-
-    /* BOTÃO VOLTAR AO TOPO */
-    #btnTop {
-      display: none;
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 999;
-      font-size: 1.5rem;
-      background-color: #800080;
-      color: white;
-      cursor: pointer;
-      padding: 0.5rem 0.8rem;
-      border: none;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #800080;
-      transition: opacity 0.3s;
-    }
-    #btnTop.show {
-      display: block;
-      opacity: 1;
-    }
-    #btnTop:hover {
-      background-color: #a020f0;
-    }
-
-    @media (max-width:768px) {
-      .products {
-        flex-direction: column;
-        align-items: center;
-      }
-      .product {
-        width: 80%;
-      }
-      header .logo {
-        font-size: 2rem;
-      }
     }
   </style>
 </head>
 
 <body>
   <!-- Ícone do Carrinho -->
-  <div class="cart" onclick="App.toggleCartPopup()">
+  <div class="cart" onclick="toggleCartPopup()">
     🛒 Carrinho <span class="cart-count" id="cartCount">0</span>
   </div>
 
   <!-- HEADER fixo -->
-  <header>
-    <span class="logo">Custom Gears</span>
-    <div id="userSection"></div>
-  </header>
+  <header>Custom Gears</header>
 
-  <!-- CONTAINER DE PRODUTOS -->
-  <main class="container" id="mainContent">
+  <!-- CONTAINER DE PRODUTOS (sempre visível) -->
+  <div class="container" id="mainContent">
     <h2>Produtos</h2>
     <div class="products" id="productList"></div>
-  </main>
+  </div>
 
-  <!-- FOOTER -->
-  <footer>
+  <!-- FOOTER sempre visível -->
+  <footer id="mainFooter">
     <h4>Sobre Nós</h4>
     <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
     <h4>Contato</h4>
     <p>Telefone: (41) 99973-7694</p>
     <p>Email: <a href="mailto:Customgears17@gmail.com">Customgears17@gmail.com</a></p>
     <h4>Redes Sociais</h4>
-    <p><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank" rel="noopener">Instagram</a></p>
+    <p><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">Instagram</a></p>
     <p>© 2025 Custom Gears. Todos os direitos reservados.</p>
   </footer>
 
   <!-- POPUP DO CARRINHO -->
   <div class="cart-popup" id="cartPopup">
-    <aside class="cart-content">
-      <button type="button" class="close-popup" aria-label="Fechar carrinho" onclick="App.toggleCartPopup()">✖</button>
+    <div class="cart-content">
       <h3>Seu Carrinho</h3>
       <div id="cartItems"></div>
 
       <!-- Seção do cupom de desconto -->
       <div class="coupon-section">
         <input type="text" id="couponCode" class="coupon-input" placeholder="Digite seu cupom">
-        <button type="button" class="coupon-btn" onclick="App.applyCoupon()">Aplicar Cupom</button>
+        <button class="coupon-btn" onclick="applyCoupon()">Aplicar Cupom</button>
       </div>
       <div id="couponMessage" class="coupon-message"></div>
 
       <!-- Totais -->
       <p id="cartTotal"></p>
-      <p id="discountedTotal" class="discounted-total"></p>
+      <p id="discountedTotal" style="color:#aa88cc; font-weight:bold;"></p>
 
-      <!-- Botão de checkout -->
-      <button type="button" class="checkout-btn" onclick="App.checkout()">Chamar no WhatsApp</button>
-    </aside>
+      <!-- Botão de checkout: chama checkout() -->
+      <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
+      <button onclick="closeCart()" style="margin-top:0.4rem;">Fechar</button>
+    </div>
   </div>
 
-  <!-- OVERLAY DE LOGIN/REGISTRO -->
+  <!-- Overlay de LOGIN/REGISTRO (aparece apenas quando for preciso) -->
   <div id="loginOverlay">
     <div id="loginBox">
-      <button type="button" class="close-popup" aria-label="Fechar login" onclick="App.closeLoginOverlay()">✖</button>
       <h3>Custom Gears</h3>
 
       <!-- FORMULÁRIO DE LOGIN -->
       <div id="loginForm">
-        <label for="loginEmail">Email</label>
-        <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
-        <div id="loginEmailError" class="form-error"></div>
-
-        <label for="loginPassword">Senha</label>
-        <input type="password" id="loginPassword" placeholder="Senha" autocomplete="current-password">
-        <div id="loginPasswordError" class="form-error"></div>
-
-        <button type="button" onclick="App.loginUser()">Entrar</button>
-        <div id="loginMessage" class="form-message"></div>
-        <div class="small-link" onclick="App.showRegister()">Não tem conta? Cadastre-se</div>
+        <input type="email" id="loginEmail" placeholder="Email" autocomplete="username" />
+        <input type="password" id="loginPassword" placeholder="Senha" autocomplete="current-password" />
+        <button onclick="loginUser()">Entrar</button>
+        <div id="loginMessage"></div>
+        <div class="small-link" onclick="showRegister()">Não tem conta? Cadastre-se</div>
       </div>
 
       <!-- FORMULÁRIO DE REGISTRO -->
-      <div id="registerForm" class="hidden">
-        <label for="regEmail">Seu email</label>
-        <input type="email" id="regEmail" placeholder="Seu email" autocomplete="username">
-        <div id="regEmailError" class="form-error"></div>
-
-        <label for="regPassword">Sua senha</label>
-        <input type="password" id="regPassword" placeholder="Sua senha" autocomplete="new-password">
-        <div id="regPasswordError" class="form-error"></div>
-
-        <button type="button" onclick="App.registerUser()">Registrar</button>
-        <div id="registerMessage" class="form-message"></div>
-        <div class="small-link" onclick="App.showLogin()">Já tem conta? Entrar</div>
+      <div id="registerForm" style="display:none;">
+        <input type="email" id="regEmail" placeholder="Seu email" autocomplete="username" />
+        <input type="password" id="regPassword" placeholder="Sua senha" autocomplete="new-password" />
+        <button onclick="registerUser()">Registrar</button>
+        <div id="registerMessage"></div>
+        <div class="small-link" onclick="showLogin()">Já tem conta? Entrar</div>
       </div>
     </div>
   </div>
 
   <!-- Botão de voltar ao topo -->
-  <button id="btnTop" onclick="App.scrollToTop()" title="Voltar ao Topo" aria-label="Voltar ao topo">↑</button>
+  <button onclick="scrollToTop()" id="btnTop" title="Voltar ao Topo">↑</button>
 
   <script>
-    const App = (() => {
-      // -----------------------------
-      // VARIÁVEIS GLOBAIS
-      // -----------------------------
-      const currencyBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    /* =====================================================
+       VARIÁVEIS GLOBAIS E DADOS INICIAIS
+    ===================================================== */
+    // 1) Lista de produtos:
+    const products = [
+      { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:2, name:'Blusa moletom com capuz Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:3, name:'Blusa moletom Custom Gears', price:149.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:4, name:'Calça moletom Custom Gears', price:139.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
+      { id:5, name:'Meias cano alto Custom Gears', price:29.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['M','G','GG'] },
+      { id:6, name:'Manopla câmbio inox Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Cinza','Cromado'], sizes:['4 polegadas'], sizePrices:{'4 polegadas':39.90} },
+      { id:7, name:'Bandeira Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco'], sizes:['90×150cm','122×183cm'], sizePrices:{'90×150cm':49.90,'122×183cm':59.90} },
+      { id:8, name:'Coifa câmbio Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['Universal'], sizePrices:{'Universal':24.90} },
+      { id:9, name:'Copo térmico personalizado Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Preto','Branco','Cinza'], sizes:['400ml','470ml'], sizePrices:{'400ml':19.90,'470ml':24.90} },
+      { id:10, name:'Chaveiro cordão Custom Gears', img:'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['2,5cm×54cm','3,5cm×14,5cm','2,5cm×19cm'], sizePrices:{'2,5cm×54cm':29.90,'3,5cm×14,5cm':14.90,'2,5cm×19cm':19.90} },
+      { id:11, name:'Adesivos refletivos Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Cinza'], sizes:['100cm×10cm','60cm×6cm'], sizePrices:{'100cm×10cm':59.90,'60cm×6cm':44.90} },
+      { id:12, name:'Aromatizante automotivo Custom Gears', img:'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['5,4cm×5,4cm','7,7cm×5,4cm'], sizePrices:{'5,4cm×5,4cm':7.90,'7,7cm×5,4cm':11.90} }
+    ];
 
-      const products = [
-        { id: 1, name: 'Camiseta oversized Custom Gears', img: 'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors: ['Branco', 'Preto', 'Cinza', 'Roxo'], sizes: ['P', 'M', 'G', 'GG', 'XG'], sizePrices: { 'P': 119.90, 'M': 119.90, 'G': 119.90, 'GG': 119.90, 'XG': 119.90 } },
-        { id: 2, name: 'Blusa moletom com capuz Custom Gears', img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco', 'Preto', 'Cinza', 'Roxo'], sizes: ['P', 'M', 'G', 'GG', 'XG'], sizePrices: { 'P': 159.90, 'M': 159.90, 'G': 159.90, 'GG': 159.90, 'XG': 159.90 } },
-        { id: 3, name: 'Blusa moletom Custom Gears', img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco', 'Preto', 'Cinza', 'Roxo'], sizes: ['P', 'M', 'G', 'GG', 'XG'], sizePrices: { 'P': 149.90, 'M': 149.90, 'G': 149.90, 'GG': 149.90, 'XG': 149.90 } },
-        { id: 4, name: 'Calça moletom Custom Gears', img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco', 'Preto', 'Cinza', 'Roxo'], sizes: ['P', 'M', 'G', 'GG', 'XG'], sizePrices: { 'P': 139.90, 'M': 139.90, 'G': 139.90, 'GG': 139.90, 'XG': 139.90 } },
-        { id: 5, name: 'Meias cano alto Custom Gears', img: 'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors: ['Branco', 'Preto', 'Cinza', 'Roxo'], sizes: ['M', 'G', 'GG'], sizePrices: { 'M': 29.90, 'G': 29.90, 'GG': 29.90 } },
-        { id: 6, name: 'Manopla câmbio inox Custom Gears', img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto', 'Cinza', 'Cromado'], sizes: ['4 polegadas'], sizePrices: { '4 polegadas': 39.90 } },
-        { id: 7, name: 'Bandeira Custom Gears', img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto', 'Branco'], sizes: ['90×150cm', '122×183cm'], sizePrices: { '90×150cm': 49.90, '122×183cm': 59.90 } },
-        { id: 8, name: 'Coifa câmbio Custom Gears', img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco', 'Preto', 'Cinza', 'Roxo'], sizes: ['Universal'], sizePrices: { 'Universal': 24.90 } },
-        { id: 9, name: 'Copo térmico personalizado Custom Gears', img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Preto', 'Branco', 'Cinza'], sizes: ['400ml', '470ml'], sizePrices: { '400ml': 19.90, '470ml': 24.90 } },
-        { id: 10, name: 'Chaveiro cordão Custom Gears', img: 'https://i.postimg.cc/J04rPZ4y/volante1.jpg', colors: ['Branco', 'Preto', 'Cinza', 'Roxo'], sizes: ['2,5cm×54cm', '3,5cm×14,5cm', '2,5cm×19cm'], sizePrices: { '2,5cm×54cm': 29.90, '3,5cm×14,5cm': 14.90, '2,5cm×19cm': 19.90 } },
-        { id: 11, name: 'Adesivos refletivos Custom Gears', img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors: ['Branco', 'Cinza'], sizes: ['100cm×10cm', '60cm×6cm'], sizePrices: { '100cm×10cm': 59.90, '60cm×6cm': 44.90 } },
-        { id: 12, name: 'Aromatizante automotivo Custom Gears', img: 'https://i.postimg.cc/nVqD3dzV/chaveiro1.jpg', colors: ['Branco', 'Preto', 'Cinza', 'Roxo'], sizes: ['5,4cm×5,4cm', '7,7cm×5,4cm'], sizePrices: { '5,4cm×5,4cm': 7.90, '7,7cm×5,4cm': 11.90 } }
-      ];
+    // 2) Estoque inicial (5 unidades para cada combinação cor|tamanho)
+    const inventory = {};
+    products.forEach(p => {
+      inventory[p.id] = {};
+      const colors = p.colors || [];
+      const sizes = p.sizes || [];
+      colors.forEach(c => sizes.forEach(s => {
+        inventory[p.id][`${c}|${s}`] = 5;
+      }));
+    });
 
-      const inventory = {};
-      products.forEach(p => {
-        inventory[p.id] = {};
-        p.colors.forEach(c =>
-          p.sizes.forEach(s => {
-            inventory[p.id][`${c}|${s}`] = 5;
-          })
-        );
-      });
+    // 3) Cupons de desconto (código → percentual)
+    const coupons = {
+      'CUSTOM10': 10,
+      'CUSTOM20': 20,
+      'FRETEGRATIS': 5
+    };
+    let appliedCoupon = null; // guarda código de cupom se for válido
 
-      const coupons = { 'CUSTOM10': 10, 'CUSTOM20': 20, 'FRETEGRATIS': 5 };
-      let appliedCoupon = null;
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      let pendingCheckout = null;
+    // 4) Carrinho (array de itens). Cada item: { id, color, size, quantity }
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-      // -----------------------------
-      // Funções de Persistência
-      // -----------------------------
-      function getUsers() {
-        return JSON.parse(localStorage.getItem('users') || '[]');
+    // 5) LÓGICA DE USUÁRIO (LOGIN / REGISTRO) — AGORA USANDO E-MAIL
+
+    function getUsers() {
+      return JSON.parse(localStorage.getItem('users') || '[]');
+    }
+    function setUsers(arr) {
+      localStorage.setItem('users', JSON.stringify(arr));
+    }
+
+    function showLogin() {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('registerForm').style.display = 'none';
+      document.getElementById('loginMessage').textContent = '';
+      document.getElementById('registerMessage').textContent = '';
+    }
+    function showRegister() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('registerForm').style.display = 'block';
+      document.getElementById('loginMessage').textContent = '';
+      document.getElementById('registerMessage').textContent = '';
+    }
+
+    function registerUser() {
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+      const msgEl = document.getElementById('registerMessage');
+
+      if (!email || !password) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'Preencha e-mail e senha.';
+        return;
       }
-      function setUsers(arr) {
-        localStorage.setItem('users', JSON.stringify(arr));
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'E-mail inválido.';
+        return;
       }
-
-      // -----------------------------
-      // Alerta Customizado
-      // -----------------------------
-      function showAlert(text) {
-        if (document.querySelector('.custom-alert')) return;
-        const div = document.createElement('div');
-        div.className = 'custom-alert';
-        div.setAttribute('role', 'alert');
-        div.textContent = text;
-        document.body.appendChild(div);
-        setTimeout(() => div.remove(), 2000);
+      const users = getUsers();
+      if (users.find(u => u.email === email)) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'E-mail já cadastrado.';
+        return;
       }
+      users.push({ email, password });
+      setUsers(users);
+      msgEl.style.color = '#6a0';
+      msgEl.textContent = 'Registrado com sucesso! Faça login.';
+      setTimeout(showLogin, 1500);
+    }
 
-      // -----------------------------
-      // Reconciliação de Estoque
-      // -----------------------------
-      function reconcileCartWithInventory() {
-        if (!cart.length) return;
-        cart.forEach(item => {
-          const key = `${item.color}|${item.size}`;
-          if (!inventory[item.id][key]) return;
-          inventory[item.id][key] = Math.max(inventory[item.id][key] - item.quantity, 0);
-        });
+    function loginUser() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const msgEl = document.getElementById('loginMessage');
+
+      if (!email || !password) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'Preencha e-mail e senha.';
+        return;
       }
-
-      // -----------------------------
-      // Renderização de Produtos
-      // -----------------------------
-      function renderProducts() {
-        const list = document.getElementById('productList');
-        list.innerHTML = '';
-
-        products.forEach(p => {
-          const card = document.createElement('div');
-          card.className = 'product';
-          card.id = `prod-${p.id}`;
-
-          const inStockKeys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
-
-          if (inStockKeys.length === 0) {
-            card.innerHTML = `
-              <div class="sold-out-placeholder">ESGOTADO</div>
-              <h3>${p.name}</h3>
-            `;
-          } else {
-            // Ordenar pela maior quantidade em estoque
-            const sortedKeys = inStockKeys.sort((a, b) => inventory[p.id][b] - inventory[p.id][a]);
-            const [firstColor, firstSize] = sortedKeys[0].split('|');
-            const initialPrice = p.sizePrices[firstSize];
-
-            const colors = [...new Set(inStockKeys.map(k => k.split('|')[0]))];
-            const sizes = [...new Set(inStockKeys.map(k => k.split('|')[1]))];
-
-            card.innerHTML = `
-              <img src="${p.img}" alt="${p.name}" loading="lazy" />
-              <h3>${p.name}</h3>
-              <p class="price">${currencyBRL.format(initialPrice)}</p>
-              <p class="stock-label">Estoque: ${inventory[p.id][`${firstColor}|${firstSize}`]}</p>
-
-              <label for="cor-${p.id}">Cor:</label>
-              <select id="cor-${p.id}">
-                ${colors.map(c => `<option>${c}</option>`).join('')}
-              </select><br>
-
-              <label for="tam-${p.id}">Tamanho:</label>
-              <select id="tam-${p.id}"> 
-                ${sizes.map(s => `<option>${s}</option>`).join('')}
-              </select><br>
-
-              <button type="button" id="btn-${p.id}">Adicionar ao Carrinho</button>
-            `;
-          }
-
-          list.appendChild(card);
-        });
-
-        attachProductListeners();
-        updateCartCount();
+      const users = getUsers();
+      const found = users.find(u => u.email === email && u.password === password);
+      if (!found) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'Credenciais inválidas.';
+        return;
       }
-
-      function attachProductListeners() {
-        const container = document.getElementById('productList');
-
-        container.addEventListener('change', e => {
-          if (e.target.tagName !== 'SELECT') return;
-          const [type, id] = e.target.id.split('-'); // "cor-3" ou "tam-3"
-          updatePriceBySize(Number(id));
-          updateStockLabel(Number(id));
-        });
-
-        container.addEventListener('click', e => {
-          if (e.target.tagName !== 'BUTTON') return;
-          const btnId = e.target.id; // ex: "btn-3"
-          if (btnId && btnId.startsWith('btn-')) {
-            const prodId = Number(btnId.replace('btn-', ''));
-            addToCart(prodId);
-          }
-        });
-      }
-
-      function updatePriceBySize(id) {
-        const size = document.getElementById(`tam-${id}`).value;
-        const prod = products.find(x => x.id === id);
-        const price = prod.sizePrices[size];
-        document.querySelector(`#prod-${id} .price`).textContent = currencyBRL.format(price);
-      }
-
-      function updateStockLabel(id) {
-        const color = document.getElementById(`cor-${id}`).value;
-        const size = document.getElementById(`tam-${id}`).value;
-        const stock = inventory[id][`${color}|${size}`] || 0;
-        const label = document.querySelector(`#prod-${id} .stock-label`);
-        label.textContent = `Estoque: ${stock}`;
-
-        const btn = document.getElementById(`btn-${id}`);
-        if (btn) {
-          if (stock === 0) {
-            btn.textContent = 'Esgotado';
-            btn.disabled = true;
-            btn.classList.add('sold-out-btn');
-          } else {
-            btn.textContent = 'Adicionar ao Carrinho';
-            btn.disabled = false;
-            btn.classList.remove('sold-out-btn');
-          }
-        }
-      }
-
-      function addToCart(id) {
-        const color = document.getElementById(`cor-${id}`).value;
-        const size = document.getElementById(`tam-${id}`).value;
-        const key = `${color}|${size}`;
-        if (inventory[id][key] < 1) {
-          showAlert('Sem estoque disponível');
-          return;
-        }
-
-        const existing = cart.find(i => i.id === id && i.color === color && i.size === size);
-        if (existing) {
-          existing.quantity++;
-        } else {
-          cart.push({ id, color, size, quantity: 1 });
-        }
-
-        inventory[id][key]--;
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        renderProducts();
-        updateCartCount();
-        showAlert('Adicionado ao carrinho');
-      }
-
-      // -----------------------------
-      // CARRINHO
-      // -----------------------------
-      function toggleCartPopup() {
-        const popup = document.getElementById('cartPopup');
-        popup.classList.toggle('active');
-        if (popup.classList.contains('active')) {
-          renderCartPopup();
-        }
-      }
-
-      function renderCartPopup() {
-        const container = document.getElementById('cartItems');
-        container.innerHTML = '';
-
-        if (!cart.length) {
-          container.innerHTML = `<p style="color:#ccc; margin:1rem 0;">Seu carrinho está vazio.</p>`;
-          document.getElementById('cartTotal').textContent = '';
-          document.getElementById('discountedTotal').textContent = '';
-          document.getElementById('couponMessage').textContent = '';
-          appliedCoupon = null;
-          return;
-        }
-
-        let total = 0;
-        cart.forEach(item => {
-          const prod = products.find(p => p.id === item.id);
-          const unitPrice = prod.sizePrices[item.size];
-          total += unitPrice * item.quantity;
-
-          const div = document.createElement('div');
-          div.className = 'cart-item';
-          div.innerHTML = `
-            <p>${prod.name} - ${item.color} / ${item.size}</p>
-            <div>
-              <button type="button" class="qty-btn" aria-label="Diminuir quantidade" onclick="App.changeQty(${item.id}, '${item.color}', '${item.size}', -1)">-</button>
-              <span>${item.quantity}</span>
-              <button type="button" class="qty-btn" aria-label="Aumentar quantidade" onclick="App.changeQty(${item.id}, '${item.color}', '${item.size}', 1)">+</button>
-              <button type="button" class="remove" onclick="App.removeFromCart(${item.id}, '${item.color}', '${item.size}')">Remover</button>
-            </div>
-          `;
-          container.appendChild(div);
-        });
-
-        document.getElementById('cartTotal').textContent = `Total: ${currencyBRL.format(total)}`;
-
-        if (appliedCoupon) {
-          const discountPercent = coupons[appliedCoupon];
-          const discountedValue = total * (1 - discountPercent / 100);
-          document.getElementById('discountedTotal').textContent = `Total com "${appliedCoupon}": ${currencyBRL.format(discountedValue)} (${discountPercent}% off)`;
-        } else {
-          document.getElementById('discountedTotal').textContent = '';
-        }
-        document.getElementById('couponMessage').textContent = '';
-      }
-
-      function changeQty(id, color, size, delta) {
-        const key = `${color}|${size}`;
-        const item = cart.find(i => i.id === id && i.color === color && i.size === size);
-        if (!item) return;
-
-        if (delta > 0 && inventory[id][key] < 1) {
-          showAlert('Sem estoque disponível');
-          return;
-        }
-        item.quantity += delta;
-        if (delta > 0) {
-          inventory[id][key]--;
-        } else {
-          inventory[id][key]++;
-        }
-
-        if (item.quantity === 0) {
-          cart = cart.filter(i => !(i.id === id && i.color === color && i.size === size));
-        }
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        renderProducts();
-        renderCartPopup();
-        updateCartCount();
-      }
-
-      function removeFromCart(id, color, size) {
-        const key = `${color}|${size}`;
-        const item = cart.find(i => i.id === id && i.color === color && i.size === size);
-        if (!item) return;
-
-        inventory[id][key] += item.quantity;
-        cart = cart.filter(i => !(i.id === id && i.color === color && i.size === size));
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        renderProducts();
-        renderCartPopup();
-        updateCartCount();
-      }
-
-      function applyCoupon() {
-        const code = document.getElementById('couponCode').value.trim().toUpperCase();
-        const msgEl = document.getElementById('couponMessage');
-
-        if (!code) {
-          msgEl.style.color = '#f55';
-          msgEl.textContent = 'Digite um cupom.';
-          return;
-        }
-        if (!cart.length) {
-          msgEl.style.color = '#f55';
-          msgEl.textContent = 'Seu carrinho está vazio.';
-          return;
-        }
-        if (appliedCoupon === code) {
-          msgEl.style.color = '#f55';
-          msgEl.textContent = 'Cupom já está aplicado.';
-          return;
-        }
-        if (coupons[code]) {
-          appliedCoupon = code;
-          msgEl.style.color = '#6a0';
-          msgEl.textContent = `Cupom "${code}" aplicado: ${coupons[code]}% de desconto!`;
-        } else {
-          appliedCoupon = null;
-          msgEl.style.color = '#f55';
-          msgEl.textContent = `"${code}" não é um cupom válido.`;
-        }
-        renderCartPopup();
-      }
-
-      // -----------------------------
-      // AUTENTICAÇÃO
-      // -----------------------------
-      function showLogin() {
-        document.getElementById('loginForm').classList.remove('hidden');
-        document.getElementById('registerForm').classList.add('hidden');
-        document.getElementById('loginMessage').textContent = '';
-        document.getElementById('loginEmailError').textContent = '';
-        document.getElementById('loginPasswordError').textContent = '';
-        document.getElementById('regEmailError').textContent = '';
-        document.getElementById('regPasswordError').textContent = '';
-      }
-      function showRegister() {
-        document.getElementById('loginForm').classList.add('hidden');
-        document.getElementById('registerForm').classList.remove('hidden');
-        document.getElementById('loginMessage').textContent = '';
-        document.getElementById('loginEmailError').textContent = '';
-        document.getElementById('loginPasswordError').textContent = '';
-        document.getElementById('regEmailError').textContent = '';
-        document.getElementById('regPasswordError').textContent = '';
-      }
-
-      function registerUser() {
-        const emailEl = document.getElementById('regEmail');
-        const passEl = document.getElementById('regPassword');
-        const msgEl = document.getElementById('registerMessage');
-        const email = emailEl.value.trim();
-        const password = passEl.value.trim();
-
-        // Limpar erros pré-existentes
-        document.getElementById('regEmailError').textContent = '';
-        document.getElementById('regPasswordError').textContent = '';
-        msgEl.textContent = '';
-
-        let valid = true;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!email) {
-          document.getElementById('regEmailError').textContent = 'E-mail é obrigatório.';
-          valid = false;
-        } else if (!emailRegex.test(email)) {
-          document.getElementById('regEmailError').textContent = 'E-mail inválido.';
-          valid = false;
-        }
-
-        if (!password) {
-          document.getElementById('regPasswordError').textContent = 'Senha é obrigatória.';
-          valid = false;
-        } else if (password.length < 6) {
-          document.getElementById('regPasswordError').textContent = 'A senha deve ter pelo menos 6 caracteres.';
-          valid = false;
-        }
-
-        if (!valid) {
-          return;
-        }
-
-        const users = getUsers();
-        if (users.find(u => u.email === email)) {
-          msgEl.style.color = '#f55';
-          msgEl.textContent = 'E-mail já cadastrado.';
-          return;
-        }
-
-        // Armazenar hash simples (base64) em vez de plain text
-        const hashedPassword = btoa(password);
-        users.push({ email, password: hashedPassword });
-        setUsers(users);
-
-        msgEl.style.color = '#6a0';
-        msgEl.textContent = 'Registrado com sucesso! Faça login.';
-        setTimeout(showLogin, 1500);
-      }
-
-      function loginUser() {
-        const emailEl = document.getElementById('loginEmail');
-        const passEl = document.getElementById('loginPassword');
-        const msgEl = document.getElementById('loginMessage');
-        const email = emailEl.value.trim();
-        const password = passEl.value.trim();
-
-        // Limpar erros pré-existentes
-        document.getElementById('loginEmailError').textContent = '';
-        document.getElementById('loginPasswordError').textContent = '';
-        msgEl.textContent = '';
-
-        let valid = true;
-
-        if (!email) {
-          document.getElementById('loginEmailError').textContent = 'E-mail é obrigatório.';
-          valid = false;
-        }
-        if (!password) {
-          document.getElementById('loginPasswordError').textContent = 'Senha é obrigatória.';
-          valid = false;
-        }
-
-        if (!valid) return;
-
-        const users = getUsers();
-        const hashedAttempt = btoa(password);
-        const found = users.find(u => u.email === email && u.password === hashedAttempt);
-
-        if (!found) {
-          msgEl.style.color = '#f55';
-          msgEl.textContent = 'Credenciais inválidas.';
-          return;
-        }
-
-        localStorage.setItem('currentUser', email);
-        updateUserSection();
-        closeLoginOverlay();
-
-        if (typeof pendingCheckout === 'function') {
-          pendingCheckout();
-          pendingCheckout = null;
-        }
-      }
-
-      function logoutUser() {
-        localStorage.removeItem('currentUser');
-        updateUserSection();
-      }
-
-      function closeLoginOverlay() {
-        document.getElementById('loginOverlay').classList.remove('active');
+      localStorage.setItem('currentUser', email);
+      document.getElementById('loginOverlay').style.display = 'none';
+      if (typeof pendingCheckout === 'function') {
+        pendingCheckout();
         pendingCheckout = null;
       }
+    }
 
-      function openLoginOverlay() {
-        document.getElementById('loginOverlay').classList.add('active');
-        showLogin();
-      }
+    function logoutUser() {
+      localStorage.removeItem('currentUser');
+      location.reload();
+    }
 
-      // -----------------------------
-      // CHECKOUT & HISTÓRICO
-      // -----------------------------
-      function checkout() {
-        const currentUser = localStorage.getItem('currentUser');
-        if (!cart.length) return;
+    /* =====================================================
+       FUNÇÕES DE RENDERIZAÇÃO E INTERAÇÃO
+    ===================================================== */
+    function reconcileCartWithInventory() {
+      if (!cart.length) return;
+      cart.forEach(item => {
+        const key = `${item.color}|${item.size}`;
+        if (!inventory[item.id][key]) return;
+        inventory[item.id][key] = Math.max(inventory[item.id][key] - item.quantity, 0);
+      });
+    }
 
-        if (!currentUser) {
-          pendingCheckout = checkout;
-          document.getElementById('loginOverlay').classList.add('active');
-          showLogin();
-          return;
-        }
+    function renderProducts() {
+      reconcileCartWithInventory();
+      const list = document.getElementById('productList');
+      list.innerHTML = '';
 
-        let msg = 'Olá, gostaria de comprar:\n';
-        let total = 0;
-        cart.forEach(item => {
-          const prod = products.find(p => p.id === item.id);
-          const unitPrice = prod.sizePrices[item.size];
-          const lineTotal = unitPrice * item.quantity;
-          total += lineTotal;
-          msg += `- ${prod.name} (${item.color}/${item.size}) x${item.quantity} – ${currencyBRL.format(lineTotal)}\n`;
-        });
-        if (appliedCoupon && coupons[appliedCoupon]) {
-          const discountPercent = coupons[appliedCoupon];
-          const discountedValue = total * (1 - discountPercent / 100);
-          msg += `\nTotal com "${appliedCoupon}": ${currencyBRL.format(discountedValue)} (${discountPercent}% off)`;
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product';
+        card.id = `prod-${p.id}`;
+
+        const inStockKeys = Object.keys(inventory[p.id]).filter(k => inventory[p.id][k] > 0);
+
+        if (inStockKeys.length === 0) {
+          card.innerHTML = `
+            <div class="sold-out-placeholder">ESGOTADO</div>
+            <h3>${p.name}</h3>
+          `;
         } else {
-          msg += `\nTotal: ${currencyBRL.format(total)}`;
+          const colors = [...new Set(inStockKeys.map(k => k.split('|')[0]))];
+          const sizes = [...new Set(inStockKeys.map(k => k.split('|')[1]))];
+          const initialSize = sizes[0];
+          const initialPrice = p.sizePrices ? p.sizePrices[initialSize] : p.price;
+
+          card.innerHTML = `
+            <img src="${p.img}" alt="${p.name}"/>
+            <h3>${p.name}</h3>
+            <p class="price">R$${initialPrice.toFixed(2)}</p>
+            <p class="stock-label">Estoque: ${inventory[p.id][`${colors[0]}|${initialSize}`]}</p>
+            <label>Cor:
+              <select id="cor-${p.id}">
+                ${colors.map(c => `<option>${c}</option>`).join('')}
+              </select>
+            </label><br>
+            <label>Tamanho:
+              <select id="tam-${p.id}">
+                ${sizes.map(s => `<option>${s}</option>`).join('')}
+              </select>
+            </label><br>
+            <button id="btn-${p.id}">Adicionar ao Carrinho</button>
+          `;
         }
 
-        // Gravar histórico
-        const historyKey = `history_${currentUser}`;
-        const previousHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
-        const purchaseRecord = {
-          date: new Date().toLocaleString('pt-BR'),
-          items: cart.map(item => ({
-            id: item.id,
-            name: products.find(p => p.id === item.id).name,
-            color: item.color,
-            size: item.size,
-            quantity: item.quantity,
-            unitPrice: products.find(p => p.id === item.id).sizePrices[item.size]
-          })),
-          coupon: appliedCoupon || null,
-          total: appliedCoupon
-            ? Number((total * (1 - coupons[appliedCoupon] / 100)).toFixed(2))
-            : Number(total.toFixed(2))
-        };
-        previousHistory.push(purchaseRecord);
-        localStorage.setItem(historyKey, JSON.stringify(previousHistory));
+        list.appendChild(card);
+      });
 
-        // Abrir WhatsApp
-        const phone = '5541999737694';
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+      initProductListeners();
+      updateCartCount();
+    }
 
-        // Limpar carrinho
-        cart = [];
-        localStorage.removeItem('cart');
-        appliedCoupon = null;
-        updateCartCount();
-        renderProducts();
+    function initProductListeners() {
+      products.forEach(p => {
+        const sizeEl = document.getElementById(`tam-${p.id}`);
+        const colorEl = document.getElementById(`cor-${p.id}`);
+        const btn = document.getElementById(`btn-${p.id}`);
+
+        if (sizeEl) {
+          sizeEl.addEventListener('change', () => {
+            updatePriceBySize(p.id);
+            updateStockLabel(p.id);
+          });
+        }
+        if (colorEl) {
+          colorEl.addEventListener('change', () => updateStockLabel(p.id));
+        }
+        if (btn) {
+          btn.addEventListener('click', () => addToCart(p.id));
+        }
+      });
+    }
+
+    function updatePriceBySize(id) {
+      const size = document.getElementById(`tam-${id}`).value;
+      const prod = products.find(x => x.id === id);
+      const price = prod.sizePrices ? prod.sizePrices[size] : prod.price;
+      document.querySelector(`#prod-${id} .price`).textContent = `R$${price.toFixed(2)}`;
+    }
+
+    function updateStockLabel(id) {
+      const colorSelect = document.getElementById(`cor-${id}`);
+      const sizeSelect = document.getElementById(`tam-${id}`);
+      if (!colorSelect || !sizeSelect) return;
+
+      const color = colorSelect.value;
+      const size = sizeSelect.value;
+      const stock = inventory[id][`${color}|${size}`] || 0;
+      const label = document.querySelector(`#prod-${id} .stock-label`);
+      label.textContent = `Estoque: ${stock}`;
+    }
+
+    function addToCart(id) {
+      const color = document.getElementById(`cor-${id}`).value;
+      const size = document.getElementById(`tam-${id}`).value;
+      const key = `${color}|${size}`;
+      if (inventory[id][key] < 1) return;
+
+      const existing = cart.find(i => i.id === id && i.color === color && i.size === size);
+      if (existing) existing.quantity++;
+      else cart.push({ id, color, size, quantity: 1 });
+
+      inventory[id][key]--;
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      renderProducts();
+      updateCartCount();
+      showAlert('Adicionado ao carrinho');
+    }
+
+    function toggleCartPopup() {
+      const popup = document.getElementById('cartPopup');
+      if (popup.style.display === 'flex') closeCart();
+      else {
         renderCartPopup();
+        popup.style.display = 'flex';
+      }
+    }
+
+    function renderCartPopup() {
+      const container = document.getElementById('cartItems');
+      container.innerHTML = '';
+
+      if (!cart.length) {
+        container.innerHTML = `<p style="color:#ccc; margin:1rem 0;">Seu carrinho está vazio.</p>`;
+        document.getElementById('cartTotal').textContent = '';
+        document.getElementById('discountedTotal').textContent = '';
+        document.getElementById('couponMessage').textContent = '';
+        appliedCoupon = null;
+        return;
       }
 
-      // -----------------------------
-      // UTILITÁRIOS
-      // -----------------------------
-      function updateCartCount() {
-        const count = cart.reduce((acc, i) => acc + i.quantity, 0);
-        document.getElementById('cartCount').textContent = count;
-      }
+      let total = 0;
+      cart.forEach(item => {
+        const prod = products.find(p => p.id === item.id);
+        const price = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
+        total += price * item.quantity;
 
-      function updateUserSection() {
-        const section = document.getElementById('userSection');
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-          section.innerHTML = `Olá, ${currentUser} <button type="button" onclick="App.logoutUser()">Sair</button>`;
-        } else {
-          section.innerHTML = `<button type="button" onclick="App.openLoginOverlay()">Entrar</button>`;
-        }
-      }
-
-      function scrollToTop() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-
-      // Mostrar/ocultar botão topo
-      window.addEventListener('scroll', () => {
-        const btn = document.getElementById('btnTop');
-        if (window.scrollY > 300) {
-          btn.classList.add('show');
-        } else {
-          btn.classList.remove('show');
-        }
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <p>${prod.name} - ${item.color} / ${item.size}</p>
+          <div>
+            <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', -1)">-</span>
+            <span>${item.quantity}</span>
+            <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', 1)">+</span>
+            <button class="remove" onclick="removeFromCart(${item.id}, '${item.color}', '${item.size}')">Remover</button>
+          </div>
+        `;
+        container.appendChild(div);
       });
 
-      // -----------------------------
-      // INICIALIZAÇÃO
-      // -----------------------------
-      document.addEventListener('DOMContentLoaded', () => {
-        reconcileCartWithInventory();
-        renderProducts();
-        updateCartCount();
-        updateUserSection();
-      });
+      document.getElementById('cartTotal').textContent = `Total: R$${total.toFixed(2)}`;
 
-      return {
-        toggleCartPopup,
-        renderCartPopup,
-        changeQty,
-        removeFromCart,
-        applyCoupon,
-        checkout,
-        registerUser,
-        loginUser,
-        logoutUser,
-        showRegister,
-        showLogin,
-        closeLoginOverlay,
-        openLoginOverlay,
-        scrollToTop
+      if (appliedCoupon) {
+        const discountPercent = coupons[appliedCoupon];
+        const discountedValue = total * (1 - discountPercent / 100);
+        document.getElementById('discountedTotal').textContent =
+          `Total com "${appliedCoupon}": R$${discountedValue.toFixed(2)} (${discountPercent}% off)`;
+      } else {
+        document.getElementById('discountedTotal').textContent = '';
+      }
+      document.getElementById('couponMessage').textContent = '';
+    }
+
+    function changeQty(id, color, size, delta) {
+      const key = `${color}|${size}`;
+      const item = cart.find(i => i.id === id && i.color === color && i.size === size);
+      if (!item) return;
+
+      if (delta > 0 && inventory[id][key] < 1) return;
+      item.quantity += delta;
+      if (delta > 0) inventory[id][key]--;
+      else inventory[id][key]++;
+
+      if (item.quantity === 0) {
+        cart = cart.filter(i => !(i.id === id && i.color === color && i.size === size));
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      renderProducts();
+      renderCartPopup();
+      updateCartCount();
+    }
+
+    function removeFromCart(id, color, size) {
+      const key = `${color}|${size}`;
+      const item = cart.find(i => i.id === id && i.color === color && i.size === size);
+      if (!item) return;
+
+      inventory[id][key] += item.quantity;
+      cart = cart.filter(i => !(i.id === id && i.color === color && i.size === size));
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      renderProducts();
+      renderCartPopup();
+      updateCartCount();
+    }
+
+    function closeCart() {
+      document.getElementById('cartPopup').style.display = 'none';
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById('couponCode').value.trim().toUpperCase();
+      const msgEl = document.getElementById('couponMessage');
+
+      if (!code) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'Digite um cupom.';
+        return;
+      }
+      if (!cart.length) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'Seu carrinho está vazio.';
+        return;
+      }
+      if (coupons[code]) {
+        appliedCoupon = code;
+        msgEl.style.color = '#6a0';
+        msgEl.textContent = `Cupom "${code}" aplicado: ${coupons[code]}% de desconto!`;
+      } else {
+        appliedCoupon = null;
+        msgEl.style.color = '#f55';
+        msgEl.textContent = `"${code}" não é um cupom válido.`;
+      }
+      renderCartPopup();
+    }
+
+    let pendingCheckout = null;
+
+    function checkout() {
+      const currentUser = localStorage.getItem('currentUser');
+      if (!cart.length) return;
+
+      if (!currentUser) {
+        pendingCheckout = checkout;
+        document.getElementById('loginOverlay').style.display = 'flex';
+        showLogin();
+        return;
+      }
+
+      let msg = 'Olá, gostaria de comprar:\n';
+      let total = 0;
+      cart.forEach(item => {
+        const prod = products.find(p => p.id === item.id);
+        const unitPrice = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
+        const lineTotal = unitPrice * item.quantity;
+        total += lineTotal;
+        msg += `- ${prod.name} (${item.color}/${item.size}) x${item.quantity} – R$${lineTotal.toFixed(2)}\n`;
+      });
+      if (appliedCoupon && coupons[appliedCoupon]) {
+        const discountPercent = coupons[appliedCoupon];
+        const discountedValue = total * (1 - discountPercent / 100);
+        msg += `\nTotal com "${appliedCoupon}": R$${discountedValue.toFixed(2)} (${discountPercent}% off)`;
+      } else {
+        msg += `\nTotal: R$${total.toFixed(2)}`;
+      }
+
+      const historyKey = `history_${currentUser}`;
+      const previousHistory = JSON.parse(localStorage.getItem(historyKey) || '[]');
+      const purchaseRecord = {
+        date: new Date().toLocaleString('pt-BR'),
+        items: cart.map(item => ({
+          id: item.id,
+          name: products.find(p => p.id === item.id).name,
+          color: item.color,
+          size: item.size,
+          quantity: item.quantity,
+          unitPrice: (products.find(p => p.id === item.id).sizePrices || {})[item.size] || products.find(p => p.id === item.id).price
+        })),
+        coupon: appliedCoupon || null,
+        total: appliedCoupon
+          ? Number((total * (1 - coupons[appliedCoupon] / 100)).toFixed(2))
+          : Number(total.toFixed(2))
       };
-    })();
+      previousHistory.push(purchaseRecord);
+      localStorage.setItem(historyKey, JSON.stringify(previousHistory));
+
+      const phone = '5541999737694';
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+
+      cart = [];
+      localStorage.removeItem('cart');
+      appliedCoupon = null;
+      updateCartCount();
+      renderProducts();
+      renderCartPopup();
+      closeCart();
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((acc, i) => acc + i.quantity, 0);
+      document.getElementById('cartCount').textContent = count;
+    }
+
+    function showAlert(text) {
+      const div = document.createElement('div');
+      div.className = 'custom-alert';
+      div.textContent = text;
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 2000);
+    }
+
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('btnTop');
+      btn.style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts();
+      updateCartCount();
+    });
   </script>
 </body>
 </html>
