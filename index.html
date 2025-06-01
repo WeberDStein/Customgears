@@ -2,19 +2,6 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <!-- ===========================
-       FORÇANDO HTTPS (no servidor)
-       ===========================
-       ATENÇÃO: para evitar hijacking, é ESSENCIAL hospedar este
-       arquivo em um domínio com certificado HTTPS válido.
-       -->
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://i.postimg.cc https://cdnjs.cloudflare.com; 
-                 script-src 'self' https://cdnjs.cloudflare.com; 
-                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-                 img-src 'self' data: https://i.postimg.cc;
-                 connect-src 'self'; 
-                 font-src 'self' https://fonts.gstatic.com;">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>𝕮𝖚𝖘𝖙𝖔𝖒 𝖌𝖊𝖆𝖗𝖘</title>
   <meta name="description" content="Custom Gears - Acessórios personalizados para carros e estilo streetwear." />
@@ -23,16 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- bcrypt.js (para hashing no front-end) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"
-          integrity="sha512-ks/6LdFwKbcG3gV6bY8zVcK4E8pDFPdKZNzNqd6lUuimxFOekjRh3o/UkHo4DZklLD+6KxmDfXWmbyhPYgGT2g=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
   <style>
     /* ===========================
        RESET & ESTILIZAÇÕES GERAIS
-       ===========================
-    */
+       =========================== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: #000;
@@ -67,16 +48,17 @@
       padding-bottom: 0.5rem;
       text-align: center;
     }
+    /* Botões gerais, menores para evitar sobreposição */
     button {
       background: #800080;
       color: white;
       border: none;
-      padding: 0.4rem 0.8rem;
+      padding: 0.4rem 0.8rem;   /* reduzido */
       border-radius: 4px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.9rem;      /* reduzido */
       transition: background 0.2s;
-      margin-top: 0.4rem;
+      margin-top: 0.4rem;     /* adiciona um pequeno espaçamento acima */
     }
     button:hover:not(.sold-out-btn) { background: #a020f0; }
     .sold-out-btn {
@@ -87,8 +69,7 @@
 
     /* ===========================
        PRODUTOS E CARRINHO
-       ===========================
-    */
+       =========================== */
     .products {
       display: flex;
       flex-wrap: wrap;
@@ -132,6 +113,7 @@
       margin-top: 0.5rem;
       display: block;
     }
+    /* Placeholder para produto totalmente esgotado */
     .sold-out-placeholder {
       width: 100%;
       height: 180px;
@@ -220,21 +202,21 @@
       gap: 0.5rem;
     }
     .coupon-input {
-      width: 55%;
+      width: 55%;           /* ligeiramente menor */
       padding: 0.4rem;
       border-radius: 4px;
       border: 1px solid #555;
       background: #111;
       color: #fff;
-      font-size: 0.9rem;
+      font-size: 0.9rem;    /* ajustado */
     }
     .coupon-btn {
-      padding: 0.4rem 0.8rem;
+      padding: 0.4rem 0.8rem;  /* ajustado */
       font-size: 0.9rem;
     }
     .coupon-message {
       font-size: 0.9rem;
-      margin-top: 0.4rem;
+      margin-top: 0.4rem;   /* espaçamento para não sobrepor as letras */
       color: #ccc;
       text-align: center;
     }
@@ -253,11 +235,11 @@
     }
     @keyframes fadein {
       from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
+      to { opacity: 1; transform: translateY(0); }
     }
     @keyframes fadeout {
       from { opacity: 1; transform: translateY(0); }
-      to   { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 0; transform: translateY(-20px); }
     }
 
     /* FOOTER */
@@ -311,7 +293,7 @@
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0, 0, 0, 0.95);
-      display: none;
+      display: none;              /* começa invisível */
       align-items: center;
       justify-content: center;
       z-index: 2000;
@@ -413,7 +395,7 @@
       <div id="loginForm">
         <input type="email" id="loginEmail" placeholder="Email" autocomplete="username" />
         <input type="password" id="loginPassword" placeholder="Senha" autocomplete="current-password" />
-        <button id="loginBtn" onclick="loginUser()">Entrar</button>
+        <button onclick="loginUser()">Entrar</button>
         <div id="loginMessage"></div>
         <div class="small-link" onclick="showRegister()">Não tem conta? Cadastre-se</div>
       </div>
@@ -422,7 +404,7 @@
       <div id="registerForm" style="display:none;">
         <input type="email" id="regEmail" placeholder="Seu email" autocomplete="username" />
         <input type="password" id="regPassword" placeholder="Sua senha" autocomplete="new-password" />
-        <button id="registerBtn" onclick="registerUser()">Registrar</button>
+        <button onclick="registerUser()">Registrar</button>
         <div id="registerMessage"></div>
         <div class="small-link" onclick="showLogin()">Já tem conta? Entrar</div>
       </div>
@@ -434,8 +416,9 @@
 
   <script>
     /* =====================================================
-         VARIÁVEIS GLOBAIS E DADOS INICIAIS
-       ===================================================== */
+       VARIÁVEIS GLOBAIS E DADOS INICIAIS
+    ===================================================== */
+    // 1) Lista de produtos:
     const products = [
       { id:1, name:'Camiseta oversized Custom Gears', price:119.90, img:'https://i.postimg.cc/G3zD0FLD/camisa1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
       { id:2, name:'Blusa moletom com capuz Custom Gears', price:159.90, img:'https://i.postimg.cc/dtZXDB2x/manopla1.jpg', colors:['Branco','Preto','Cinza','Roxo'], sizes:['P','M','G','GG','XG'] },
@@ -473,25 +456,14 @@
     // 4) Carrinho (array de itens). Cada item: { id, color, size, quantity }
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    /* =====================================================
-         LÓGICA DE USUÁRIO (LOGIN / REGISTRO) — AGORA USANDO E-MAIL
-         COM BCRYPT.JS PARA HASHING
-       ===================================================== */
-    // Armazena array de usuários no localStorage em formato: 
-    // [ { email: 'x@x.com', passwordHash: '<hash bcrypt>' } ]
+    // 5) LÓGICA DE USUÁRIO (LOGIN / REGISTRO) — AGORA USANDO E-MAIL
+
     function getUsers() {
       return JSON.parse(localStorage.getItem('users') || '[]');
     }
     function setUsers(arr) {
       localStorage.setItem('users', JSON.stringify(arr));
     }
-
-    let loginAttempts = 0;       // contagem de tentativas consecutivas
-    const MAX_LOGIN_ATTEMPTS = 5;
-    const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutos
-
-    let isLockedOut = false;
-    let lockoutEndTime = 0;
 
     function showLogin() {
       document.getElementById('loginForm').style.display = 'block';
@@ -506,15 +478,11 @@
       document.getElementById('registerMessage').textContent = '';
     }
 
-    async function registerUser() {
-      const emailEl = document.getElementById('regEmail');
-      const passEl = document.getElementById('regPassword');
+    function registerUser() {
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
       const msgEl = document.getElementById('registerMessage');
 
-      const email = emailEl.value.trim();
-      const password = passEl.value.trim();
-
-      // Validação básica de email/senha
       if (!email || !password) {
         msgEl.style.color = '#f55';
         msgEl.textContent = 'Preencha e-mail e senha.';
@@ -526,103 +494,41 @@
         msgEl.textContent = 'E-mail inválido.';
         return;
       }
-      if (password.length < 6) {
-        msgEl.style.color = '#f55';
-        msgEl.textContent = 'Senha muito curta (mínimo 6 caracteres).';
-        return;
-      }
-
       const users = getUsers();
       if (users.find(u => u.email === email)) {
         msgEl.style.color = '#f55';
         msgEl.textContent = 'E-mail já cadastrado.';
         return;
       }
-
-      // Gera salt e hash com bcrypt.js
-      const saltRounds = 12;
-      try {
-        const hash = await bcrypt.hash(password, saltRounds);
-        users.push({ email, passwordHash: hash });
-        setUsers(users);
-
-        msgEl.style.color = '#6a0';
-        msgEl.textContent = 'Registrado com sucesso! Faça login.';
-        setTimeout(showLogin, 1500);
-      } catch (err) {
-        console.error('Erro ao gerar hash:', err);
-        msgEl.style.color = '#f55';
-        msgEl.textContent = 'Erro no registro. Tente novamente.';
-      }
+      users.push({ email, password });
+      setUsers(users);
+      msgEl.style.color = '#6a0';
+      msgEl.textContent = 'Registrado com sucesso! Faça login.';
+      setTimeout(showLogin, 1500);
     }
 
-    async function loginUser() {
-      const now = Date.now();
-      const msgEl = document.getElementById('loginMessage');
-
-      // Bloqueio temporário se excedeu tentativas
-      if (isLockedOut && now < lockoutEndTime) {
-        const remaining = Math.ceil((lockoutEndTime - now) / 1000);
-        msgEl.style.color = '#f55';
-        msgEl.textContent = `Bloqueado por tentativas excessivas. Tente em ${remaining}s.`;
-        return;
-      }
-      if (isLockedOut && now >= lockoutEndTime) {
-        // desbloqueia
-        isLockedOut = false;
-        loginAttempts = 0;
-      }
-
+    function loginUser() {
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value.trim();
+      const msgEl = document.getElementById('loginMessage');
 
       if (!email || !password) {
         msgEl.style.color = '#f55';
         msgEl.textContent = 'Preencha e-mail e senha.';
         return;
       }
-
       const users = getUsers();
-      const userRecord = users.find(u => u.email === email);
-      if (!userRecord) {
-        loginAttempts++;
-        tratarFalhaLogin(msgEl);
-        return;
-      }
-
-      try {
-        const match = await bcrypt.compare(password, userRecord.passwordHash);
-        if (!match) {
-          loginAttempts++;
-          tratarFalhaLogin(msgEl);
-          return;
-        }
-      } catch (err) {
-        console.error('Erro ao comparar hash:', err);
+      const found = users.find(u => u.email === email && u.password === password);
+      if (!found) {
         msgEl.style.color = '#f55';
-        msgEl.textContent = 'Erro interno. Tente novamente.';
+        msgEl.textContent = 'Credenciais inválidas.';
         return;
       }
-
-      // login bem-sucedido
       localStorage.setItem('currentUser', email);
       document.getElementById('loginOverlay').style.display = 'none';
-      loginAttempts = 0; // zera contagem
       if (typeof pendingCheckout === 'function') {
         pendingCheckout();
         pendingCheckout = null;
-      }
-    }
-
-    function tratarFalhaLogin(msgEl) {
-      if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {
-        isLockedOut = true;
-        lockoutEndTime = Date.now() + LOCKOUT_DURATION_MS;
-        msgEl.style.color = '#f55';
-        msgEl.textContent = 'Muitas tentativas. Bloqueado por 15 minutos.';
-      } else {
-        msgEl.style.color = '#f55';
-        msgEl.textContent = `Credenciais inválidas. ${MAX_LOGIN_ATTEMPTS - loginAttempts} tentativas restantes.`;
       }
     }
 
@@ -632,8 +538,8 @@
     }
 
     /* =====================================================
-       FUNÇÕES DE RENDERIZAÇÃO E INTERAÇÃO (carrinho e produtos)
-       ===================================================== */
+       FUNÇÕES DE RENDERIZAÇÃO E INTERAÇÃO
+    ===================================================== */
     function reconcileCartWithInventory() {
       if (!cart.length) return;
       cart.forEach(item => {
@@ -780,9 +686,9 @@
 
         const div = document.createElement('div');
         div.innerHTML = `
-          <p>${prod.name} – ${item.color} / ${item.size}</p>
+          <p>${prod.name} - ${item.color} / ${item.size}</p>
           <div>
-            <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', -1)">–</span>
+            <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', -1)">-</span>
             <span>${item.quantity}</span>
             <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', 1)">+</span>
             <button class="remove" onclick="removeFromCart(${item.id}, '${item.color}', '${item.size}')">Remover</button>
@@ -938,7 +844,7 @@
     function showAlert(text) {
       const div = document.createElement('div');
       div.className = 'custom-alert';
-      div.textContent = text; // usa textContent p/ evitar injeção de HTML
+      div.textContent = text;
       document.body.appendChild(div);
       setTimeout(() => div.remove(), 2000);
     }
