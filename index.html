@@ -343,7 +343,7 @@
     <div class="products" id="productList"></div>
   </div>
 
-  <!-- Botões adicionais -->
+  <!-- Botões “Meu Perfil” e “Sair” -->
   <div class="container" style="text-align:center; margin-top:1rem;">
     <button onclick="window.location.href='perfil.html'">Meu Perfil</button>
     <button onclick="logoutUser()">Sair</button>
@@ -450,13 +450,16 @@
     };
     let appliedCoupon = null;
 
-    // Carrinho e persistência local (temporário até criar pedidos)
+    // Carrinho e persistência local
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     // Armazena última seleção de cor/tamanho para cada produto
     const lastSelection = {};
 
-    /* Ajusta estoque de acordo com carrinho salvo localmente (inicial) */
+    /* ================================================
+       Ajusta estoque de acordo com carrinho já salvo
+       (apenas na carga inicial da página)
+       ================================================ */
     function adjustInventoryFromLocalCart() {
       cart.forEach(item => {
         const key = `${item.color}|${item.size}`;
@@ -466,7 +469,9 @@
       });
     }
 
-    /* Salva seleções atuais de <select> antes de re-render */
+    /* ================================================
+       SALVA seleções atuais de <select> antes de re-render
+       ================================================ */
     function saveCurrentSelections() {
       products.forEach(p => {
         const colorEl = document.getElementById(`cor-${p.id}`);
@@ -480,9 +485,9 @@
       });
     }
 
-    /* =========================================
+    /* ================================================
        FUNÇÕES DE AUTENTICAÇÃO VIA BACKEND
-       ========================================= */
+       ================================================ */
     async function registerUser() {
       const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value.trim();
@@ -707,7 +712,7 @@
       document.getElementById('cartTotal').textContent = `Total: R$${total.toFixed(2)}`;
       if (appliedCoupon) {
         const discountPercent = coupons[appliedCoupon];
-        const discountedValue = total * (1 - discountPercent/100);
+        const discountedValue = total * (1 - discountPercent / 100);
         document.getElementById('discountedTotal').textContent =
           `Total com "${appliedCoupon}": R$${discountedValue.toFixed(2)} (${discountPercent}% off)`;
       } else document.getElementById('discountedTotal').textContent = '';
@@ -717,83 +722,153 @@
     function changeQty(id, color, size, delta) {
       saveCurrentSelections();
       const key = `${color}|${size}`;
-      const item = cart.find(i=>i.id===id&&i.color===color&&i.size===size);
+      const item = cart.find(i => i.id === id && i.color === color && i.size === size);
       if (!item) return;
-      if (delta>0) {
-        if (inventory[id][key]<1) return;
+      if (delta > 0) {
+        if (inventory[id][key] < 1) return;
         item.quantity++; inventory[id][key]--;
-      } else { item.quantity--; inventory[id][key]++; }
-      if (item.quantity===0) cart = cart.filter(i=>!(i.id===id&&i.color===color&&i.size===size));
-      localStorage.setItem('cart',JSON.stringify(cart));
+      } else {
+        item.quantity--; inventory[id][key]++;
+      }
+      if (item.quantity === 0) {
+        cart = cart.filter(i => !(i.id === id && i.color === color && i.size === size));
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
       renderProducts(); renderCartPopup();
     }
 
     function removeFromCart(id, color, size) {
       saveCurrentSelections();
       const key = `${color}|${size}`;
-      const item = cart.find(i=>i.id===id&&i.color===color&&i.size===size);
+      const item = cart.find(i => i.id === id && i.color === color && i.size === size);
       if (!item) return;
-      inventory[id][key]+=item.quantity;
-      cart = cart.filter(i=>!(i.id===id&&i.color===color&&i.size===size));
+      inventory[id][key] += item.quantity;
+      cart = cart.filter(i => !(i.id === id && i.color === color && i.size === size));
       localStorage.setItem('cart', JSON.stringify(cart));
       renderProducts(); renderCartPopup();
     }
 
-    function closeCart() { document.getElementById('cartPopup').style.display = 'none'; }
+    function closeCart() {
+      document.getElementById('cartPopup').style.display = 'none';
+    }
 
     function applyCoupon() {
       const code = document.getElementById('couponCode').value.trim().toUpperCase();
       const msgEl = document.getElementById('couponMessage');
-      if (!code) { msgEl.style.color='#f55'; msgEl.textContent='Digite um cupom.'; return; }
-      if (!cart.length) { msgEl.style.color='#f55'; msgEl.textContent='Seu carrinho está vazio.'; return; }
-      if (coupons[code]) { appliedCoupon=code; msgEl.style.color='#6a0'; msgEl.textContent=`Cupom "${code}" aplicado: ${coupons[code]}% de desconto!`; }
-      else { appliedCoupon=null; msgEl.style.color='#f55'; msgEl.textContent=`"${code}" não é um cupom válido.`; }
+      if (!code) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'Digite um cupom.';
+        return;
+      }
+      if (!cart.length) {
+        msgEl.style.color = '#f55';
+        msgEl.textContent = 'Seu carrinho está vazio.';
+        return;
+      }
+      if (coupons[code]) {
+        appliedCoupon = code;
+        msgEl.style.color = '#6a0';
+        msgEl.textContent = `Cupom "${code}" aplicado: ${coupons[code]}% de desconto!`;
+      } else {
+        appliedCoupon = null;
+        msgEl.style.color = '#f55';
+        msgEl.textContent = `"${code}" não é um cupom válido.`;
+      }
       renderCartPopup();
     }
 
+    let pendingCheckout = null;
+
     async function checkout() {
-      const profileRes = await fetch('http://localhost:4000/api/profile', { credentials:'include' });
+      // Confere sessão via endpoint de perfil
+      const profileRes = await fetch('http://localhost:4000/api/profile', { credentials: 'include' });
       if (profileRes.status !== 200) {
+        // Se não estiver logado, mostra overlay
         pendingCheckout = checkout;
         document.getElementById('loginOverlay').style.display = 'flex';
         showLogin();
         return;
       }
+
+      // Monta payload de pedido
       let itemsPayload = cart.map(item => {
-        const prod = products.find(p=>p.id===item.id);
-        const unitPrice = prod.sizePrices? prod.sizePrices[item.size]: prod.price;
-        return { id: item.id, name: prod.name, color:item.color, size:item.size, quantity:item.quantity, unitPrice };
+        const prod = products.find(p => p.id === item.id);
+        const unitPrice = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
+        return {
+          id: item.id,
+          name: prod.name,
+          color: item.color,
+          size: item.size,
+          quantity: item.quantity,
+          unitPrice
+        };
       });
-      let total = itemsPayload.reduce((acc,i)=>acc + i.unitPrice*i.quantity, 0);
+      let total = itemsPayload.reduce((acc, i) => acc + i.unitPrice * i.quantity, 0);
       let couponCode = appliedCoupon || null;
       let body = { items: itemsPayload, totalPrice: total, couponCode };
+
       try {
         const res = await fetch('http://localhost:4000/api/orders', {
-          method:'POST', headers:{'Content-Type':'application/json'}, credentials:'include', body: JSON.stringify(body)
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(body)
         });
         if (!res.ok) throw await res.json();
+
+        // Depois de criar pedido, abre WhatsApp com resumo
         let msg = 'Olá, gostaria de comprar:\n';
         itemsPayload.forEach(item => {
-          msg += `- ${item.name} (${item.color}/${item.size}) x${item.quantity} – R$${(item.unitPrice*item.quantity).toFixed(2)}\n`;
+          msg += `- ${item.name} (${item.color}/${item.size}) x${item.quantity} – R$${(item.unitPrice * item.quantity).toFixed(2)}\n`;
         });
-        if (couponCode) { let discounted = total*(1 - coupons[couponCode]/100); msg += `\nTotal com "${couponCode}": R$${discounted.toFixed(2)} (${coupons[couponCode]}% off)`; }
-        else msg += `\nTotal: R$${total.toFixed(2)}`;
+        if (couponCode) {
+          let discounted = total * (1 - coupons[couponCode] / 100);
+          msg += `\nTotal com "${couponCode}": R$${discounted.toFixed(2)} (${coupons[couponCode]}% off)`;
+        } else {
+          msg += `\nTotal: R$${total.toFixed(2)}`;
+        }
         window.open(`https://wa.me/5541999737694?text=${encodeURIComponent(msg)}`, '_blank');
-        cart=[]; localStorage.removeItem('cart'); appliedCoupon=null;
-        renderProducts(); renderCartPopup();
+
+        // Limpa carrinho
+        cart = [];
+        localStorage.removeItem('cart');
+        appliedCoupon = null;
+        renderProducts();
+        renderCartPopup();
       } catch (err) {
         console.error(err);
         showAlert('Erro ao finalizar compra.');
       }
     }
 
-    function updateCartCount() { const count = cart.reduce((acc,i)=>acc+i.quantity,0); document.getElementById('cartCount').textContent = count; }
-    function showAlert(text) { const div = document.createElement('div'); div.className='custom-alert'; div.textContent=text; document.body.appendChild(div); setTimeout(()=>div.remove(),2000); }
+    function updateCartCount() {
+      const count = cart.reduce((acc, i) => acc + i.quantity, 0);
+      document.getElementById('cartCount').textContent = count;
+    }
 
-    window.addEventListener('scroll',()=>{ const btn=document.getElementById('btnTop'); btn.style.display=window.scrollY>300?'block':'none'; });
-    function scrollToTop(){ window.scrollTo({ top:0, behavior:'smooth' }); }
+    function showAlert(text) {
+      const div = document.createElement('div');
+      div.className = 'custom-alert';
+      div.textContent = text;
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 2000);
+    }
 
-    document.addEventListener('DOMContentLoaded',()=>{ adjustInventoryFromLocalCart(); renderProducts(); updateCartCount(); });
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('btnTop');
+      btn.style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Ajusta estoque conforme carrinho salvo
+      adjustInventoryFromLocalCart();
+      // Renderiza produtos na carga inicial
+      renderProducts();
+      updateCartCount();
+    });
   </script>
 </body>
 </html>
