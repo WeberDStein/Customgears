@@ -108,12 +108,6 @@
       color: #ccc;
       margin-bottom: 0.5rem;
     }
-    .sold-out-text {
-      color: #c00;
-      font-weight: bold;
-      margin-top: 0.5rem;
-      display: block;
-    }
     .sold-out-placeholder {
       width: 100%;
       height: 180px;
@@ -418,7 +412,7 @@
       <p id="cartTotal"></p>
       <p id="discountedTotal" style="color:#aa88cc; font-weight:bold;"></p>
 
-      <!-- Botão de checkout: chama checkout() -->
+      <!-- Botão de checkout -->
       <button onclick="checkout()" class="checkout">Chamar no WhatsApp</button>
       <button onclick="closeCart()" style="margin-top:0.4rem;">Fechar</button>
     </div>
@@ -947,32 +941,31 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    /* ======================================
+       LÓGICA GERAL (produtos + carrossel)
+       ====================================== */
     document.addEventListener('DOMContentLoaded', () => {
       // Ajusta o estoque a partir do que já estiver no carrinho salvo
       adjustInventoryFromLocalCart();
-      // Renderiza pela primeira vez
+      // Renderiza produtos e atualiza o contador
       renderProducts();
       updateCartCount();
-    });
 
-    /* ======================================
-       LÓGICA DO CARROSSEL DE FOTOS ABAIXO
-       ====================================== */
-    document.addEventListener("DOMContentLoaded", function() {
-      const track = document.querySelector(".carousel-track");
-      const gallerySection = document.getElementById("gallery-section");
+      // Configura o carrossel para iniciar ao rolar até a seção
+      const track = document.querySelector('.carousel-track');
+      const gallerySection = document.getElementById('gallery-section');
       let scrollingStarted = false;
 
       function checkScrollPosition() {
         const windowBottom = window.scrollY + window.innerHeight;
         const galleryTop = gallerySection.offsetTop;
         if (!scrollingStarted && windowBottom >= galleryTop) {
-          track.classList.add("scrolling");
+          track.classList.add('scrolling');
           scrollingStarted = true;
         }
       }
 
-      window.addEventListener("scroll", checkScrollPosition);
+      window.addEventListener('scroll', checkScrollPosition);
       checkScrollPosition();
     });
   </script>
