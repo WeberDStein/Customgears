@@ -242,26 +242,6 @@
       to   { opacity: 0; transform: translateY(-20px); }
     }
 
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 2rem;
-      background-color: #111;
-      border-top:1px solid #333;
-    }
-    footer h4 {
-      color: #aa88cc;
-      margin-bottom: 0.5rem;
-    }
-    footer p, footer a {
-      color:#ccc;
-      font-size:0.9rem;
-      margin: 0.2rem 0;
-    }
-    footer a {
-      text-decoration: none;
-    }
-
     /* BOTÃO VOLTAR AO TOPO */
     #btnTop {
       display: none;
@@ -344,6 +324,7 @@
       padding: 40px 0;
       box-sizing: border-box;
       overflow: hidden;
+      margin-top: 2rem; /* espaço extra entre produtos e carrossel */
     }
     .carousel-container {
       width: 100%;
@@ -391,20 +372,8 @@
     <div class="products" id="productList"></div>
   </div>
 
-  <!-- FOOTER sempre visível -->
-  <footer id="mainFooter">
-    <h4>Sobre Nós</h4>
-    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
-    <h4>Contato</h4>
-    <p>Telefone: (41) 99973-7694</p>
-    <p>Email: <a href="mailto:Customgears17@gmail.com">Customgears17@gmail.com</a></p>
-    <h4>Redes Sociais</h4>
-    <p><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">Instagram</a></p>
-    <p>© 2025 Custom Gears. Todos os direitos reservados.</p>
-  </footer>
-
   <!-- ================
-       CARROSSEL DE FOTOS
+       CARROSSEL DE FOTOS (ABAIXO DOS PRODUTOS)
        ================ -->
   <section id="gallery-section">
     <div class="carousel-container">
@@ -419,6 +388,18 @@
       </div>
     </div>
   </section>
+
+  <!-- FOOTER sempre visível -->
+  <footer id="mainFooter">
+    <h4>Sobre Nós</h4>
+    <p>Na Custom Gears, transformamos paixão automotiva em estilo. Criamos roupas e acessórios exclusivos, inspirados na cultura automotiva e no espírito livre das ruas.</p>
+    <h4>Contato</h4>
+    <p>Telefone: (41) 99973-7694</p>
+    <p>Email: <a href="mailto:Customgears17@gmail.com">Customgears17@gmail.com</a></p>
+    <h4>Redes Sociais</h4>
+    <p><a href="https://www.instagram.com/custom_gears17?igsh=bmVtODg0cDk2NWEz" target="_blank">Instagram</a></p>
+    <p>© 2025 Custom Gears. Todos os direitos reservados.</p>
+  </footer>
 
   <!-- POPUP DO CARRINHO -->
   <div class="cart-popup" id="cartPopup">
@@ -985,7 +966,6 @@
       function checkScrollPosition() {
         const windowBottom = window.scrollY + window.innerHeight;
         const galleryTop = gallerySection.offsetTop;
-
         if (!scrollingStarted && windowBottom >= galleryTop) {
           track.classList.add("scrolling");
           scrollingStarted = true;
