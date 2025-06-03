@@ -91,8 +91,11 @@
     .product:hover { transform: scale(1.05); }
     .product img {
       width: 100%;
+      height: 200px;
+      object-fit: cover;
       border-radius: 6px;
       margin-bottom: 0.5rem;
+      cursor: pointer;
     }
     .product h3 {
       color: #ddd;
@@ -167,6 +170,18 @@
       text-align: center;
       max-height: 80vh;
       overflow-y: auto;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 10px;
     }
     .qty-btn {
       display: inline-block;
@@ -783,7 +798,7 @@
             : p.price;
 
           card.innerHTML = `
-            <img src="${p.img}" alt="${p.name}"/>
+            <img src="${p.img}" alt="${p.name}" class="prod-img" data-id="${p.id}" />
             <h3>${p.name}</h3>
             <p class="price">R$${priceValue.toFixed(2)}</p>
             <p class="stock-label">Estoque: ${inventory[p.id][`${selColor}|${selSize}`]}</p>
@@ -810,6 +825,13 @@
 
       initProductListeners();
       updateCartCount();
+
+      // Adiciona listener de clique para abrir modal ao clicar na imagem do produto
+      document.querySelectorAll('.prod-img').forEach(img => {
+        img.addEventListener('click', () => {
+          openModal(img.src);
+        });
+      });
     }
 
     function initProductListeners() {
@@ -912,14 +934,19 @@
         const price = prod.sizePrices ? prod.sizePrices[item.size] : prod.price;
         total += price * item.quantity;
 
+        // Cada item agora exibe a miniatura da foto do produto
         const div = document.createElement('div');
+        div.className = 'cart-item';
         div.innerHTML = `
-          <p>${prod.name} – ${item.color} / ${item.size}</p>
+          <img src="${prod.img}" alt="${prod.name}">
           <div>
-            <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', -1)">–</span>
-            <span>${item.quantity}</span>
-            <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', 1)">+</span>
-            <button class="remove" onclick="removeFromCart(${item.id}, '${item.color}', '${item.size}')">Remover</button>
+            <p>${prod.name} – ${item.color}/${item.size}</p>
+            <div>
+              <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', -1)">–</span>
+              <span>${item.quantity}</span>
+              <span class="qty-btn" onclick="changeQty(${item.id}, '${item.color}', '${item.size}', 1)">+</span>
+              <button class="remove" onclick="removeFromCart(${item.id}, '${item.color}', '${item.size}')">Remover</button>
+            </div>
           </div>
         `;
         container.appendChild(div);
@@ -1113,7 +1140,7 @@
     }
 
     /* ======================================
-       LÓGICA GERAL (produtos + carrossel)
+       LÓGICA GERAL (produtos + carrossel + modal)
        ====================================== */
     document.addEventListener('DOMContentLoaded', () => {
       // Ajusta o estoque a partir do que já estiver no carrinho salvo
