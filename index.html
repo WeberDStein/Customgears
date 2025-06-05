@@ -13,7 +13,7 @@
   <style>
     /* ===========================
        RESET & ESTILIZAÇÕES GERAIS
-       ============================
+       ===========================
     */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -69,7 +69,7 @@
 
     /* ===========================
        PRODUTOS E CARRINHO
-       ============================
+       ===========================
     */
     .products {
       display: flex;
@@ -163,10 +163,10 @@
     }
     .cart-content {
       background: #333;
-      padding: 20px;
+      padding: 15px; /* padding um pouco menor */
       border-radius: 8px;
       width: 90%;
-      max-width: 400px;
+      max-width: 300px; /* reduzido de 400px para 300px */
       text-align: center;
       max-height: 80vh;
       overflow-y: auto;
@@ -174,14 +174,14 @@
     .cart-item {
       display: flex;
       align-items: center;
-      margin: 10px 0;
+      margin: 8px 0; /* margem um pouco menor */
     }
     .cart-item img {
-      width: 60px;
-      height: 60px;
+      width: 50px;   /* reduzido de 60px para 50px */
+      height: 50px;  /* reduzido de 60px para 50px */
       object-fit: cover;
       border-radius: 4px;
-      margin-right: 10px;
+      margin-right: 8px; /* margem um pouco menor */
     }
     .qty-btn {
       display: inline-block;
@@ -561,7 +561,8 @@
   <!-- POPUP DO CARRINHO -->
   <div class="cart-popup" id="cartPopup">
     <div class="cart-content">
-      <h3>Seu Carrinho</h3>
+      <!-- Título alterado conforme solicitado: -->
+      <h3>Carrinho de Compras 🛒</h3>
       <div id="cartItems"></div>
 
       <!-- Seção do cupom de desconto -->
